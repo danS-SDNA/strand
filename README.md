@@ -47,6 +47,14 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   phone's own speech engine (no audio files, no server). On Lead-me it asks for the compass and
   says "to your left" / "straight ahead" when a heading is known.
 
+- Once location is allowed, the home page is **Around you**: places by distance with a one-line
+  story teaser, so nothing needs typing. ◎ refreshes it.
+- **☰** holds the switches: which kinds of place to show (filters pins, Nearby and Lead-me, kept
+  on the phone) and **Walk with me**, which watches your position and, within about 80 m of an
+  unvisited place with a story or a well-known person, vibrates, shows a card and says one line.
+  At most one alert per 40 seconds. Works while the page is open; phones suspend web pages when
+  the screen locks, so background alerts would need a native wrapper.
+
 ## Known gaps
 
 - The place-specific anecdote (why this person matters *here*) is not structured data anywhere.
