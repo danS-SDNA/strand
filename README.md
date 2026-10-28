@@ -55,6 +55,14 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   At most one alert per 40 seconds. Works while the page is open; phones suspend web pages when
   the screen locks, so background alerts would need a native wrapper.
 
+- The current place pulses red on the map, above the clusters, so a tap in the panel can be found on the map.
+- **Tours** are ordered lists of places, numbered on the map with a dashed line and leg distances.
+  Build one from any place page (**+ Tour**), reorder in ☰ → Tours, save it on the phone with a name
+  (40 characters) and a description (100 words). **Share link** carries the whole tour in the URL,
+  so nothing is uploaded anywhere and the recipient can keep it. Curated tours ship in
+  `site/data/tours.json` (`tools/seed_tours.py` writes examples); adding one is a commit, which is
+  the approval step. There is no server, so there is no public user content to moderate.
+
 ## Known gaps
 
 - The place-specific anecdote (why this person matters *here*) is not structured data anywhere.

@@ -1,0 +1,50 @@
+[
+ {
+  "id": "westminster-statues",
+  "name": "Statues of Westminster",
+  "desc": "The statesmen, soldiers and reformers in bronze around Parliament Square and Whitehall, Churchill, Mandela, Gandhi, Cromwell and Lincoln among them. About a kilometre on foot.",
+  "stops": [
+   "Q25338500",
+   "Q18161998",
+   "Q19593953",
+   "Q7604495",
+   "Q7604505",
+   "Q3497572",
+   "Q7324819",
+   "Q18159618",
+   "Q7604496",
+   "Q29546709"
+  ]
+ },
+ {
+  "id": "highgate-village",
+  "name": "Highgate village and cemetery",
+  "desc": "Up the hill from Archway: the cemetery where Marx, George Eliot and Faraday lie, then the village, school and houses around it. Steep in places.",
+  "stops": [
+   "Q17526711",
+   "Q112356379",
+   "Q533697",
+   "Q27086336",
+   "Q27086347",
+   "Q17548714",
+   "Q17548853",
+   "Q7996907"
+  ]
+ },
+ {
+  "id": "bloomsbury-squares",
+  "name": "Around the Bloomsbury squares",
+  "desc": "The British Museum, the colleges and the houses between Russell Square and Gordon Square, and the people tied to them. Flat and short between stops.",
+  "stops": [
+   "Q7270359",
+   "Q3530462",
+   "Q131141",
+   "Q606662",
+   "Q170027",
+   "Q3825189",
+   "Q2466845",
+   "Q7689129",
+   "Q28402796"
+  ]
+ }
+]
