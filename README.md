@@ -26,6 +26,9 @@ people admitted by some other relation.
 
 ## Run
 
+Live at https://dans-sdna.github.io/strand/ — deployed by `.github/workflows/pages.yml` on every push to master.
+
+
 Static site. `python -m http.server 5260 --directory site` (registered as `strand` in the
 one v.2 `.claude/launch.json`). Wikipedia summaries and thumbnails are fetched by the page on
 demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
