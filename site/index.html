@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Strand</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+<style>
+:root{--bg:#fbf7ef;--ink:#1d1a16;--muted:#6f675c;--line:#e4dccd;--acc:#8a2f1d;--acc2:#2f5d8a;--chip:#efe7d6}
+@media (prefers-color-scheme:dark){:root{--bg:#17150f;--ink:#efe8da;--muted:#a69d8d;--line:#332e25;--acc:#e07a5f;--acc2:#7fb0e0;--chip:#2a251c}}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:15px/1.45 Georgia,"Iowan Old Style",serif}
+#map{position:fixed;inset:0;z-index:0}
+#top{position:fixed;top:0;left:0;right:0;z-index:5;padding:env(safe-area-inset-top) 10px 0;display:flex;gap:6px;align-items:center;pointer-events:none}
+#top>*{pointer-events:auto}
+#search{flex:1;margin-top:8px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;box-shadow:0 2px 8px rgba(0,0,0,.15);min-width:0}
+.btn{margin-top:8px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);white-space:nowrap}
+.btn.acc{background:var(--acc);color:#fff;border-color:var(--acc)}
+#journey{position:fixed;top:52px;left:0;right:0;z-index:5;display:flex;gap:6px;overflow-x:auto;padding:6px 10px;scrollbar-width:none}
+#journey::-webkit-scrollbar{display:none}
+.hop{flex:none;padding:4px 10px;border-radius:999px;background:var(--chip);border:1px solid var(--line);font-size:13px;cursor:pointer;white-space:nowrap;opacity:.85}
+.hop.cur{opacity:1;border-color:var(--acc);font-weight:bold}
+#panel{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bg);border-top:1px solid var(--line);border-radius:16px 16px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.2);max-height:62vh;display:flex;flex-direction:column;transition:max-height .2s}
+#panel.collapsed{max-height:56px}
+#grip{flex:none;height:22px;display:flex;justify-content:center;align-items:center;cursor:pointer}
+#grip::after{content:"";width:44px;height:5px;border-radius:3px;background:var(--line)}
+#content{overflow-y:auto;padding:0 16px 24px}
+@media(min-width:900px){#panel{left:auto;right:12px;bottom:12px;width:440px;max-height:calc(100vh - 110px);border-radius:16px}#panel.collapsed{max-height:56px}}
+h1{font-size:22px;margin:4px 0 2px}h2{font-size:15px;margin:18px 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:normal}
+.sub{color:var(--muted);margin:0 0 8px}
+a,.lnk{color:var(--acc2);text-decoration:none;cursor:pointer}.lnk:hover{text-decoration:underline}
+.row{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.row .who{flex:1;min-width:0}.row .yrs{color:var(--muted);font-size:13px;white-space:nowrap}
+.av{flex:none;width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--chip)}
+.av.ph{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px}
+.rel{font-size:13px;color:var(--acc)}
+.tl{list-style:none;padding:0;margin:0;border-left:2px solid var(--line)}
+.tl li{position:relative;padding:4px 0 8px 14px}
+.tl li::before{content:"";position:absolute;left:-6px;top:11px;width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.tl li.here::before{background:var(--acc)}
+.tl .yr{display:inline-block;min-width:44px;color:var(--muted);font-variant-numeric:tabular-nums}
+.extract{margin:8px 0;overflow:hidden}.thumb{float:left;width:120px;max-height:160px;object-fit:cover;margin:2px 12px 6px 0;border-radius:8px}
+.dim{color:var(--muted)}
+.card{display:flex;gap:12px;align-items:center;padding:10px;margin:8px 0;border:1px solid var(--line);border-radius:12px;cursor:pointer;background:var(--chip)}
+.card:hover{border-color:var(--acc)}
+.arrow{flex:none;width:44px;height:44px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--acc)}
+.card .d{font-size:13px;color:var(--muted)}.card b{display:block}
+.card .ppl{font-size:13px}
+.actions{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}
+.actions .btn{margin:0;box-shadow:none}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="top"><input id="search" placeholder="Search a person or place…" autocomplete="off"><button class="btn" id="near" title="Near me">◎</button><button class="btn acc" id="lead" title="Lead me">➜ Lead me</button></div>
+<div id="journey"></div>
+<div id="panel"><div id="grip"></div><div id="content"><p class="sub">Loading London…</p></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+var D=null, byPlace={}, byPerson={}, markers={}, journey=[], visited={}, cur=null, cluster, hereMarker=null, lifeLine=null, lifeEvents=[], myPos=null, leadRadius=1.2;
+var map=L.map('map',{zoomControl:false}).setView([51.508,-0.128],13);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap · data Wikidata/Wikipedia'}).addTo(map);
+L.control.zoom({position:'bottomleft'}).addTo(map);
+function $(s){return document.querySelector(s)}
+var content=$('#content'), panel=$('#panel');
+$('#grip').onclick=function(){panel.classList.toggle('collapsed')};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function yrs(p){return (p.b||p.x)?((p.b||'?')+'–'+(p.x||'')):''}
+function span(s,e){return (s||e)?(' '+(s||'')+((e&&e!==s)?'–'+e:'')):''}
+function img(p,w){var f=p.i,ext=f.toLowerCase().split('.').pop(),sfx=ext==='svg'?'.png':(ext==='tif'||ext==='tiff'||ext==='pdf'||ext==='djvu'||ext==='webp')?'.jpg':'';return 'https://upload.wikimedia.org/wikipedia/commons/thumb/'+p.h[0]+'/'+p.h+'/'+encodeURIComponent(f)+'/'+w+'px-'+encodeURIComponent(f)+sfx}
+function avatar(p){return p.i?'<img class="av" data-src="'+img(p,120)+'" alt="">':'<div class="av ph">◦</div>'}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var i=e.target;i.src=i.getAttribute('data-src');i.removeAttribute('data-src');io.unobserve(i)}})},{root:document.querySelector('#content'),rootMargin:'200px'});
+new MutationObserver(function(){document.querySelectorAll('img[data-src]').forEach(function(i){io.observe(i)})}).observe(document.querySelector('#content'),{childList:true,subtree:true});
+var RELTEXT={commemorated:'commemorated here',depicted:'depicted here',buried:'buried here',died:'died here',born:'born here',lived:'lived here',designed:'designed this','named after':'gives it its name',founded:'founded it',commissioned:'commissioned it',made:'made it',owned:'owned it'};
+function link(kind,id,label,ctx){return '<span class="lnk" data-go="'+kind+'/'+id+(ctx?'/'+ctx:'')+'">'+esc(label)+'</span>'}
+document.addEventListener('click',function(e){var t=e.target.closest('[data-go]');if(t){location.hash='#'+t.getAttribute('data-go');return}
+  var f=e.target.closest('[data-fly]');if(f){fly(+f.getAttribute('data-fly'));return}
+  var a=e.target.closest('[data-act]');if(a){act(a.getAttribute('data-act'))}});
+
+fetch('data/index.json').then(function(r){return r.json()}).then(function(d){
+  D=d;
+  d.links.forEach(function(l){(byPlace[l.pl]=byPlace[l.pl]||[]).push(l);(byPerson[l.pe]=byPerson[l.pe]||[]).push(l)});
+  cluster=L.markerClusterGroup({disableClusteringAtZoom:17,maxClusterRadius:50,chunkedLoading:true});
+  Object.keys(d.places).forEach(function(id){var p=d.places[id];
+    var m=L.marker([p.lat,p.lon],{title:p.l});m.on('click',function(){location.hash='#l/'+id});markers[id]=m;cluster.addLayer(m)});
+  map.addLayer(cluster);
+  route();
+});
+window.addEventListener('hashchange',route);
+function route(){if(!D)return;var h=location.hash.slice(1).split('/');
+  if(h[0]==='p'&&D.people[h[1]])showPerson(h[1],h[2]);else if(h[0]==='l'&&D.places[h[1]])showPlace(h[1]);else showHome()}
+function hop(kind,id,label){var k=kind+'/'+id;if(kind==='l')visited[id]=1;if(journey.length&&journey[journey.length-1].k===k)return;
+  journey.push({k:k,kind:kind,id:id,label:label});if(journey.length>40)journey.shift();
+  $('#journey').innerHTML=journey.map(function(j,i){return '<span class="hop'+(i===journey.length-1?' cur':'')+'" data-go="'+j.kind+'/'+j.id+'">'+(j.kind==='p'?'👤 ':'📍 ')+esc(j.label)+'</span>'}).join('');
+  $('#journey').scrollLeft=1e6}
+function byFame(a,b){return (b.p.f||0)-(a.p.f||0)||((a.p.x||a.p.b||3000)-(b.p.x||b.p.b||3000))}
+function placePeople(id){var seen={},out=[];
+  (byPlace[id]||[]).forEach(function(l){var p=D.people[l.pe];if(!p)return;var o=seen[l.pe];if(!o){o={id:l.pe,p:p,rels:[]};seen[l.pe]=o;out.push(o)}o.rels.push(RELTEXT[l.r]+span(l.s,l.e))});
+  out.sort(byFame);return out}
+function personRow(id,ctx,rels){var p=D.people[id];return '<div class="row">'+avatar(p)+'<span class="who">'+link('p',id,p.l,ctx)+(rels?'<br><span class="rel">'+rels.join(' · ')+'</span>':'')+(p.d?'<br><span class="dim">'+esc(p.d)+'</span>':'')+'</span><span class="yrs">'+yrs(p)+'</span></div>'}
+function showHome(){panel.classList.remove('collapsed');
+  var STRONG={buried:1,died:1,born:1,lived:1,commemorated:1};var top=Object.keys(D.people).filter(function(i){return (byPerson[i]||[]).some(function(l){return STRONG[l.r]})}).map(function(i){return {id:i,p:D.people[i]}}).sort(byFame).slice(0,8);
+  content.innerHTML='<h1>Strand · London</h1><p class="sub">'+Object.keys(D.places).length+' places, '+Object.keys(D.people).length+' people. Tap a pin, press ◎ for what is around you, or ➜ Lead me to be taken somewhere. Follow a life, or change to someone it crossed.</p>'+
+   '<h2>Start with</h2>'+top.map(function(o){return personRow(o.id)}).join('')}
+function showPlace(id){var pl=D.places[id];cur={kind:'l',id:id};hop('l',id,pl.l);panel.classList.remove('collapsed');
+  map.flyTo([pl.lat,pl.lon],Math.max(map.getZoom(),16),{duration:.6});
+  var ppl=placePeople(id);
+  content.innerHTML='<h1>'+esc(pl.l)+'</h1><p class="sub">'+esc(pl.d||pl.t.join(', '))+' · <a target="_blank" href="https://www.wikidata.org/wiki/'+id+'">wikidata</a></p>'+
+   '<div class="actions"><button class="btn acc" data-act="lead">➜ Lead me on from here</button></div>'+
+   '<h2>'+ppl.length+' people</h2>'+ppl.map(function(o){return personRow(o.id,id,o.rels)}).join('')+
+   '<h2>Nearby</h2>'+nearby(pl.lat,pl.lon,8,id);
+  content.scrollTop=0}
+function dist(a,b,c,d){var x=(c-a)*111.2,y=(d-b)*111.2*Math.cos(a*Math.PI/180);return Math.sqrt(x*x+y*y)}
+function bearing(a,b,c,d){var y=Math.sin((d-b)*Math.PI/180)*Math.cos(c*Math.PI/180),x=Math.cos(a*Math.PI/180)*Math.sin(c*Math.PI/180)-Math.sin(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.cos((d-b)*Math.PI/180);return (Math.atan2(y,x)*180/Math.PI+360)%360}
+function compass(b){return ['north','north-east','east','south-east','south','south-west','west','north-west'][Math.round(b/45)%8]}
+function fmt(km){return km<1?Math.round(km*1000/10)*10+' m':km.toFixed(1)+' km'}
+function topNames(id,n){return placePeople(id).slice(0,n).map(function(o){return o.p.l})}
+function nearby(lat,lon,n,skip){var arr=Object.keys(D.places).filter(function(i){return i!==skip}).map(function(i){var p=D.places[i];return [dist(lat,lon,p.lat,p.lon),i]});
+  arr.sort(function(a,b){return a[0]-b[0]});
+  return arr.slice(0,n).map(function(x){var p=D.places[x[1]];return '<div class="row"><span class="who">'+link('l',x[1],p.l)+'<br><span class="dim">'+esc(topNames(x[1],2).join(', '))+(p.n>2?' +'+(p.n-2):'')+'</span></span><span class="yrs">'+fmt(x[0])+'</span></div>'}).join('')}
+/* Lead me: three directions worth walking, diverse in bearing, ranked by who is there */
+function origin(){if(cur&&cur.kind==='l'){var p=D.places[cur.id];return {lat:p.lat,lon:p.lon,label:p.l}}if(myPos)return {lat:myPos[0],lon:myPos[1],label:'where you are'};var c=map.getCenter();return {lat:c.lat,lon:c.lng,label:'the map centre'}}
+function lead(){var o=origin();panel.classList.remove('collapsed');
+  var cands=Object.keys(D.places).filter(function(i){return !visited[i]&&!(cur&&cur.kind==='l'&&cur.id===i)}).map(function(i){var p=D.places[i];var d=dist(o.lat,o.lon,p.lat,p.lon);
+    return {id:i,p:p,d:d,b:bearing(o.lat,o.lon,p.lat,p.lon),score:(Math.log(1+(p.f||0))*3+Math.log(1+(p.n||0)))/(0.25+d)}}).filter(function(c){return c.d>0.05&&c.d<=leadRadius});
+  cands.sort(function(a,b){return b.score-a.score});
+  var picks=[];cands.forEach(function(c){if(picks.length>=3)return;if(picks.every(function(q){var diff=Math.abs(q.b-c.b);diff=Math.min(diff,360-diff);return diff>=70}))picks.push(c)});
+  if(picks.length<3)cands.forEach(function(c){if(picks.length<3&&picks.indexOf(c)<0)picks.push(c)});
+  content.innerHTML='<h1>Lead me</h1><p class="sub">From '+esc(o.label)+', within '+fmt(leadRadius)+'. Three ways to walk.</p>'+
+   (picks.length?picks.map(function(c){return '<div class="card" data-go="l/'+c.id+'"><div class="arrow" style="transform:rotate('+Math.round(c.b)+'deg)">↑</div><div><div class="d">'+fmt(c.d)+' '+compass(c.b)+'</div><b>'+esc(c.p.l)+'</b><div class="ppl">'+esc(topNames(c.id,3).join(', '))+(c.p.n>3?' <span class="dim">+'+(c.p.n-3)+' more</span>':'')+'</div></div></div>'}).join(''):'<p class="dim">Nothing new within range.</p>')+
+   '<div class="actions"><button class="btn" data-act="further">Further afield</button><button class="btn" data-act="closer">Closer</button><button class="btn" data-act="forget">Forget where I have been</button></div>';
+  content.scrollTop=0}
+function act(a){if(a==='lead')lead();else if(a==='further'){leadRadius=Math.min(leadRadius*2,20);lead()}else if(a==='closer'){leadRadius=Math.max(leadRadius/2,0.3);lead()}else if(a==='forget'){visited={};lead()}}
+$('#lead').onclick=lead;
+function showPerson(id,ctxPlace){var p=D.people[id];cur={kind:'p',id:id};hop('p',id,p.l);panel.classList.remove('collapsed');
+  var here=(byPerson[id]||[]).map(function(l){var pl=D.places[l.pl];return '<div class="row"><span class="who">'+link('l',l.pl,pl.l)+' <span class="rel">'+RELTEXT[l.r]+span(l.s,l.e)+'</span></span></div>'}).join('');
+  content.innerHTML='<h1>'+esc(p.l)+'</h1><p class="sub">'+yrs(p)+(p.d?' · '+esc(p.d):'')+'</p><div id="wiki" class="extract">'+(p.i?'<img class="thumb" src="'+img(p,240)+'" alt="">':'')+'<span class="dim">Loading Wikipedia…</span></div>'+
+   '<h2>In London</h2>'+here+'<h2>Life</h2><div id="life" class="dim">Loading…</div><h2>People</h2><div id="assoc" class="dim">Loading…</div>';
+  content.scrollTop=0;
+  if(p.w)fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+p.w).then(function(r){return r.json()}).then(function(w){if(cur.id!==id)return;
+      var pic=w.thumbnail?w.thumbnail.source:(p.i?img(p,240):null);
+      $('#wiki').innerHTML=(pic?'<img class="thumb" src="'+pic+'" alt="">':'')+esc(w.extract||'')+' <a target="_blank" href="'+w.content_urls.desktop.page+'">Wikipedia ↗</a>'}).catch(function(){$('#wiki').querySelector('.dim').textContent=''});
+  else $('#wiki').querySelector('.dim').innerHTML='No English Wikipedia article. <a target="_blank" href="https://www.wikidata.org/wiki/'+id+'">Wikidata ↗</a>';
+  fetch('data/people/'+id+'.json').then(function(r){return r.json()}).then(function(x){if(cur.id!==id)return;
+    var ev=x.ev.map(function(e){return {y:e.s||e.w||(e.k==='born'?p.b:(e.k==='died'||e.k==='buried')?p.x:null),k:e.k,l:e.l,pl:e.pl,lat:e.lat,lon:e.lon,s:e.s,e:e.e,inLondon:e.in}})
+      .concat(x.pos.map(function(q){return {y:q.s,k:'held',l:q.l,s:q.s,e:q.e}}));
+    if(p.b&&!ev.some(function(e){return e.k==='born'}))ev.push({y:p.b,k:'born',l:''});
+    if(p.x&&!ev.some(function(e){return e.k==='died'}))ev.push({y:p.x,k:'died',l:''});
+    var order={born:0,studied:1,lived:2,'worked at':3,'worked in':3,held:4,died:8,buried:9};
+    ev.sort(function(a,b){return ((a.y==null?9999:a.y)-(b.y==null?9999:b.y))||((order[a.k]||5)-(order[b.k]||5))});
+    var seenEv={};ev=ev.filter(function(e){var k=[e.y,e.k,e.l].join('|');if(seenEv[k])return false;seenEv[k]=1;return true});
+    lifeEvents=ev;
+    $('#life').className='';$('#life').innerHTML='<ul class="tl">'+ev.map(function(e,i){
+      var where=e.l?(e.lat!=null?' <span class="lnk" data-fly="'+i+'">'+esc(e.l)+'</span>':' '+esc(e.l)):'';
+      return '<li'+(e.inLondon?' here':'')+'><span class="yr">'+(e.y==null?'':e.y)+'</span>'+esc(e.k)+where+((e.e&&e.e!==e.y)?' <span class="dim">until '+e.e+'</span>':'')+(e.inLondon?' · '+link('l',e.pl,'people here'):'')+'</li>'}).join('')+'</ul>';
+    var as=x.as.slice().sort(function(a,b){return (b.in?1:0)-(a.in?1:0)||((b.in&&D.people[b.id].f||0)-(a.in&&D.people[a.id].f||0))});
+    $('#assoc').className='';$('#assoc').innerHTML=as.length?as.map(function(a){return '<div class="row">'+(a.in?avatar(D.people[a.id]):'')+'<span class="who">'+(a.in?link('p',a.id,a.l):'<span class="dim">'+esc(a.l)+'</span>')+' <span class="rel">'+esc(a.r)+'</span></span>'+(a.in?'<span class="yrs">→ strand</span>':'')+'</div>'}).join(''):'<span class="dim">No recorded relations.</span>';
+    var pts=ev.filter(function(e){return e.lat!=null});
+    if(lifeLine)map.removeLayer(lifeLine);
+    if(pts.length>1){lifeLine=L.polyline(pts.map(function(e){return [e.lat,e.lon]}),{color:'#8a2f1d',weight:2,dashArray:'4 6',opacity:.7}).addTo(map)}
+  });
+  var ctx=ctxPlace&&D.places[ctxPlace];if(ctx)map.flyTo([ctx.lat,ctx.lon],Math.max(map.getZoom(),15),{duration:.6});
+}
+function fly(i){var e=lifeEvents[i];if(!e)return;map.flyTo([e.lat,e.lon],e.inLondon?16:10,{duration:1});
+  if(hereMarker)map.removeLayer(hereMarker);
+  if(!e.inLondon){hereMarker=L.circleMarker([e.lat,e.lon],{radius:9,color:'#8a2f1d'}).addTo(map).bindPopup(esc(e.k+' · '+e.l)).openPopup()}}
+$('#near').onclick=function(){navigator.geolocation.getCurrentPosition(function(pos){var la=pos.coords.latitude,lo=pos.coords.longitude;myPos=[la,lo];cur=null;
+  map.flyTo([la,lo],16);if(hereMarker)map.removeLayer(hereMarker);hereMarker=L.circleMarker([la,lo],{radius:8,color:'#2f5d8a'}).addTo(map);
+  panel.classList.remove('collapsed');content.innerHTML='<h1>Around you</h1><div class="actions"><button class="btn acc" data-act="lead">➜ Lead me</button></div>'+nearby(la,lo,20)},function(){alert('No location available')},{enableHighAccuracy:true,timeout:8000})};
+$('#search').oninput=function(){var q=this.value.trim().toLowerCase();if(q.length<2||!D)return;panel.classList.remove('collapsed');
+  var pp=Object.keys(D.people).filter(function(i){return D.people[i].l&&D.people[i].l.toLowerCase().indexOf(q)>=0}).map(function(i){return {id:i,p:D.people[i]}}).sort(byFame).slice(0,25);
+  var ll=Object.keys(D.places).filter(function(i){return D.places[i].l&&D.places[i].l.toLowerCase().indexOf(q)>=0}).slice(0,15);
+  content.innerHTML='<h2>Places</h2>'+ll.map(function(i){return '<div class="row"><span class="who">'+link('l',i,D.places[i].l)+'</span><span class="yrs">'+(byPlace[i]||[]).length+'</span></div>'}).join('')+
+   '<h2>People</h2>'+pp.map(function(o){return personRow(o.id)}).join('')};
+</script>
+</body>
+</html>
