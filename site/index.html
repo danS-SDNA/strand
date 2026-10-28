@@ -161,7 +161,7 @@ function onOrient(e){var h=e.webkitCompassHeading!=null?e.webkitCompassHeading:(
 function startCompass(cb){if(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'){DeviceOrientationEvent.requestPermission().then(function(s){if(s==='granted')window.addEventListener('deviceorientation',onOrient);setTimeout(cb,400)}).catch(cb)}
   else{window.addEventListener('deviceorientationabsolute',onOrient);window.addEventListener('deviceorientation',onOrient);setTimeout(cb,400)}}
 var leadPicks=[];
-function leadSpeech(){if(!leadPicks.length)return 'Nothing new within range.';return 'From '+origin().label+'. '+leadPicks.map(function(c){var names=topNames(c.id,3);return fmt(c.d).replace(' m',' metres').replace(' km',' kilometres')+' '+relDir(c.b)+': '+c.p.l+(names.length?', with '+names.join(', '):'')}).join('. ')+'.'}
+function leadSpeech(){if(!leadPicks.length)return 'Nothing new within range.';return 'From '+origin().label+'. '+leadPicks.map(function(c){var names=topNames(c.id,3).filter(function(n){return c.p.l.indexOf(n)<0});return fmt(c.d).replace(' m',' metres').replace(' km',' kilometres')+' '+relDir(c.b)+': '+c.p.l+(names.length?', with '+names.join(', '):'')}).join('. ')+'.'}
 function dist(a,b,c,d){var x=(c-a)*111.2,y=(d-b)*111.2*Math.cos(a*Math.PI/180);return Math.sqrt(x*x+y*y)}
 function bearing(a,b,c,d){var y=Math.sin((d-b)*Math.PI/180)*Math.cos(c*Math.PI/180),x=Math.cos(a*Math.PI/180)*Math.sin(c*Math.PI/180)-Math.sin(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.cos((d-b)*Math.PI/180);return (Math.atan2(y,x)*180/Math.PI+360)%360}
 function compass(b){return ['north','north-east','east','south-east','south','south-west','west','north-west'][Math.round(b/45)%8]}
