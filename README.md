@@ -73,6 +73,26 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   markercluster are vendored under `site/vendor/` for the same reason. Map tiles are only cached as
   looked at; bulk tile download is against the OpenStreetMap tile policy.
 
+- **Installable.** `manifest.webmanifest` + icons (`site/icons/`, drawn by Pillow in a one-off
+  script); on Android/desktop Chrome the menu shows **Install Strand** once the browser offers
+  it; on iPhone the menu explains Share → Add to Home Screen. Installed, it opens full-screen,
+  keeps its caches and settings, and the walk screen-lock survives better.
+
+## Licences (what we use, and what releasing an app needs)
+
+- **Wikidata** (places, people, relations, dates): CC0. No conditions.
+- **Wikipedia** text (leads shown on person pages, and the material the stories are written
+  from): CC BY-SA 4.0. Attribution and share-alike: the stories are derived works and are
+  released under CC BY-SA 4.0 with the source article credited (the page says so under each).
+- **Wikimedia Commons** images: each file has its own licence (mostly CC BY-SA, CC BY or public
+  domain), attribution per image. The page links the file; an app must show the credit.
+- **OpenStreetMap** data: ODbL, attribution required (shown on the map). The **tile servers** at
+  tile.openstreetmap.org are run by the OSM Foundation for the community; their policy forbids
+  bulk download and heavy or app-distributed use. A released app needs its own tiles: a
+  commercial provider (MapTiler, Stadia, Thunderforest) or self-hosted vector tiles (Protomaps).
+- **Leaflet** (BSD-2) and **Leaflet.markercluster** (MIT): keep the notices.
+- **Wikipedia/Wikidata APIs**: free to call with a descriptive User-Agent and reasonable rate.
+
 ## Known gaps
 
 - The place-specific anecdote (why this person matters *here*) is not structured data anywhere.
