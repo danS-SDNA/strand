@@ -63,6 +63,16 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   `site/data/tours.json` (`tools/seed_tours.py` writes examples); adding one is a commit, which is
   the approval step. There is no server, so there is no public user content to moderate.
 
+- **Settings** (☰): which kinds of place may raise a walk alert, whose places (anyone / well known /
+  famous, by Wikipedia sitelink count), only places with a story, alert distance, minimum gap,
+  speak and vibrate switches, voice speed. All kept on the phone (`strand.settings`).
+- **Offline** is opt-in. `sw.js` always keeps the app shell, the indexes and whatever has been seen
+  (map tiles up to 4,000, Wikimedia images and summaries up to 1,500). The **Keep London on this
+  phone** switch downloads every person and story file (about 30 MB) through ordinary fetches the
+  worker stores; turning it off removes them and the tile cache but keeps the shell. Leaflet and
+  markercluster are vendored under `site/vendor/` for the same reason. Map tiles are only cached as
+  looked at; bulk tile download is against the OpenStreetMap tile policy.
+
 ## Known gaps
 
 - The place-specific anecdote (why this person matters *here*) is not structured data anywhere.

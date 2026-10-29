@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Strand</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.min.css">
+<link rel="stylesheet" href="vendor/markercluster/MarkerCluster.css">
+<link rel="stylesheet" href="vendor/markercluster/MarkerCluster.Default.css">
 <style>
 :root{--bg:#fbf7ef;--ink:#1d1a16;--muted:#6f675c;--line:#e4dccd;--acc:#8a2f1d;--acc2:#2f5d8a;--chip:#efe7d6}
 @media (prefers-color-scheme:dark){:root{--bg:#17150f;--ink:#efe8da;--muted:#a69d8d;--line:#332e25;--acc:#e07a5f;--acc2:#7fb0e0;--chip:#2a251c}}
@@ -70,6 +70,8 @@ a,.lnk{color:var(--acc2);text-decoration:none;cursor:pointer}.lnk:hover{text-dec
 .mini{display:flex;gap:4px}.mini .btn{padding:3px 8px;font-size:13px}
 .form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;margin:4px 0}.form .cnt{font-size:12px;color:var(--muted);text-align:right}
 .leg{font-size:12px;color:var(--muted);padding:0 0 4px 38px}
+.chip.on{border-color:var(--acc);background:var(--bg);font-weight:bold}.lab{font-size:13px;color:var(--muted);margin:8px 0 3px}
+#menu{max-height:calc(100vh - 70px);overflow-y:auto}.stat{font-size:12px;color:var(--muted);margin:-2px 0 6px}
 </style>
 </head>
 <body>
@@ -80,10 +82,15 @@ a,.lnk{color:var(--acc2);text-decoration:none;cursor:pointer}.lnk:hover{text-dec
 <div id="toast"></div>
 <div id="panel"><div id="grip"></div><div id="content"><p class="sub">Loading London…</p></div></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="vendor/leaflet/leaflet.min.js"></script>
+<script src="vendor/markercluster/leaflet.markercluster.js"></script>
 <script>
-var D=null, byPlace={}, byPerson={}, markers={}, journey=[], visited={}, cur=null, cluster, hereMarker=null, lifeLine=null, lifeEvents=[], myPos=null, leadRadius=1.2, excluded={}, walkOn=false, walkWatch=null, alerted={}, lastAlert=0, wakeLock=null, selMarker=null, tourLayer=null, curated=[], activeTour=null, draft={name:'',desc:'',stops:[]}, myTours=[];
+var D=null, byPlace={}, byPerson={}, markers={}, journey=[], visited={}, cur=null, cluster, hereMarker=null, lifeLine=null, lifeEvents=[], myPos=null, leadRadius=1.2, excluded={}, walkOn=false, walkWatch=null, alerted={}, lastAlert=0, wakeLock=null, selMarker=null, tourLayer=null, curated=[], activeTour=null, draft={name:'',desc:'',stops:[]}, myTours=[], alertEx={}, offlineState='';
+var DEF={speak:true,vibrate:true,rate:0.95,alertRadius:80,alertGap:40,alertFame:'known',alertStory:true,offline:false};var S={};
+try{S=JSON.parse(localStorage.getItem('strand.settings')||'{}');alertEx=JSON.parse(localStorage.getItem('strand.alertEx')||'{}')}catch(e){}
+Object.keys(DEF).forEach(function(k){if(S[k]===undefined)S[k]=DEF[k]});
+function saveS(){localStorage.setItem('strand.settings',JSON.stringify(S));localStorage.setItem('strand.alertEx',JSON.stringify(alertEx))}
+var FAMEMIN={anyone:0,known:40,famous:150};
 try{draft=JSON.parse(localStorage.getItem('strand.draft')||'null')||draft;myTours=JSON.parse(localStorage.getItem('strand.tours')||'[]')}catch(e){}
 try{excluded=JSON.parse(localStorage.getItem('strand.excluded')||'{}')}catch(e){}
 var GROUPS=[['monuments','Statues & memorials','statue',{statue:1,memorial:1,plaque:1}],['graves','Graves','grave',{grave:1}],['churches','Churches','church',{church:1}],['homes','Homes & palaces','house',{house:1,palace:1}],
@@ -141,6 +148,7 @@ fetch('data/index.json').then(function(r){return r.json()}).then(function(d){
     var m=L.marker([p.lat,p.lon],{title:p.l});m.on('click',function(){location.hash='#l/'+id});markers[id]=m});
   map.addLayer(cluster);refreshPins();renderMenu();
   if(localStorage.getItem('strand.loc')==='1')locate(false);
+  if(S.offline&&!localStorage.getItem('strand.offlineDone'))offline(true);
   fetch('data/tours.json').then(function(r){return r.ok?r.json():[]}).then(function(t){curated=t.filter(function(x){return x.stops.every(function(i){return D.places[i]})});renderMenu()}).catch(function(){}).then(route);
 });
 window.addEventListener('hashchange',route);
@@ -150,8 +158,29 @@ function renderMenu(){$('#menu').innerHTML='<div class="sw'+(walkOn?' on':'')+'"
   '<h2>Tours</h2>'+curated.map(function(t){return '<div class="row"><span class="who">'+link('t',t.id,t.name)+'<br><span class="dim">'+t.stops.length+' stops</span></span></div>'}).join('')+
   myTours.map(function(t,i){return '<div class="row"><span class="who">'+link('t','m'+i,t.name)+'<br><span class="dim">'+t.stops.length+' stops · mine</span></span></div>'}).join('')+
   '<div class="actions" style="margin-top:8px"><button class="btn" data-act="tour-open">'+(draft.stops.length?'✎ Tour in progress ('+draft.stops.length+')':'+ New tour')+'</button></div>'+
+  '<h2>Alerts on a walk</h2><div class="lab">For these kinds of place</div><div class="chips">'+GROUPS.map(function(g){return '<span class="chip'+(alertEx[g[0]]?' off':'')+'" data-act="acat:'+g[0]+'">'+g[1]+'</span>'}).join('')+'</div>'+
+  '<div class="lab">Whose places</div>'+seg('alertFame',[['anyone','Anyone'],['known','Well known'],['famous','Famous']])+
+  sw('alertStory','Only places with a story','Skips pins that have just a name and a relation')+
+  '<div class="lab">Within</div>'+seg('alertRadius',[[50,'50 m'],[80,'80 m'],[150,'150 m']])+
+  '<div class="lab">At most one every</div>'+seg('alertGap',[[20,'20 s'],[40,'40 s'],[90,'90 s']])+
+  sw('speak','Speak alerts','Off: the card and a buzz only')+sw('vibrate','Vibrate','')+
+  '<h2>Voice</h2>'+seg('rate',[[0.85,'Slower'],[0.95,'Normal'],[1.1,'Faster']])+
+  '<h2>Offline</h2>'+sw('offline','Keep London on this phone','About 30 MB: every place, person and story. The map itself is kept as you look at it.')+'<div class="stat" id="offstat">'+esc(offlineState)+'</div>'+
   '<div class="actions" style="margin-top:12px"><button class="btn" data-act="forget">Forget where I have been</button></div>'}
+function seg(key,opts){return '<div class="chips">'+opts.map(function(o){return '<span class="chip'+(String(S[key])===String(o[0])?' on':'')+'" data-act="set:'+key+':'+o[0]+'">'+o[1]+'</span>'}).join('')+'</div>'}
+function sw(key,label,small){return '<div class="sw'+(S[key]?' on':'')+'" data-act="set:'+key+':toggle"><span>'+label+(small?'<small>'+small+'</small>':'')+'</span><i></i></div>'}
 $('#menubtn').onclick=function(){$('#menu').classList.toggle('open')};
+/* Offline: the service worker (sw.js) keeps the shell and anything seen; this prefetches every person and story when asked. */
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
+function offStat(t){offlineState=t;var el=$('#offstat');if(el)el.textContent=t}
+function offline(on){if(!on){offStat('');localStorage.removeItem('strand.offlineDone');if(window.caches){caches.delete('tiles');caches.delete('media');caches.keys().then(function(ks){ks.filter(function(k){return k.indexOf('strand-')===0}).forEach(function(k){caches.open(k).then(function(c){c.keys().then(function(rs){rs.forEach(function(r){if(/data\/(people|story)\/Q/.test(r.url))c.delete(r)})})})})})}return}
+  if(!('serviceWorker' in navigator)){offStat('This browser cannot keep pages offline');return}
+  if(localStorage.getItem('strand.offlineDone')){offStat('Ready. Works without a signal; pictures and Wikipedia text need one.');return}
+  navigator.serviceWorker.ready.then(function(){var urls=Object.keys(D.people).map(function(i){return 'data/people/'+i+'.json'}).concat(Object.keys(D.places).map(function(i){return 'data/story/'+i+'.json'}));
+    var done=0,fail=0,i=0,total=urls.length;function next(){if(!S.offline)return;if(i>=total){if(done+fail>=total){localStorage.setItem('strand.offlineDone','1');offStat('Ready ('+done+' files'+(fail?', '+fail+' failed':'')+'). Works without a signal; pictures and Wikipedia text need one.')}return}
+      var u=urls[i++];fetch(u).then(function(r){if(!r.ok)fail++;else done++}).catch(function(){fail++}).then(function(){if((done+fail)%50===0)offStat('Downloading '+(done+fail)+' of '+total+'…');next()})}
+    offStat('Downloading 0 of '+total+'…');for(var k=0;k<6;k++)next()})}
+if(S.offline&&localStorage.getItem('strand.offlineDone'))offlineState='Ready. Works without a signal; pictures and Wikipedia text need one.';
 document.addEventListener('click',function(e){if(!e.target.closest('#menu,#menubtn'))$('#menu').classList.remove('open')});
 function route(){if(!D)return;var h=location.hash.slice(1).split('/');
   if(h[0]==='p'&&D.people[h[1]])showPerson(h[1],h[2]);else if(h[0]==='l'&&D.places[h[1]])showPlace(h[1]);else if(h[0]==='t')showTour(h.slice(1).join('/'));else showHome()}
@@ -187,15 +216,15 @@ function toggleWalk(){walkOn=!walkOn;renderMenu();
   if(walkOn){startCompass(function(){});walkWatch=navigator.geolocation.watchPosition(function(pos){onFix(pos);walkCheck()},function(){},{enableHighAccuracy:true,maximumAge:5000});
     if(navigator.wakeLock)navigator.wakeLock.request('screen').then(function(l){wakeLock=l}).catch(function(){});speak('Walk with me is on. I will speak up when you pass somewhere worth a stop.')}
   else{if(walkWatch!=null)navigator.geolocation.clearWatch(walkWatch);walkWatch=null;if(wakeLock){wakeLock.release();wakeLock=null}}}
-function worthAStop(id){var p=D.places[id];return (storyIdx&&storyIdx[id])||(p.f||0)>=60||(p.n||0)>=3}
-function walkCheck(){if(!myPos||Date.now()-lastAlert<40000)return;var la=myPos[0],lo=myPos[1],best=null;
-  Object.keys(D.places).forEach(function(id){if(visited[id]||alerted[id]||!active(id))return;var p=D.places[id];var d=dist(la,lo,p.lat,p.lon);if(d>0.08||!worthAStop(id))return;
+function worthAStop(id){var p=D.places[id];if(alertEx[p.g])return false;if(S.alertStory&&!(storyIdx&&storyIdx[id]))return false;return (p.f||0)>=FAMEMIN[S.alertFame]||(S.alertFame==='anyone')}
+function walkCheck(){if(!myPos||Date.now()-lastAlert<S.alertGap*1000)return;var la=myPos[0],lo=myPos[1],best=null;
+  Object.keys(D.places).forEach(function(id){if(visited[id]||alerted[id]||!active(id))return;var p=D.places[id];var d=dist(la,lo,p.lat,p.lon);if(d>S.alertRadius/1000||!worthAStop(id))return;
     var sc=(Math.log(1+(p.f||0))*3+Math.log(1+(p.n||0)))/(0.05+d);if(!best||sc>best.sc)best={id:id,p:p,d:d,sc:sc}});
   if(!best)return;lastAlert=Date.now();alerted[best.id]=1;var b=bearing(la,lo,best.p.lat,best.p.lon);var names=topNames(best.id,2).filter(function(n){return best.p.l.indexOf(n)<0});
   var line=Math.round(best.d*1000/10)*10+' metres '+relDir(b)+': '+best.p.l+(names.length?', '+names.join(' and '):'');
   var t=$('#toast');t.innerHTML='<b>'+esc(best.p.l)+'</b><br>'+esc(line.split(': ')[0])+(names.length?' · '+esc(names.join(' and ')):'')+' · tap for the story';t.setAttribute('data-go','l/'+best.id);t.classList.add('show');setTimeout(function(){t.classList.remove('show')},25000);
-  if(navigator.vibrate)navigator.vibrate([120,60,120]);
-  function say(x){speak(line+'. '+(x||''))}
+  if(S.vibrate&&navigator.vibrate)navigator.vibrate([120,60,120]);
+  function say(x){if(S.speak)speak(line+'. '+(x||''))}
   if(storyIdx&&storyIdx[best.id]){if(storyText[best.id])say(storyText[best.id].split(/(?<=\.)\s/)[0]);else fetch('data/story/'+best.id+'.json').then(function(r){return r.json()}).then(function(x){storyText[best.id]=x.t;say(x.t.split(/(?<=\.)\s/)[0])}).catch(function(){say('')})}else say('')}
 function select(latlng){if(selMarker)map.removeLayer(selMarker);selMarker=latlng?L.marker(latlng,{icon:L.divIcon({className:'',html:'<div class="pulse"></div>',iconSize:[26,26],iconAnchor:[13,13]}),interactive:false,zIndexOffset:1000}).addTo(map):null}
 function showPlace(id){var pl=D.places[id];cur={kind:'l',id:id};hop('l',id,pl.l);panel.classList.remove('collapsed');select([pl.lat,pl.lon]);
@@ -216,7 +245,7 @@ function placeSpeech(id){var pl=D.places[id];if(storyText[id])return storyText[i
 var speaking=false;
 function speak(text,btn){if(!window.speechSynthesis){alert('No speech on this device');return}
   if(speaking&&btn){speechSynthesis.cancel();speaking=false;btn.classList.remove('on');return}
-  var u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.95;var v=speechSynthesis.getVoices().filter(function(v){return /en[-_]GB/i.test(v.lang)})[0];if(v)u.voice=v;
+  var u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=S.rate;var v=speechSynthesis.getVoices().filter(function(v){return /en[-_]GB/i.test(v.lang)})[0];if(v)u.voice=v;
   u.onend=u.onerror=function(){speaking=false;if(btn)btn.classList.remove('on')};speaking=true;if(btn)btn.classList.add('on');speechSynthesis.cancel();speechSynthesis.speak(u)}
 /* Heading: on a phone, Lead me can say "ahead" / "to your left" instead of compass points */
 var heading=null;
@@ -274,6 +303,8 @@ function lead(){var o=origin();panel.classList.remove('collapsed');
   content.scrollTop=0}
 function act(a,btn){if(a.slice(0,4)==='cat:'){var g=a.slice(4);if(excluded[g])delete excluded[g];else excluded[g]=1;localStorage.setItem('strand.excluded',JSON.stringify(excluded));refreshPins();renderMenu();if(!location.hash||location.hash==='#')showHome();return}
   if(a==='walk'){toggleWalk();return}if(a==='locate'){locate(true);return}
+  if(a.slice(0,5)==='acat:'){var ag=a.slice(5);if(alertEx[ag])delete alertEx[ag];else alertEx[ag]=1;saveS();renderMenu();return}
+  if(a.slice(0,4)==='set:'){var sp=a.slice(4).split(':'),k=sp[0],v=sp[1];if(v==='toggle')S[k]=!S[k];else S[k]=isNaN(+v)?v:+v;saveS();renderMenu();if(k==='offline')offline(S[k]);return}
   if(a==='tour-add'){draft.stops.push(cur.id);saveDraft();showPlace(cur.id);return}if(a==='tour-open'){location.hash='#t/draft';return}
   if(a.slice(0,5)==='stop:'){var x=a.slice(5).split(':'),i=+x[1];if(x[0]==='up'&&i>0){var tmp=draft.stops[i];draft.stops[i]=draft.stops[i-1];draft.stops[i-1]=tmp}else if(x[0]==='down'&&i<draft.stops.length-1){var tmp2=draft.stops[i];draft.stops[i]=draft.stops[i+1];draft.stops[i+1]=tmp2}else if(x[0]==='del')draft.stops.splice(i,1);saveDraft();showTour('draft');return}
   if(a==='tour-save'){var nm=$('#tname').value.trim().slice(0,40),ds=words($('#tdesc').value,100);if(!nm){alert('Give the tour a name');return}
