@@ -1,0 +1,19 @@
+# Strand AI planner: turns a visitor's sentence into the planner's own answers. Deploy with
+#   npx wrangler kv namespace create CAPS      (put the id below)
+#   npx wrangler secret put AI_KEY             (the Moonshot/Kimi key, or another OpenAI-compatible key)
+#   npx wrangler deploy
+# then set AI_URL in site/index.html to the worker's URL.
+name = "strand-ai-planner"
+main = "index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+AI_BASE = "https://api.moonshot.ai/v1"      # Kimi (Moonshot), OpenAI-compatible; same endpoint .one's LiteAi uses
+AI_MODEL = ""                               # e.g. the current Kimi model id; must be set before deploy
+DEVICE_DAILY = "5"                          # plans per device per day
+GLOBAL_DAILY = "500"                        # plans per day for everyone, a hard spending ceiling
+ALLOWED_ORIGIN = "https://dans-sdna.github.io"
+
+[[kv_namespaces]]
+binding = "CAPS"
+id = "REPLACE_WITH_KV_ID"
