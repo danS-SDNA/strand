@@ -78,6 +78,17 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   it; on iPhone the menu explains Share → Add to Home Screen. Installed, it opens full-screen,
   keeps its caches and settings, and the walk screen-lock survives better.
 
+- **Plan my visit** (home, Around you, ☰ → Tours): five tap-only questions (how long, interests,
+  famous or hidden, pace, start), then tours built on the phone. Interests are themes read from the
+  descriptions of the people tied to each place (writers, science, art, stage, royalty, politics,
+  soldiers and explorers, faith) plus place kinds. A greedy walk picks the best place per minute
+  of walking and lingering; multi-day plans start each day somewhere new. No server, no AI.
+- **Guide videos**: shorts by London guides, pinned where they were filmed (`tools/pull_videos.py`,
+  sources in `tools/video_sources.json`). They appear on place pages, as ▶ pins (switchable in ☰),
+  and on walk alerts, and play in a draggable in-app floating player using YouTube's own embed.
+  Feeds give each channel's latest 15 shorts; more needs a YouTube Data API key. Instagram reels
+  can be listed by hand and embed the same way; they are never fetched.
+
 ## Licences (what we use, and what releasing an app needs)
 
 - **Wikidata** (places, people, relations, dates): CC0. No conditions.
@@ -90,6 +101,9 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   tile.openstreetmap.org are run by the OSM Foundation for the community; their policy forbids
   bulk download and heavy or app-distributed use. A released app needs its own tiles: a
   commercial provider (MapTiler, Stadia, Thunderforest) or self-hosted vector tiles (Protomaps).
+- **Guide videos** are embedded with the platforms' own players, never copied, so views count for
+  the creator and they can withdraw a video. For a released app, ask the creators: an embed is
+  allowed by YouTube's terms, but a curated, pinned collection is better with their blessing.
 - **Leaflet** (BSD-2) and **Leaflet.markercluster** (MIT): keep the notices.
 - **Wikipedia/Wikidata APIs**: free to call with a descriptive User-Agent and reasonable rate.
 

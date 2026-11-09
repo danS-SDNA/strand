@@ -1,0 +1,14 @@
+{
+  "_note": "Guide channels whose shorts are pulled from YouTube's public RSS feed (the latest 15 each), plus single videos added by hand. Instagram reels go in 'videos' with platform 'ig' and the reel code; they are never fetched, only embedded.",
+  "channels": [
+    {"id": "UC0FY2mxHdVGnl0uGxrJ8k-w", "name": "Living London History (Jack Chesher)"},
+    {"id": "UCFWqceEDVxifaU3ljzMH5tg", "name": "Joolz Guides"},
+    {"id": "UCjuLwBL8ZQrcFaBTGozQ64A", "name": "Look Up London (Katie Wignall)"}
+  ],
+  "videos": [
+    {"platform": "yt", "id": "c2lykmWo954"},
+    {"platform": "yt", "id": "9jcdOkQZuQM"},
+    {"platform": "yt", "id": "8ZaYWakepDk"},
+    {"platform": "yt", "id": "NxKh_LhzBss"}
+  ]
+}

@@ -77,7 +77,17 @@ a,.lnk{color:var(--acc2);text-decoration:none;cursor:pointer}.lnk:hover{text-dec
 .mini{display:flex;gap:4px}.mini .btn{padding:3px 8px;font-size:13px}
 .form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;margin:4px 0}.form .cnt{font-size:12px;color:var(--muted);text-align:right}
 .leg{font-size:12px;color:var(--muted);padding:0 0 4px 38px}
-.chip.on{border-color:var(--acc);background:var(--bg);font-weight:bold}.lab{font-size:13px;color:var(--muted);margin:8px 0 3px}
+.chip.on{border-color:var(--acc);background:var(--bg);font-weight:bold}
+.q{margin:14px 0 4px;font-weight:bold}
+#pip{position:fixed;right:10px;bottom:72px;z-index:12;width:min(210px,52vw);aspect-ratio:9/16;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.45);display:none;touch-action:none}
+#pip.show{display:block}#pip.big{width:min(340px,86vw)}#pip iframe{width:100%;height:100%;border:0}
+#pip .bar{position:absolute;top:0;left:0;right:0;height:30px;display:flex;justify-content:space-between;align-items:center;padding:0 6px;background:linear-gradient(rgba(0,0,0,.65),transparent);cursor:move;z-index:2}
+#pip .bar span{color:#fff;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;padding:0 4px}#pip .bar button{background:rgba(0,0,0,.4);color:#fff;border:0;border-radius:6px;width:26px;height:24px;cursor:pointer;font-size:14px}
+@media(min-width:900px){#pip{right:470px;bottom:12px}}
+.vids{display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}.vid{flex:none;width:96px;cursor:pointer}.vid .th{width:96px;height:150px;border-radius:10px;background:#222 center/cover;position:relative}
+.vid .th::after{content:"▶";position:absolute;inset:auto 6px 6px auto;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center}
+.vid .vt{font-size:12px;line-height:1.25;margin-top:4px;max-height:3.75em;overflow:hidden}.vid .vc{font-size:11px;color:var(--muted)}
+.vpin{width:26px;height:26px;border-radius:7px;background:#1a1410;color:#fff;border:2px solid #b08556;display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.4)}.day{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0;background:var(--chip)}.day b{display:block}.lab{font-size:13px;color:var(--muted);margin:8px 0 3px}
 #menu{max-height:calc(100vh - 70px);overflow-y:auto}.stat{font-size:12px;color:var(--muted);margin:-2px 0 6px}
 </style>
 </head>
@@ -87,13 +97,15 @@ a,.lnk{color:var(--acc2);text-decoration:none;cursor:pointer}.lnk:hover{text-dec
 <div id="journey"></div>
 <div id="menu"></div>
 <div id="toast"></div>
+<div id="pip"><div class="bar"><span id="piptitle"></span><button id="pipsize" title="Bigger">⤢</button><button id="pipopen" title="Open in YouTube">↗</button><button id="pipclose" title="Close">✕</button></div></div>
 <div id="panel"><div id="grip"></div><div id="content"><p class="sub">Loading London…</p></div></div>
 
 <script src="vendor/leaflet/leaflet.min.js"></script>
 <script src="vendor/markercluster/leaflet.markercluster.js"></script>
 <script>
-var D=null, byPlace={}, byPerson={}, markers={}, journey=[], visited={}, cur=null, cluster, hereMarker=null, lifeLine=null, lifeEvents=[], myPos=null, leadRadius=1.2, excluded={}, walkOn=false, walkWatch=null, alerted={}, lastAlert=0, wakeLock=null, selMarker=null, tourLayer=null, curated=[], activeTour=null, draft={name:'',desc:'',stops:[]}, myTours=[], alertEx={}, offlineState='', deferredInstall=null;
-var DEF={speak:true,vibrate:true,rate:0.95,alertRadius:80,alertGap:40,alertFame:'known',alertStory:true,offline:false};var S={};
+var D=null, byPlace={}, byPerson={}, markers={}, journey=[], visited={}, cur=null, cluster, hereMarker=null, lifeLine=null, lifeEvents=[], myPos=null, leadRadius=1.2, excluded={}, walkOn=false, walkWatch=null, alerted={}, lastAlert=0, wakeLock=null, selMarker=null, tourLayer=null, curated=[], activeTour=null, draft={name:'',desc:'',stops:[]}, myTours=[], alertEx={}, offlineState='', deferredInstall=null, VIDS=[], vidsAt={}, vidLayer=null, pipCur=null, planned=[], PA={len:'day',pace:'normal',fame:'mix',themes:{},cats:{},from:'here'};
+try{var _pa=JSON.parse(localStorage.getItem('strand.plan')||'null');if(_pa)PA=_pa}catch(e){}
+var DEF={videos:true,vibrate:true,rate:0.95,alertRadius:80,alertGap:40,alertFame:'known',alertStory:true,offline:false};var S={};
 try{S=JSON.parse(localStorage.getItem('strand.settings')||'{}');alertEx=JSON.parse(localStorage.getItem('strand.alertEx')||'{}')}catch(e){}
 Object.keys(DEF).forEach(function(k){if(S[k]===undefined)S[k]=DEF[k]});
 function saveS(){localStorage.setItem('strand.settings',JSON.stringify(S));localStorage.setItem('strand.alertEx',JSON.stringify(alertEx))}
@@ -153,6 +165,8 @@ fetch('data/index.json').then(function(r){return r.json()}).then(function(d){
   cluster=L.markerClusterGroup({disableClusteringAtZoom:17,maxClusterRadius:50,chunkedLoading:true});
   Object.keys(d.places).forEach(function(id){var p=d.places[id];p.g=groupOf(iconOf(p));
     var m=L.marker([p.lat,p.lon],{title:p.l});m.on('click',function(){location.hash='#l/'+id});markers[id]=m});
+  computeThemes();
+  fetch('data/videos.json').then(function(r){return r.ok?r.json():[]}).then(function(v){VIDS=v;v.forEach(function(x,i){x.i=i;(x.pl||[]).forEach(function(q){(vidsAt[q]=vidsAt[q]||[]).push(x)})});drawVids();if(cur&&cur.kind==='l')showPlace(cur.id)}).catch(function(){});
   map.addLayer(cluster);refreshPins();renderMenu();
   if(localStorage.getItem('strand.loc')==='1')locate(false);
   if(S.offline&&!localStorage.getItem('strand.offlineDone'))offline(true);
@@ -167,13 +181,14 @@ function renderMenu(){$('#menu').innerHTML=installRow()+'<div class="sw'+(walkOn
   '<h2>Show</h2><div class="chips">'+GROUPS.map(function(g){return '<span class="chip'+(excluded[g[0]]?' off':'')+'" data-act="cat:'+g[0]+'"><span class="ic"><svg viewBox="0 0 24 24">'+ICONS[g[2]]+'</svg></span>'+g[1]+'</span>'}).join('')+'</div>'+
   '<h2>Tours</h2>'+curated.map(function(t){return '<div class="row"><span class="who">'+link('t',t.id,t.name)+'<br><span class="dim">'+t.stops.length+' stops</span></span></div>'}).join('')+
   myTours.map(function(t,i){return '<div class="row"><span class="who">'+link('t','m'+i,t.name)+'<br><span class="dim">'+t.stops.length+' stops · mine</span></span></div>'}).join('')+
-  '<div class="actions" style="margin-top:8px"><button class="btn" data-act="tour-open">'+(draft.stops.length?'✎ Tour in progress ('+draft.stops.length+')':'+ New tour')+'</button></div>'+
+  '<div class="actions" style="margin-top:8px"><button class="btn acc" data-go="plan">✦ Plan my visit</button><button class="btn" data-act="tour-open">'+(draft.stops.length?'✎ Tour in progress ('+draft.stops.length+')':'+ New tour')+'</button></div>'+
   '<h2>Alerts on a walk</h2><div class="lab">For these kinds of place</div><div class="chips">'+GROUPS.map(function(g){return '<span class="chip'+(alertEx[g[0]]?' off':'')+'" data-act="acat:'+g[0]+'">'+g[1]+'</span>'}).join('')+'</div>'+
   '<div class="lab">Whose places</div>'+seg('alertFame',[['anyone','Anyone'],['known','Well known'],['famous','Famous']])+
   sw('alertStory','Only places with a story','Skips pins that have just a name and a relation')+
   '<div class="lab">Within</div>'+seg('alertRadius',[[50,'50 m'],[80,'80 m'],[150,'150 m']])+
   '<div class="lab">At most one every</div>'+seg('alertGap',[[20,'20 s'],[40,'40 s'],[90,'90 s']])+
   sw('speak','Speak alerts','Off: the card and a buzz only')+sw('vibrate','Vibrate','')+
+  '<h2>Guide videos</h2>'+sw('videos','Show guide shorts on the map','Short films by London guides, pinned where they were made')+
   '<h2>Voice</h2>'+seg('rate',[[0.85,'Slower'],[0.95,'Normal'],[1.1,'Faster']])+
   '<h2>Offline</h2>'+sw('offline','Keep London on this phone','About 30 MB: every place, person and story. The map itself is kept as you look at it.')+'<div class="stat" id="offstat">'+esc(offlineState)+'</div>'+
   '<div class="actions" style="margin-top:12px"><button class="btn" data-act="forget">Forget where I have been</button></div>'}
@@ -195,7 +210,7 @@ function offline(on){if(!on){offStat('');localStorage.removeItem('strand.offline
 if(S.offline&&localStorage.getItem('strand.offlineDone'))offlineState='Ready. Works without a signal; pictures and Wikipedia text need one.';
 document.addEventListener('click',function(e){if(!e.target.closest('#menu,#menubtn'))$('#menu').classList.remove('open')});
 function route(){if(!D)return;var h=location.hash.slice(1).split('/');
-  if(h[0]==='p'&&D.people[h[1]])showPerson(h[1],h[2]);else if(h[0]==='l'&&D.places[h[1]])showPlace(h[1]);else if(h[0]==='t')showTour(h.slice(1).join('/'));else showHome()}
+  if(h[0]==='p'&&D.people[h[1]])showPerson(h[1],h[2]);else if(h[0]==='l'&&D.places[h[1]])showPlace(h[1]);else if(h[0]==='t')showTour(h.slice(1).join('/'));else if(h[0]==='plan')showPlanner(h[1]);else showHome()}
 function hop(kind,id,label){var k=kind+'/'+id;if(kind==='l')visited[id]=1;if(journey.length&&journey[journey.length-1].k===k)return;
   journey.push({k:k,kind:kind,id:id,label:label});if(journey.length>40)journey.shift();
   $('#journey').innerHTML=journey.map(function(j,i){return '<span class="hop'+(i===journey.length-1?' cur':'')+'" data-go="'+j.kind+'/'+j.id+'">'+(j.kind==='p'?'👤 ':'📍 ')+esc(j.label)+'</span>'}).join('');
@@ -209,10 +224,10 @@ function showHome(){panel.classList.remove('collapsed');
   if(myPos){aroundYou();return}
   var STRONG={buried:1,died:1,born:1,lived:1,commemorated:1};var top=Object.keys(D.people).filter(function(i){return (byPerson[i]||[]).some(function(l){return STRONG[l.r]})}).map(function(i){return {id:i,p:D.people[i]}}).sort(byFame).slice(0,8);
   content.innerHTML='<h1>Strand · London</h1><p class="sub">'+Object.keys(D.places).length+' places, '+Object.keys(D.people).length+' people. Tap a pin, press ◎ for what is around you, or ➜ Lead me to be taken somewhere. Follow a life, or change to someone it crossed.</p>'+
-   '<div class="actions"><button class="btn acc" data-act="locate">◎ What is around me</button></div><h2>Start with</h2>'+top.map(function(o){return personRow(o.id)}).join('')}
+   '<div class="actions"><button class="btn acc" data-act="locate">◎ What is around me</button><button class="btn" data-go="plan">✦ Plan my visit</button></div><h2>Start with</h2>'+top.map(function(o){return personRow(o.id)}).join('')}
 /* Around you: the home page once location is allowed. Distance order, story teasers, no typing needed. */
 function aroundYou(){var la=myPos[0],lo=myPos[1];cur=null;panel.classList.remove('collapsed');
-  content.innerHTML='<h1>Around you</h1><div class="actions"><button class="btn acc" data-act="lead">➜ Lead me</button><button class="btn" data-act="locate">◎ Refresh</button></div>'+nearby(la,lo,20);
+  content.innerHTML='<h1>Around you</h1><div class="actions"><button class="btn acc" data-act="lead">➜ Lead me</button><button class="btn" data-go="plan">✦ Plan my visit</button><button class="btn" data-act="locate">◎ Refresh</button></div>'+nearby(la,lo,20);
   content.scrollTop=0;teasers()}
 function teasers(){var rows=document.querySelectorAll('#content .row [data-go^="l/"]');if(!storyIdx){fetch('data/story/_index.json').then(function(r){return r.ok?r.json():{}}).then(function(x){storyIdx=x;teasers()}).catch(function(){storyIdx={}});return}
   var n=0;rows.forEach(function(el){var id=el.getAttribute('data-go').slice(2);if(!storyIdx[id]||n++>=12)return;
@@ -234,7 +249,7 @@ function walkCheck(){if(!myPos||Date.now()-lastAlert<S.alertGap*1000)return;var 
     var sc=(Math.log(1+(p.f||0))*3+Math.log(1+(p.n||0)))/(0.05+d);if(!best||sc>best.sc)best={id:id,p:p,d:d,sc:sc}});
   if(!best)return;lastAlert=Date.now();alerted[best.id]=1;var b=bearing(la,lo,best.p.lat,best.p.lon);var names=topNames(best.id,2).filter(function(n){return best.p.l.indexOf(n)<0});
   var line=Math.round(best.d*1000/10)*10+' metres '+relDir(b)+': '+best.p.l+(names.length?', '+names.join(' and '):'');
-  var t=$('#toast');t.innerHTML='<b>'+esc(best.p.l)+'</b><br>'+esc(line.split(': ')[0])+(names.length?' · '+esc(names.join(' and ')):'')+' · tap for the story';t.setAttribute('data-go','l/'+best.id);t.classList.add('show');setTimeout(function(){t.classList.remove('show')},25000);
+  var t=$('#toast');t.innerHTML='<b>'+esc(best.p.l)+'</b><br>'+esc(line.split(': ')[0])+(names.length?' · '+esc(names.join(' and ')):'')+' · tap for the story';var vn=vidsNear(best.p.lat,best.p.lon,best.id);if(vn.length)t.innerHTML+='<br><span class="btn" style="margin-top:6px;display:inline-block;padding:4px 10px" onclick="event.stopPropagation();play(VIDS['+vn[0].i+'])">▶ A guide filmed here</span>';t.setAttribute('data-go','l/'+best.id);t.classList.add('show');setTimeout(function(){t.classList.remove('show')},25000);
   if(S.vibrate&&navigator.vibrate)navigator.vibrate([120,60,120]);
   function say(x){if(S.speak)speak(line+'. '+(x||''))}
   if(storyIdx&&storyIdx[best.id]){if(storyText[best.id])say(storyText[best.id].split(/(?<=\.)\s/)[0]);else fetch('data/story/'+best.id+'.json').then(function(r){return r.json()}).then(function(x){storyText[best.id]=x.t;say(x.t.split(/(?<=\.)\s/)[0])}).catch(function(){say('')})}else say('')}
@@ -243,7 +258,7 @@ function showPlace(id){var pl=D.places[id];cur={kind:'l',id:id};hop('l',id,pl.l)
   map.flyTo([pl.lat,pl.lon],Math.max(map.getZoom(),16),{duration:.6});
   var ppl=placePeople(id);
   content.innerHTML='<h1>'+icon(pl,1)+esc(pl.l)+'</h1><p class="sub">'+esc(pl.d||pl.t.join(', '))+' · <a target="_blank" href="https://www.wikidata.org/wiki/'+id+'">wikidata</a></p>'+
-   '<div id="story"></div>'+tourStrip(id)+'<div class="actions"><button class="btn acc" data-act="lead">➜ Lead me on from here</button><button class="btn" data-act="listen">▶ Listen</button>'+(draft.stops.indexOf(id)<0?'<button class="btn" data-act="tour-add">+ Tour</button>':'<button class="btn on" data-act="tour-open">✓ In tour ('+draft.stops.length+')</button>')+'</div>'+
+   '<div id="story"></div>'+vidStrip(vidsNear(pl.lat,pl.lon,id))+tourStrip(id)+'<div class="actions"><button class="btn acc" data-act="lead">➜ Lead me on from here</button><button class="btn" data-act="listen">▶ Listen</button>'+(draft.stops.indexOf(id)<0?'<button class="btn" data-act="tour-add">+ Tour</button>':'<button class="btn on" data-act="tour-open">✓ In tour ('+draft.stops.length+')</button>')+'</div>'+
    '<h2>'+ppl.length+' people</h2>'+ppl.map(function(o){return personRow(o.id,id,o.rels)}).join('')+
    '<h2>Nearby</h2>'+nearby(pl.lat,pl.lon,8,id);
   content.scrollTop=0;loadStory(id)}
@@ -283,6 +298,7 @@ function b64(x){return btoa(unescape(encodeURIComponent(x))).replace(/\+/g,'-').
 function unb64(x){return decodeURIComponent(escape(atob(x.replace(/-/g,'+').replace(/_/g,'/'))))}
 function tourOf(key){if(key==='draft')return {key:key,name:draft.name,desc:draft.desc,stops:draft.stops,editable:true};
   if(key.slice(0,2)==='x/'){try{var a=JSON.parse(unb64(key.slice(2)));return {key:key,name:String(a[0]).slice(0,40),desc:words(String(a[1]||''),100),stops:a[2].filter(function(i){return D.places[i]}),shared:true}}catch(e){return null}}
+  if(key[0]==='p'&&planned[+key.slice(1)]){var pd=planned[+key.slice(1)];return {key:key,name:pd.name,desc:pd.desc,stops:pd.stops,planned:true}}
   if(key[0]==='m'){var t=myTours[+key.slice(1)];return t?{key:key,name:t.name,desc:t.desc,stops:t.stops,mine:+key.slice(1)}:null}
   for(var i=0;i<curated.length;i++)if(curated[i].id===key)return {key:key,name:curated[i].name,desc:curated[i].desc,stops:curated[i].stops,curated:true};return null}
 function drawTour(t){if(tourLayer){map.removeLayer(tourLayer);tourLayer=null}if(!t||!t.stops.length)return;
@@ -299,8 +315,67 @@ function showTour(key){var t=tourOf(key);if(!t){location.hash='';return}cur=null
     '<h1>'+esc(t.name)+'</h1><p class="sub">'+t.stops.length+' stops, '+fmt(total)+' on foot'+(t.curated?' · curated':t.shared?' · shared with you':'')+'</p>'+(t.desc?'<div class="story">'+esc(t.desc)+'</div>':'');
   var acts=t.editable?(t.stops.length>=2?'<div class="form"><input id="tname" maxlength="40" placeholder="Tour name (40 characters)" value="'+esc(t.name)+'"><textarea id="tdesc" rows="3" placeholder="What this tour is, 100 words at most" oninput="this.nextElementSibling.textContent=this.value.trim().split(/\\s+/).filter(Boolean).length+\' / 100 words\'">'+esc(t.desc)+'</textarea><div class="cnt">'+(t.desc?t.desc.split(/\s+/).length:0)+' / 100 words</div></div>':'')+
       '<div class="actions">'+(t.stops.length?'<button class="btn acc" data-go="l/'+t.stops[0]+'">Start at stop 1</button>':'')+(t.stops.length>=2?'<button class="btn" data-act="tour-save">Save</button>':'')+(t.stops.length?'<button class="btn" data-act="tour-clear">Discard</button>':'')+'</div>':
-    '<div class="actions">'+(t.stops.length?'<button class="btn acc" data-go="l/'+t.stops[0]+'">Start at stop 1</button>':'')+'<button class="btn" data-act="tour-share">Share link</button>'+(t.shared?'<button class="btn" data-act="tour-keep">Keep this tour</button>':'')+(t.mine!=null?'<button class="btn" data-act="tour-edit">Edit</button><button class="btn" data-act="tour-del:'+t.mine+'">Delete</button>':'')+'</div>';
+    '<div class="actions">'+(t.stops.length?'<button class="btn acc" data-go="l/'+t.stops[0]+'">Start at stop 1</button>':'')+'<button class="btn" data-act="tour-share">Share link</button>'+(t.shared||t.planned?'<button class="btn" data-act="tour-keep">Keep this tour</button>':'')+(t.planned?'<button class="btn" data-go="plan/result">◀ Back to the plan</button>':'')+(t.mine!=null?'<button class="btn" data-act="tour-edit">Edit</button><button class="btn" data-act="tour-del:'+t.mine+'">Delete</button>':'')+'</div>';
   content.innerHTML=head+acts+rows;content.scrollTop=0}
+/* Guide videos: shorts by London guides pinned where they were filmed (tools/pull_videos.py). Played in a floating
+   in-app player so the map stays usable; YouTube's own embed, nothing re-hosted. */
+function vidsNear(lat,lon,id){var out=(vidsAt[id]||[]).slice();VIDS.forEach(function(v){if(out.indexOf(v)<0&&dist(lat,lon,v.lat,v.lon)<0.06)out.push(v)});return out}
+function thumb(v){return v.p==='yt'?'https://i.ytimg.com/vi/'+v.v+'/hqdefault.jpg':''}
+function vidStrip(vs){if(!vs.length)return '';return '<h2>Guides filmed here</h2><div class="vids">'+vs.map(function(v){return '<div class="vid" data-act="vid:'+v.i+'"><div class="th" style="background-image:url('+thumb(v)+')"></div><div class="vt">'+esc(v.t.replace(/#\w+/g,'').trim())+'</div><div class="vc">'+esc(v.c)+'</div></div>'}).join('')+'</div>'}
+function drawVids(){if(vidLayer){map.removeLayer(vidLayer);vidLayer=null}if(!S.videos||!VIDS.length)return;
+  vidLayer=L.layerGroup(VIDS.map(function(v){return L.marker([v.lat,v.lon],{icon:L.divIcon({className:'',html:'<div class="vpin">▶</div>',iconSize:[26,26],iconAnchor:[13,13]}),zIndexOffset:800,title:v.t}).on('click',function(){if(v.pl&&v.pl[0])location.hash='#l/'+v.pl[0];play(v)})})).addTo(map)}
+function vidSrc(v){return v.p==='ig'?'https://www.instagram.com/reel/'+v.v+'/embed':'https://www.youtube-nocookie.com/embed/'+v.v+'?autoplay=1&playsinline=1&rel=0&modestbranding=1'}
+function vidUrl(v){return v.p==='ig'?'https://www.instagram.com/reel/'+v.v+'/':'https://www.youtube.com/shorts/'+v.v}
+function play(v){if(!v)return;pipCur=v;var p=$('#pip');var f=p.querySelector('iframe');if(f)f.remove();f=document.createElement('iframe');f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.src=vidSrc(v);p.appendChild(f);
+  $('#piptitle').textContent=v.c;p.classList.add('show');if(speaking){speechSynthesis.cancel();speaking=false}}
+$('#pipclose').onclick=function(){var p=$('#pip');p.classList.remove('show','big');var f=p.querySelector('iframe');if(f)f.remove();pipCur=null};
+$('#pipsize').onclick=function(){$('#pip').classList.toggle('big')};
+$('#pipopen').onclick=function(){if(pipCur)window.open(vidUrl(pipCur),'_blank')};
+(function(){var p=$('#pip'),bar=p.querySelector('.bar'),sx,sy,ox,oy,drag=false;
+  bar.addEventListener('pointerdown',function(e){if(e.target.tagName==='BUTTON')return;drag=true;bar.setPointerCapture(e.pointerId);var r=p.getBoundingClientRect();sx=e.clientX;sy=e.clientY;ox=r.left;oy=r.top});
+  bar.addEventListener('pointermove',function(e){if(!drag)return;var x=Math.max(0,Math.min(innerWidth-p.offsetWidth,ox+e.clientX-sx)),y=Math.max(0,Math.min(innerHeight-p.offsetHeight,oy+e.clientY-sy));p.style.left=x+'px';p.style.top=y+'px';p.style.right='auto';p.style.bottom='auto'});
+  bar.addEventListener('pointerup',function(){drag=false})})();
+/* Plan my visit: a few taps, then tours built on the phone from the people behind each place. No AI, no server. */
+var THEMES=[['writers','Writers & poets',/writer|poet|novelist|playwright|author|essayist|dramatist|journalist|diarist/],['science','Science & invention',/scientist|physicist|chemist|mathematician|engineer|inventor|biologist|astronomer|naturalist|physician|surgeon|nurse/],
+ ['art','Art & architecture',/painter|sculptor|artist|architect|designer|illustrator|photographer/],['stage','Music & stage',/composer|musician|singer|actor|actress|comedian|dancer|conductor|songwriter|guitarist/],
+ ['royal','Kings & queens',/\bking\b|queen|prince|princess|monarch|duke|duchess|\bearl\b|royal|emperor/],['politics','Politics & reform',/politician|prime minister|statesman|activist|reformer|suffrag|campaigner|revolutionary|philosopher|economist|abolition/],
+ ['war','Soldiers & explorers',/military|officer|admiral|general\b|soldier|explorer|navigator|aviator|naval/],['faith','Faith & churches',/bishop|priest|cleric|saint|theologian|archbishop|preacher|nun\b|monk/]];
+var PLANCATS=[['museums','Museums','museum'],['churches','Churches','church'],['pubs','Pubs','pub'],['outdoors','Parks & squares','park'],['graves','Graves','grave'],['monuments','Statues','statue']];
+var LENS={hours:[2,1],half:[4,1],day:[7,1],two:[7,2],three:[7,3],week:[7,5]};var PACE={gentle:[3.5,1.3],normal:[4.5,1],brisk:[5.5,0.8]};
+function computeThemes(){Object.keys(D.places).forEach(function(id){var th={};(byPlace[id]||[]).forEach(function(l){var p=D.people[l.pe];if(!p||!p.d)return;var d=p.d.toLowerCase(),w=Math.log(2+(p.f||0));THEMES.forEach(function(t){if(t[2].test(d))th[t[0]]=(th[t[0]]||0)+w})});D.places[id].th=th})}
+function chipsQ(key,opts,multi){return '<div class="chips">'+opts.map(function(o){var on=multi?PA[key][o[0]]:PA[key]===o[0];return '<span class="chip'+(on?' on':'')+'" data-act="pa:'+key+':'+o[0]+'">'+o[1]+'</span>'}).join('')+'</div>'}
+function showPlanner(sub){if(sub==='result'&&planned.length){showPlan();return}cur=null;select(null);panel.classList.remove('collapsed');
+  content.innerHTML='<h1>Plan my visit</h1><p class="sub">A few taps and Strand builds walking tours around what you like. Nothing to type; your answers stay on this phone.</p>'+
+   '<div class="q">How long are you here?</div>'+chipsQ('len',[['hours','A couple of hours'],['half','Half a day'],['day','A day'],['two','Two days'],['three','Three days'],['week','A week']])+
+   '<div class="q">What are you into?</div>'+chipsQ('themes',THEMES.map(function(t){return [t[0],t[1]]}),1)+'<div style="height:6px"></div>'+chipsQ('cats',PLANCATS.map(function(c){return [c[0],c[1]]}),1)+
+   '<div class="q">Famous or hidden?</div>'+chipsQ('fame',[['famous','The famous ones'],['mix','A mix'],['hidden','Off the beaten track']])+
+   '<div class="q">Walking pace</div>'+chipsQ('pace',[['gentle','Gentle'],['normal','Normal'],['brisk','Brisk']])+
+   '<div class="q">Start from</div>'+chipsQ('from',[['here','Where I am'],['map','The middle of the map']])+
+   '<div class="actions" style="margin-top:16px"><button class="btn acc" data-act="plan-go">✦ Plan it</button></div>';content.scrollTop=0}
+function dwell(pl){var k=iconOf(pl);return {museum:60,palace:40,church:20,pub:30,park:20,theatre:12,grave:10,hospital:10,school:10,station:6,statue:8,plaque:6,memorial:8,street:6,water:10,bridge:8,house:10,building:10}[k]||10}
+function planScore(id){var pl=D.places[id];if(!active(id)||/country|kingdom|state|empire/.test((pl.t||[]).join(' ')))return 0;var th=pl.th||{},want=Object.keys(PA.themes),cats=Object.keys(PA.cats);
+  var interest=1;want.forEach(function(t){interest+=(th[t]||0)});if(cats.length&&cats.indexOf(pl.g)>=0)interest+=4;if((want.length||cats.length)&&interest===1)interest=0.15;
+  var f=pl.f||0,fame=PA.fame==='famous'?Math.log(2+f):PA.fame==='hidden'?(f>300?0.2:2.5/Math.log(3+f)):Math.sqrt(Math.log(2+f));
+  var k=iconOf(pl),dull=(k==='street'||k==='station')&&!PA.cats.outdoors?0.25:1;
+  return interest*fame*dull*(storyIdx&&storyIdx[id]?1:0.5)}
+function planDay(start,minutes,used,pace){var pos=start,left=minutes,stops=[],km=0;
+  var cands=Object.keys(D.places).filter(function(i){return !used[i]&&dist(start[0],start[1],D.places[i].lat,D.places[i].lon)<3}).map(function(i){return {id:i,s:planScore(i)}}).filter(function(c){return c.s>0});
+  var labels={},cap=Math.min(14,Math.max(4,Math.round(minutes/22)));
+  while(stops.length<cap){var best=null;cands.forEach(function(c){if(used[c.id])return;var pl=D.places[c.id];if(labels[pl.l])return;var d=dist(pos[0],pos[1],pl.lat,pl.lon);if(d>(stops.length?1.2:3))return;
+      var walk=d/pace[0]*60,cost=walk+dwell(pl)*pace[1];if(cost>left)return;var v=c.s/(4+cost);if(!best||v>best.v)best={id:c.id,v:v,cost:cost,d:d}});
+    if(!best)break;used[best.id]=1;labels[D.places[best.id].l]=1;stops.push(best.id);left-=best.cost;km+=best.d;pos=[D.places[best.id].lat,D.places[best.id].lon]}
+  return {stops:stops,km:km,mins:minutes-left}}
+function makePlan(){var L=LENS[PA.len],pace=PACE[PA.pace],used={},start;if(PA.from==='here'&&myPos)start=myPos.slice();else{var c=map.getCenter();start=[c.lat,c.lng]}
+  planned=[];var starts=[start];for(var day=0;day<L[1];day++){var r=planDay(start,L[0]*60,used,pace);if(r.stops.length){var first=D.places[r.stops[0]];
+      var names=[];r.stops.forEach(function(i){topNames(i,1).forEach(function(n){if(names.indexOf(n)<0&&names.length<4)names.push(n)})});
+      planned.push({name:(L[1]>1?'Day '+(day+1)+': ':'')+'From '+first.l,desc:r.stops.length+' stops, about '+fmt(r.km)+' on foot and '+(Math.round(r.mins/30)/2)+' hours with time at each. With '+names.join(', ')+'.',stops:r.stops,km:r.km,mins:r.mins})}
+    /* next day: the best unused place well away from earlier starts */
+    var nb=null;Object.keys(D.places).forEach(function(i){if(used[i])return;var pl=D.places[i];if(starts.some(function(s){return dist(s[0],s[1],pl.lat,pl.lon)<2}))return;var sc=planScore(i);if(!nb||sc>nb.s)nb={i:i,s:sc}});
+    if(!nb)break;start=[D.places[nb.i].lat,D.places[nb.i].lon];starts.push(start)}}
+function showPlan(){cur=null;select(null);activeTour=null;drawTour(null);panel.classList.remove('collapsed');
+  content.innerHTML='<h1>Your plan</h1><p class="sub">'+(planned.length?planned.length+' tour'+(planned.length>1?'s':'')+'. Open one to see it on the map; keep the ones you like.':'Nothing matched. Try fewer interests or a longer time.')+'</p>'+
+   planned.map(function(d,i){return '<div class="day" data-go="t/p'+i+'"><b>'+esc(d.name)+'</b><span class="dim">'+esc(d.desc)+'</span></div>'}).join('')+
+   '<div class="actions">'+(planned.length?'<button class="btn acc" data-act="plan-keepall">Keep all</button>':'')+'<button class="btn" data-go="plan">Change answers</button></div>';content.scrollTop=0}
 /* Lead me: three directions worth walking, diverse in bearing, ranked by who is there */
 function origin(){if(cur&&cur.kind==='l'){var p=D.places[cur.id];return {lat:p.lat,lon:p.lon,label:p.l}}if(myPos)return {lat:myPos[0],lon:myPos[1],label:'where you are'};var c=map.getCenter();return {lat:c.lat,lon:c.lng,label:'the map centre'}}
 function lead(){var o=origin();panel.classList.remove('collapsed');
@@ -314,10 +389,13 @@ function lead(){var o=origin();panel.classList.remove('collapsed');
    '<div class="actions"><button class="btn" data-act="listen-lead">▶ Listen</button><button class="btn" data-act="further">Further afield</button><button class="btn" data-act="closer">Closer</button><button class="btn" data-act="forget">Forget where I have been</button></div>';
   content.scrollTop=0}
 function act(a,btn){if(a.slice(0,4)==='cat:'){var g=a.slice(4);if(excluded[g])delete excluded[g];else excluded[g]=1;localStorage.setItem('strand.excluded',JSON.stringify(excluded));refreshPins();renderMenu();if(!location.hash||location.hash==='#')showHome();return}
-  if(a==='walk'){toggleWalk();return}if(a==='locate'){locate(true);return}
+  if(a==='walk'){toggleWalk();return}if(a.slice(0,4)==='vid:'){play(VIDS[+a.slice(4)]);return}if(a==='locate'){locate(true);return}
+  if(a.slice(0,3)==='pa:'){var pq=a.slice(3).split(':');if(pq[0]==='themes'||pq[0]==='cats'){if(PA[pq[0]][pq[1]])delete PA[pq[0]][pq[1]];else PA[pq[0]][pq[1]]=1}else PA[pq[0]]=pq[1];localStorage.setItem('strand.plan',JSON.stringify(PA));var sc=content.scrollTop;showPlanner();content.scrollTop=sc;return}
+  if(a==='plan-go'){makePlan();location.hash='#plan/result';return}
+  if(a==='plan-keepall'){planned.forEach(function(d){myTours.push({name:d.name,desc:d.desc,stops:d.stops.slice()})});localStorage.setItem('strand.tours',JSON.stringify(myTours));renderMenu();alert(planned.length+' tour'+(planned.length>1?'s':'')+' saved under ☰ → Tours');return}
   if(a==='install'){if(deferredInstall){deferredInstall.prompt();deferredInstall.userChoice.then(function(){deferredInstall=null;renderMenu()})}return}
   if(a.slice(0,5)==='acat:'){var ag=a.slice(5);if(alertEx[ag])delete alertEx[ag];else alertEx[ag]=1;saveS();renderMenu();return}
-  if(a.slice(0,4)==='set:'){var sp=a.slice(4).split(':'),k=sp[0],v=sp[1];if(v==='toggle')S[k]=!S[k];else S[k]=isNaN(+v)?v:+v;saveS();renderMenu();if(k==='offline')offline(S[k]);return}
+  if(a.slice(0,4)==='set:'){var sp=a.slice(4).split(':'),k=sp[0],v=sp[1];if(v==='toggle')S[k]=!S[k];else S[k]=isNaN(+v)?v:+v;saveS();renderMenu();if(k==='offline')offline(S[k]);if(k==='videos')drawVids();return}
   if(a==='tour-add'){draft.stops.push(cur.id);saveDraft();showPlace(cur.id);return}if(a==='tour-open'){location.hash='#t/draft';return}
   if(a.slice(0,5)==='stop:'){var x=a.slice(5).split(':'),i=+x[1];if(x[0]==='up'&&i>0){var tmp=draft.stops[i];draft.stops[i]=draft.stops[i-1];draft.stops[i-1]=tmp}else if(x[0]==='down'&&i<draft.stops.length-1){var tmp2=draft.stops[i];draft.stops[i]=draft.stops[i+1];draft.stops[i+1]=tmp2}else if(x[0]==='del')draft.stops.splice(i,1);saveDraft();showTour('draft');return}
   if(a==='tour-save'){var nm=$('#tname').value.trim().slice(0,40),ds=words($('#tdesc').value,100);if(!nm){alert('Give the tour a name');return}
