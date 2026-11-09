@@ -89,6 +89,24 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   Feeds give each channel's latest 15 shorts; more needs a YouTube Data API key. Instagram reels
   can be listed by hand and embed the same way; they are never fetched.
 
+- **Food and drink**: 12,987 cafés, pubs, bars and restaurants from OpenStreetMap
+  (`tools/pull_food.py`; `tools/pull_food_geofabrik.py` reads just the points-of-interest layers out of
+  Geofabrik's daily London extract with range requests when the Overpass API is down). Pubs with a
+  Wikidata item are flagged: famous (an article and more, 337) or historic (mostly listed, 642). They
+  are tappable places, drawn from zoom 16 (famous pubs from 14), listed under "Food & drink nearby",
+  findable in search, and usable as tour stops. The planner can add a coffee stop every couple of
+  hours and end the day at a famous pub; chains are skipped. No ratings yet.
+- **Menu** is a short list of sections (Tours, Show on the map, Food & drink, Walk alerts, Voice &
+  sound, Offline, More), each opening its own page.
+- **Start screen**: on opening, "Where to today?" offers Around me, Walk with me, Lead me, Plan my
+  visit and Meet others on a tour (not built; a tap records interest on the phone), with Skip and
+  "Don't ask". If a tour is under way the app reopens at its current stop instead.
+- **AI planning** (optional): `worker/ai-planner` is a Cloudflare Worker that turns a sentence into
+  the planner's own answers through an OpenAI-compatible model (Kimi/Moonshot by default, the same
+  endpoint .one's LiteAi uses). The model never chooses places. Per-device and global daily caps in
+  KV; `node worker/ai-planner/test.mjs` checks it offline. The box on the planner page appears only
+  when `AI_URL` is set in `index.html`.
+
 ## Licences (what we use, and what releasing an app needs)
 
 - **Wikidata** (places, people, relations, dates): CC0. No conditions.
