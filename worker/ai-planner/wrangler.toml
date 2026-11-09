@@ -9,11 +9,12 @@ compatibility_date = "2026-10-01"
 
 [vars]
 AI_BASE = "https://api.moonshot.ai/v1"      # Kimi (Moonshot), OpenAI-compatible; same endpoint .one's LiteAi uses
-AI_MODEL = ""                               # e.g. the current Kimi model id; must be set before deploy
+AI_MODEL = "kimi-k3"                        # measured 09/11: answers in ~2.5 s with thinking off
+AI_THINKING = "disabled"                    # K3 otherwise reasons for ~30 s and can run out of tokens
 DEVICE_DAILY = "5"                          # plans per device per day
 GLOBAL_DAILY = "500"                        # plans per day for everyone, a hard spending ceiling
 ALLOWED_ORIGIN = "https://dans-sdna.github.io"
 
 [[kv_namespaces]]
 binding = "CAPS"
-id = "REPLACE_WITH_KV_ID"
+id = "19bd9a390c7e43ea9df0104abc8f910e"

@@ -112,7 +112,7 @@ a,.lnk{color:var(--acc2);text-decoration:none;cursor:pointer}.lnk:hover{text-dec
 <script>
 var D=null, byPlace={}, byPerson={}, markers={}, journey=[], visited={}, cur=null, cluster, hereMarker=null, lifeLine=null, lifeEvents=[], myPos=null, leadRadius=1.2, excluded={}, walkOn=false, walkWatch=null, alerted={}, lastAlert=0, wakeLock=null, selMarker=null, tourLayer=null, curated=[], activeTour=null, draft={name:'',desc:'',stops:[]}, myTours=[], alertEx={}, offlineState='', deferredInstall=null, FOOD=[], foodLayer=null, menuPage='', VIDS=[], vidsAt={}, vidLayer=null, pipCur=null, planned=[], PA={len:'day',pace:'normal',fame:'mix',themes:{},cats:{},from:'here',breaks:{}};
 try{var _pa=JSON.parse(localStorage.getItem('strand.plan')||'null');if(_pa)PA=_pa;if(!PA.breaks)PA.breaks={}}catch(e){}
-var AI_URL='';
+var AI_URL='https://strand-ai-planner.rackdigaback.workers.dev';
 var DEF={startSheet:true,foodC:true,foodP:true,foodB:true,foodR:true,videos:true,vibrate:true,rate:0.95,alertRadius:80,alertGap:40,alertFame:'known',alertStory:true,offline:false};var S={};
 try{S=JSON.parse(localStorage.getItem('strand.settings')||'{}');alertEx=JSON.parse(localStorage.getItem('strand.alertEx')||'{}')}catch(e){}
 Object.keys(DEF).forEach(function(k){if(S[k]===undefined)S[k]=DEF[k]});

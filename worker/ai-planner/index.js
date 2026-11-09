@@ -3,6 +3,14 @@
 // The phone then builds the tours from real Strand places. Small prompt, small reply, nothing invented.
 const LEN = ["hours", "half", "day", "two", "three", "week"], PACE = ["gentle", "normal", "brisk"], FAME = ["famous", "mix", "hidden"], BREAKS = ["coffee", "pub"];
 
+// The last parseable {...} in the reply: a model that thinks out loud may quote JSON before its answer.
+function lastJson(t) {
+  const end = t.lastIndexOf("}");
+  for (let i = t.lastIndexOf("{", end); i >= 0; i = t.lastIndexOf("{", i - 1)) {
+    try { const v = JSON.parse(t.slice(i, end + 1)); if (v && typeof v === "object") return v; } catch {}
+  }
+  return {};
+}
 function cors(env) {
   return { "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN, "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type" };
 }
@@ -37,14 +45,12 @@ export default {
 Use only the values listed. Leave a field out when the visitor gives no clue. Never name places.`;
     const r = await fetch(`${env.AI_BASE}/chat/completions`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.AI_KEY}` },
-      body: JSON.stringify({ model: env.AI_MODEL, temperature: 0.2, max_tokens: 300, messages: [{ role: "system", content: sys }, { role: "user", content: text }] }),
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${String(env.AI_KEY || "").trim()}` },
+      body: JSON.stringify({ model: env.AI_MODEL, max_tokens: 1200, ...(env.AI_THINKING ? { thinking: { type: env.AI_THINKING } } : {}), messages: [{ role: "system", content: sys }, { role: "user", content: text }] }),
     });
-    if (!r.ok) return reply(env, 502, { error: "Not available just now" });
+    if (!r.ok) return reply(env, 502, { error: "Not available just now", upstream: r.status });
     const out = await r.json();
-    const m = (out.choices?.[0]?.message?.content || "").match(/\{[\s\S]*\}/);
-    let a = {};
-    try { a = m ? JSON.parse(m[0]) : {}; } catch { a = {}; }
+    const a = lastJson(out.choices?.[0]?.message?.content || "");
     const pick = (v, list) => (list.includes(v) ? v : undefined), some = (v, list) => (Array.isArray(v) ? v.filter((x) => list.includes(x)) : []);
     const answers = { len: pick(a.len, LEN), pace: pick(a.pace, PACE), fame: pick(a.fame, FAME), themes: some(a.themes, themes), cats: some(a.cats, cats), breaks: some(a.breaks, BREAKS) };
     return reply(env, 200, { answers, intro: typeof a.intro === "string" ? a.intro.slice(0, 200) : "" });

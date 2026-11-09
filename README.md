@@ -104,8 +104,12 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
 - **AI planning** (optional): `worker/ai-planner` is a Cloudflare Worker that turns a sentence into
   the planner's own answers through an OpenAI-compatible model (Kimi/Moonshot by default, the same
   endpoint .one's LiteAi uses). The model never chooses places. Per-device and global daily caps in
-  KV; `node worker/ai-planner/test.mjs` checks it offline. The box on the planner page appears only
-  when `AI_URL` is set in `index.html`.
+  KV; `node worker/ai-planner/test.mjs` checks it offline, `live-check.mjs` makes one real call.
+  Live since 09/11/2026 at https://strand-ai-planner.rackdigaback.workers.dev on Kimi K3 with
+  thinking off (about 3.5 s and 300 tokens a plan; with thinking on it took 33 s and ran out of
+  tokens). The key is the worker secret `AI_KEY` (from `ONE_AI_KEY_MOONSHOT`); balance:
+  `GET https://api.moonshot.ai/v1/users/me/balance`. The box on the planner page appears only when
+  `AI_URL` is set in `index.html`.
 
 ## Licences (what we use, and what releasing an app needs)
 
