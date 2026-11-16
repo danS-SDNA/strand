@@ -94,6 +94,11 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   are general topics, several places at once, book news, or outside London. Instagram reels
   can be listed by hand and embed the same way; they are never fetched.
 
+- **Video walks**: Plan my visit asks about guide films: leave them out, include the spots guides
+  filmed (boosted), or a video walk that only stops where there is a film. Each film belongs to one
+  place, its own or the nearest within 100 m, so every stop has a film of its own; a film with no
+  place nearby becomes a stop of its own. Each stop's tour strip has "Watch the guide here". A
+  curated "A video walk through the City" (12 stops, Barbican to Cornhill) ships in `tours.json`.
 - **Food and drink**: 12,987 cafés, pubs, bars and restaurants from OpenStreetMap
   (`tools/pull_food.py`; `tools/pull_food_geofabrik.py` reads just the points-of-interest layers out of
   Geofabrik's daily London extract with range requests when the Overpass API is down). Pubs with a

@@ -50,6 +50,33 @@ tours = [
      "desc": "The British Museum, the colleges and the houses between Russell Square and Gordon Square, and the people tied to them. Flat and short between stops.",
      "stops": pick((51.5225, -0.1270), 0.55, lambda q: "street" not in kinds(q) and "road" not in kinds(q) and "square" not in kinds(q), 9)},
 ]
+
+# A video walk: places that own a guide film (the film's own place, or the nearest within 100 m),
+# inside the City, walked nearest-neighbour from the best known. Same rule the app uses.
+VIDS = json.loads((ROOT / "site/data/videos.json").read_text(encoding="utf-8"))
+owner = {}
+for v in VIDS:
+    o = v["pl"][0] if v.get("pl") and v["pl"][0] in P else None
+    if not o:
+        best = 0.1
+        for q, pl in P.items():
+            d = dist((v["lat"], v["lon"]), (pl["lat"], pl["lon"]))
+            if d < best:
+                best, o = d, q
+    if o:
+        owner.setdefault(o, []).append(v)
+city = [q for q in owner if 51.506 <= P[q]["lat"] <= 51.521 and -0.112 <= P[q]["lon"] <= -0.076]
+city.sort(key=lambda q: -(P[q].get("f") or 0))
+walk, rest = [city[0]], city[1:]
+while rest and len(walk) < 12:
+    last = P[walk[-1]]
+    rest.sort(key=lambda q: dist((last["lat"], last["lon"]), (P[q]["lat"], P[q]["lon"])))
+    nxt = rest.pop(0)
+    if dist((last["lat"], last["lon"]), (P[nxt]["lat"], P[nxt]["lon"])) <= 0.8:
+        walk.append(nxt)
+tours.append({"id": "city-video-walk", "name": "A video walk through the City",
+              "desc": "Stop where London's guides filmed, mostly Jack Chesher of Living London History, and watch each short on the spot. Tap Watch at every stop.",
+              "stops": walk})
 for t in tours:
     print(t["name"], len(t["stops"]))
     for q in t["stops"]:

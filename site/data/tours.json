@@ -46,5 +46,24 @@
    "Q7689129",
    "Q28402796"
   ]
+ },
+ {
+  "id": "city-video-walk",
+  "name": "A video walk through the City",
+  "desc": "Stop where London's guides filmed, mostly Jack Chesher of Living London History, and watch each short on the spot. Tap Watch at every stop.",
+  "stops": [
+   "Q15709552",
+   "Q132743947",
+   "Q5135539",
+   "Q27085745",
+   "Q1194829",
+   "Q17526857",
+   "Q173882",
+   "Q7593677",
+   "Q7594557",
+   "Q1786933",
+   "Q1241240",
+   "Q28846065"
+  ]
  }
 ]

@@ -111,8 +111,8 @@ a,.lnk{color:var(--acc2);text-decoration:none;cursor:pointer}.lnk:hover{text-dec
 <script src="vendor/leaflet/leaflet.min.js"></script>
 <script src="vendor/markercluster/leaflet.markercluster.js"></script>
 <script>
-var D=null, byPlace={}, byPerson={}, markers={}, journey=[], visited={}, cur=null, cluster, hereMarker=null, lifeLine=null, lifeEvents=[], myPos=null, leadRadius=1.2, excluded={}, walkOn=false, walkWatch=null, alerted={}, lastAlert=0, wakeLock=null, selMarker=null, tourLayer=null, curated=[], activeTour=null, draft={name:'',desc:'',stops:[]}, myTours=[], alertEx={}, offlineState='', deferredInstall=null, FOOD=[], foodLayer=null, menuPage='', VIDS=[], vidsAt={}, vidLayer=null, pipCur=null, planned=[], PA={len:'day',pace:'normal',fame:'mix',themes:{},cats:{},from:'here',breaks:{}};
-try{var _pa=JSON.parse(localStorage.getItem('strand.plan')||'null');if(_pa)PA=_pa;if(!PA.breaks)PA.breaks={}}catch(e){}
+var D=null, byPlace={}, byPerson={}, markers={}, journey=[], visited={}, cur=null, cluster, hereMarker=null, lifeLine=null, lifeEvents=[], myPos=null, leadRadius=1.2, excluded={}, walkOn=false, walkWatch=null, alerted={}, lastAlert=0, wakeLock=null, selMarker=null, tourLayer=null, curated=[], activeTour=null, draft={name:'',desc:'',stops:[]}, myTours=[], alertEx={}, offlineState='', deferredInstall=null, FOOD=[], hasVid={}, foodLayer=null, menuPage='', VIDS=[], vidsAt={}, vidLayer=null, pipCur=null, planned=[], PA={len:'day',pace:'normal',fame:'mix',themes:{},cats:{},from:'here',breaks:{},vids:'some'};
+try{var _pa=JSON.parse(localStorage.getItem('strand.plan')||'null');if(_pa)PA=_pa;if(!PA.breaks)PA.breaks={};if(!PA.vids)PA.vids='some'}catch(e){}
 var AI_URL='https://strand-ai-planner.rackdigaback.workers.dev';
 var DEF={startSheet:true,foodC:true,foodP:true,foodB:true,foodR:true,videos:true,vibrate:true,rate:0.95,alertRadius:80,alertGap:40,alertFame:'known',alertStory:true,offline:false};var S={};
 try{S=JSON.parse(localStorage.getItem('strand.settings')||'{}');alertEx=JSON.parse(localStorage.getItem('strand.alertEx')||'{}')}catch(e){}
@@ -124,7 +124,7 @@ try{excluded=JSON.parse(localStorage.getItem('strand.excluded')||'{}')}catch(e){
 var GROUPS=[['monuments','Statues & memorials','statue',{statue:1,memorial:1,plaque:1}],['graves','Graves','grave',{grave:1}],['churches','Churches','church',{church:1}],['homes','Homes & palaces','house',{house:1,palace:1}],
  ['venues','Theatres & venues','theatre',{theatre:1}],['museums','Museums & libraries','museum',{museum:1}],['pubs','Pubs & hotels','pub',{pub:1}],['outdoors','Parks, streets & water','park',{park:1,street:1,water:1,bridge:1}],['other','Other buildings','building',{building:1,hospital:1,school:1,station:1}]];
 function groupOf(k){for(var i=0;i<GROUPS.length;i++)if(GROUPS[i][3][k])return GROUPS[i][0];return 'other'}
-function active(id){var p=D.places[id];return !p.food&&!excluded[p.g]}
+function active(id){var p=D.places[id];return !p.food&&!p.vid&&!excluded[p.g]}
 var map=L.map('map',{zoomControl:false}).setView([51.508,-0.128],13);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap · data Wikidata/Wikipedia'}).addTo(map);
 L.control.zoom({position:'bottomleft'}).addTo(map);
@@ -138,7 +138,8 @@ function img(p,w){var f=p.i,ext=f.toLowerCase().split('.').pop(),sfx=ext==='svg'
 function avatar(p){return p.i?'<img class="av" data-src="'+img(p,120)+'" alt="">':'<div class="av ph">◦</div>'}
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var i=e.target;i.src=i.getAttribute('data-src');i.removeAttribute('data-src');io.unobserve(i)}})},{root:document.querySelector('#content'),rootMargin:'200px'});
 new MutationObserver(function(){document.querySelectorAll('img[data-src]').forEach(function(i){io.observe(i)})}).observe(document.querySelector('#content'),{childList:true,subtree:true});
-var ICONS={cafe:'<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5zM16 10h2a2 2 0 0 1 0 4h-2M8 3v3M11 3v3M14 3v3"/>',
+var ICONS={video:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/>',
+ cafe:'<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5zM16 10h2a2 2 0 0 1 0 4h-2M8 3v3M11 3v3M14 3v3"/>',
  dining:'<path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M16 3c-2 1-3 4-3 7h3v11"/>',
  statue:'<path d="M9 21h6M10 21v-4h4v4M7 17h10M9 13l1-7h4l1 7M11 6V4h2v2"/>',
  memorial:'<path d="M5 21h14M8 21V9l4-5 4 5v12M12 10v7"/>',
@@ -159,7 +160,7 @@ var ICONS={cafe:'<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5zM16 10h2a2 2 
  water:'<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',
  building:'<path d="M4 21V5h10v16M14 11h6v10M4 21h16M7 8h2M7 12h2M7 16h2M17 15h.01M17 18h.01"/>'};
 var ICONRULES=[['grave',/cemetery|tomb|grave|mausoleum|crypt|catacomb/],['statue',/statue|bust|sculpture|relief|mural|obelisk|work of art|equestrian/],['water',/fountain|lake|pond|river|canal|dock|basin/],['plaque',/plaque/],['memorial',/memorial|monument|cenotaph/],
- ['hospital',/hospital|infirmary|asylum|clinic|hospice/],['church',/church|chapel|cathedral|abbey|synagogue|mosque|temple|priory|minster/],['school',/school|college|university|academy|institute|education|polytechnic/],['station',/station|railway|underground|tube/],['bridge',/bridge/],
+ ['hospital',/hospital|infirmary|asylum|clinic|hospice/],['church',/church|chapel|cathedral|abbey|synagogue|mosque|\btemple\b|priory|\bminster\b/],['school',/school|college|university|academy|institute|education|polytechnic/],['station',/station|railway|underground|tube/],['bridge',/bridge/],
  ['theatre',/theat|cinema|opera|concert|music venue|nightclub|music hall|playhouse/],['museum',/museum|gallery|library|archive/],['pub',/\bpub\b|public house|inn\b|tavern|restaurant|hotel|club|shop|cafe|coffee/],['palace',/palace|castle|court|parliament|government|town hall|guildhall/],
  ['park',/park|garden|square|common|heath|green\b|wood/],['street',/street|road|lane|avenue|alley|mews|row\b|crescent|place\b|terrace/],['house',/house|home|residence|mansion|villa|apartment|flat|cottage|lodge/]];
 function iconOf(pl){if(pl.ic)return pl.ic;var t=(pl.t||[]).join(' | ').toLowerCase()+' | '+(pl.d||'').toLowerCase();for(var i=0;i<ICONRULES.length;i++)if(ICONRULES[i][1].test(t))return ICONRULES[i][0];return 'building'}
@@ -180,7 +181,7 @@ fetch('data/index.json').then(function(r){return r.json()}).then(function(d){
   var foodReady=fetch('data/food.json').then(function(r){return r.ok?r.json():[]}).then(function(f){FOOD=f;var KW={c:['café','cafe'],p:['pub','pub'],b:['bar','pub'],r:['restaurant','dining']};
     f.forEach(function(v,i){var id='f'+i;v.id=id;D.places[id]={l:v.n,d:(v.f===2?'Famous pub':v.f===1?'Historic pub':KW[v.k][0][0].toUpperCase()+KW[v.k][0].slice(1))+(v.cu?' · '+v.cu:''),lat:v.lat,lon:v.lon,t:[KW[v.k][0]],f:0,n:0,food:v.k,famous:v.f||0,wd:v.wd,ic:v.k==='c'?'cafe':v.k==='r'?'dining':'pub',g:'food'}});
     drawFood()}).catch(function(){});
-  fetch('data/videos.json').then(function(r){return r.ok?r.json():[]}).then(function(v){var today=new Date().toISOString().slice(0,10);v=v.filter(function(x){return !x.until||x.until>=today});VIDS=v;v.forEach(function(x,i){x.i=i;(x.pl||[]).forEach(function(q){(vidsAt[q]=vidsAt[q]||[]).push(x)})});drawVids();if(cur&&cur.kind==='l')showPlace(cur.id)}).catch(function(){});
+  fetch('data/videos.json').then(function(r){return r.ok?r.json():[]}).then(function(v){var today=new Date().toISOString().slice(0,10);v=v.filter(function(x){return !x.until||x.until>=today});VIDS=v;v.forEach(function(x,i){x.i=i;(x.pl||[]).forEach(function(q){(vidsAt[q]=vidsAt[q]||[]).push(x)})});drawVids();filmSpots();if(cur&&cur.kind==='l')showPlace(cur.id)}).catch(function(){});
   map.addLayer(cluster);refreshPins();renderMenu();
   if(localStorage.getItem('strand.loc')==='1')locate(false);
   if(S.offline&&!localStorage.getItem('strand.offlineDone'))offline(true);
@@ -231,7 +232,7 @@ function offStat(t){offlineState=t;var el=$('#offstat');if(el)el.textContent=t}
 function offline(on){if(!on){offStat('');localStorage.removeItem('strand.offlineDone');if(window.caches){caches.delete('tiles');caches.delete('media');caches.keys().then(function(ks){ks.filter(function(k){return k.indexOf('strand-')===0}).forEach(function(k){caches.open(k).then(function(c){c.keys().then(function(rs){rs.forEach(function(r){if(/data\/(people|story)\/Q/.test(r.url))c.delete(r)})})})})})}return}
   if(!('serviceWorker' in navigator)){offStat('This browser cannot keep pages offline');return}
   if(localStorage.getItem('strand.offlineDone')){offStat('Ready. Works without a signal; pictures and Wikipedia text need one.');return}
-  navigator.serviceWorker.ready.then(function(){var urls=Object.keys(D.people).map(function(i){return 'data/people/'+i+'.json'}).concat(Object.keys(D.places).filter(function(i){return !D.places[i].food}).map(function(i){return 'data/story/'+i+'.json'}));
+  navigator.serviceWorker.ready.then(function(){var urls=Object.keys(D.people).map(function(i){return 'data/people/'+i+'.json'}).concat(Object.keys(D.places).filter(function(i){return !D.places[i].food&&!D.places[i].vid}).map(function(i){return 'data/story/'+i+'.json'}));
     var done=0,fail=0,i=0,total=urls.length;function next(){if(!S.offline)return;if(i>=total){if(done+fail>=total){localStorage.setItem('strand.offlineDone','1');offStat('Ready ('+done+' files'+(fail?', '+fail+' failed':'')+'). Works without a signal; pictures and Wikipedia text need one.')}return}
       var u=urls[i++];fetch(u).then(function(r){if(!r.ok)fail++;else done++}).catch(function(){fail++}).then(function(){if((done+fail)%50===0)offStat('Downloading '+(done+fail)+' of '+total+'…');next()})}
     offStat('Downloading 0 of '+total+'…');for(var k=0;k<6;k++)next()})}
@@ -283,7 +284,7 @@ function walkCheck(){if(!myPos||Date.now()-lastAlert<S.alertGap*1000)return;var 
   if(storyIdx&&storyIdx[best.id]){if(storyText[best.id])say(storyText[best.id].split(/(?<=\.)\s/)[0]);else fetch('data/story/'+best.id+'.json').then(function(r){return r.json()}).then(function(x){storyText[best.id]=x.t;say(x.t.split(/(?<=\.)\s/)[0])}).catch(function(){say('')})}else say('')}
 function select(latlng){if(selMarker)map.removeLayer(selMarker);selMarker=latlng?L.marker(latlng,{icon:L.divIcon({className:'',html:'<div class="pulse"></div>',iconSize:[26,26],iconAnchor:[13,13]}),interactive:false,zIndexOffset:1000}).addTo(map):null}
 function showPlace(id){var pl=D.places[id];cur={kind:'l',id:id};hop('l',id,pl.l);panel.classList.remove('collapsed');select([pl.lat,pl.lon]);saveActive(id);
-  if(pl.food){showFood(id);return}
+  if(pl.food||pl.vid){showFood(id);return}
   map.flyTo([pl.lat,pl.lon],Math.max(map.getZoom(),16),{duration:.6});
   var ppl=placePeople(id);
   content.innerHTML='<h1>'+icon(pl,1)+esc(pl.l)+'</h1><p class="sub">'+esc(pl.d||pl.t.join(', '))+' · <a target="_blank" href="https://www.wikidata.org/wiki/'+id+'">wikidata</a></p>'+
@@ -334,8 +335,8 @@ function drawTour(t){if(tourLayer){map.removeLayer(tourLayer);tourLayer=null}if(
   var pts=t.stops.map(function(i){return [D.places[i].lat,D.places[i].lon]});
   tourLayer=L.layerGroup([L.polyline(pts,{color:'#8a2f1d',weight:3,dashArray:'6 6',opacity:.8})].concat(t.stops.map(function(id,i){return L.marker(pts[i],{icon:L.divIcon({className:'',html:'<div class="stop">'+(i+1)+'</div>',iconSize:[28,28],iconAnchor:[14,14]}),zIndexOffset:900}).on('click',function(){location.hash='#l/'+id})}))).addTo(map);
   if(pts.length>1)map.fitBounds(pts,{padding:[40,40],maxZoom:16});else map.flyTo(pts[0],16)}
-function tourStrip(id){if(!activeTour)return '';var i=activeTour.stops.indexOf(id);if(i<0)return '';var n=activeTour.stops.length;
-  return '<div class="actions"><span class="chip">'+esc(activeTour.name)+' · stop '+(i+1)+' of '+n+'</span>'+(i>0?'<button class="btn" data-go="l/'+activeTour.stops[i-1]+'">◀</button>':'')+(i<n-1?'<button class="btn acc" data-go="l/'+activeTour.stops[i+1]+'">Next stop ➜</button>':'<button class="btn" data-act="tour-stop">End tour</button>')+'</div>'}
+function tourStrip(id){if(!activeTour)return '';var i=activeTour.stops.indexOf(id);if(i<0)return '';var n=activeTour.stops.length;var pv=D.places[id],fv=hasVid[id]||(pv?vidsNear(pv.lat,pv.lon,id):[]);
+  return '<div class="actions"><span class="chip">'+esc(activeTour.name)+' · stop '+(i+1)+' of '+n+'</span>'+(fv.length?'<button class="btn acc" data-act="vid:'+fv[0].i+'">▶ Watch the guide here</button>':'')+(i>0?'<button class="btn" data-go="l/'+activeTour.stops[i-1]+'">◀</button>':'')+(i<n-1?'<button class="btn acc" data-go="l/'+activeTour.stops[i+1]+'">Next stop ➜</button>':'<button class="btn" data-act="tour-stop">End tour</button>')+'</div>'}
 function showTour(key){var t=tourOf(key);if(!t){location.hash='';return}cur=null;select(null);panel.classList.remove('collapsed');activeTour=t.stops.length?t:null;drawTour(t);
   var total=0;for(var i=1;i<t.stops.length;i++){var a=D.places[t.stops[i-1]],b=D.places[t.stops[i]];total+=dist(a.lat,a.lon,b.lat,b.lon)}
   var rows=t.stops.map(function(id,i){var pl=D.places[id];var leg=i?'<div class="leg">↓ '+fmt(dist(D.places[t.stops[i-1]].lat,D.places[t.stops[i-1]].lon,pl.lat,pl.lon))+'</div>':'';
@@ -364,6 +365,15 @@ $('#pipopen').onclick=function(){if(pipCur)window.open(vidUrl(pipCur),'_blank')}
   bar.addEventListener('pointerdown',function(e){if(e.target.tagName==='BUTTON')return;drag=true;bar.setPointerCapture(e.pointerId);var r=p.getBoundingClientRect();sx=e.clientX;sy=e.clientY;ox=r.left;oy=r.top});
   bar.addEventListener('pointermove',function(e){if(!drag)return;var x=Math.max(0,Math.min(innerWidth-p.offsetWidth,ox+e.clientX-sx)),y=Math.max(0,Math.min(innerHeight-p.offsetHeight,oy+e.clientY-sy));p.style.left=x+'px';p.style.top=y+'px';p.style.right='auto';p.style.bottom='auto'});
   bar.addEventListener('pointerup',function(){drag=false})})();
+/* Film spots: a guide video with no Strand place within 100 m becomes a place of its own ('v' ids), so a tour can
+   stop there; hasVid marks every place, real or not, that has a film within 100 m. */
+function filmSpots(){var n=0;VIDS.forEach(function(v){if(v.pl&&v.pl.length&&D.places[v.pl[0]])return;if(Object.keys(D.places).some(function(i){return /^v\d/.test(i)&&dist(v.lat,v.lon,D.places[i].lat,D.places[i].lon)<0.04}))return;
+    var near=Object.keys(D.places).some(function(i){var q=D.places[i];return !q.food&&dist(v.lat,v.lon,q.lat,q.lon)<0.1});if(near)return;
+    var id='v'+(n++);D.places[id]={l:(v.w||v.t).replace(/\s*\(.*\)$/,''),d:'Filmed here by '+v.c.replace(/\s*\(.*\)$/,''),lat:v.lat,lon:v.lon,t:['guide film'],f:0,n:0,vid:1,ic:'video',g:'video'}});
+  /* each film belongs to ONE place, its own or the nearest within 100 m, so a video walk's stops each have their own film */
+  hasVid={};var ids=Object.keys(D.places).filter(function(i){return !D.places[i].food});
+  VIDS.forEach(function(v){var own=v.pl&&v.pl[0]&&D.places[v.pl[0]]?v.pl[0]:null;if(!own){var bd=0.1;ids.forEach(function(i){var q=D.places[i],d=dist(v.lat,v.lon,q.lat,q.lon);if(d<bd){bd=d;own=i}})}
+    if(own)(hasVid[own]=hasVid[own]||[]).push(v)})}
 /* Food and drink: OpenStreetMap venues (tools/pull_food.py), famous and historic pubs from Wikidata. */
 function foodOn(k){return S['food'+k.toUpperCase()]}
 function drawFood(){if(!foodLayer){foodLayer=L.layerGroup().addTo(map);map.on('moveend zoomend',drawFood)}foodLayer.clearLayers();var z=map.getZoom();if(z<14||!FOOD.length)return;
@@ -375,7 +385,7 @@ function foodNear(lat,lon,n,skip){var vs=FOOD.filter(function(v){return v.id!==s
   return '<h2>Food & drink nearby</h2>'+vs.slice(0,n).map(function(x){var v=x[1],pl=D.places[v.id];return '<div class="row">'+icon(pl)+'<span class="who">'+link('l',v.id,v.n)+'<br><span class="dim">'+esc(pl.d)+'</span></span><span class="yrs">'+fmt(dist(lat,lon,v.lat,v.lon))+'</span></div>'}).join('')}
 function showFood(id){var pl=D.places[id];map.flyTo([pl.lat,pl.lon],Math.max(map.getZoom(),17),{duration:.6});
   content.innerHTML='<h1>'+icon(pl,1)+esc(pl.l)+'</h1><p class="sub">'+esc(pl.d)+' · <a target="_blank" href="https://www.openstreetmap.org/?mlat='+pl.lat+'&mlon='+pl.lon+'#map=19/'+pl.lat+'/'+pl.lon+'">map</a>'+(pl.wd?' · <a target="_blank" href="https://www.wikidata.org/wiki/'+pl.wd+'">wikidata</a>':'')+'</p>'+
-   tourStrip(id)+'<div class="actions"><button class="btn acc" data-act="lead">➜ Lead me on from here</button>'+(draft.stops.indexOf(id)<0?'<button class="btn" data-act="tour-add">+ Tour</button>':'<button class="btn on" data-act="tour-open">✓ In tour ('+draft.stops.length+')</button>')+'</div>'+
+   vidStrip(vidsNear(pl.lat,pl.lon,id))+tourStrip(id)+'<div class="actions"><button class="btn acc" data-act="lead">➜ Lead me on from here</button>'+(draft.stops.indexOf(id)<0?'<button class="btn" data-act="tour-add">+ Tour</button>':'<button class="btn on" data-act="tour-open">✓ In tour ('+draft.stops.length+')</button>')+'</div>'+
    '<h2>Worth seeing nearby</h2>'+nearby(pl.lat,pl.lon,8,id)+foodNear(pl.lat,pl.lon,3,id);content.scrollTop=0}
 /* Start sheet: on opening the app, unless a tour is under way, offer the main ways in; Skip just starts. */
 function saveActive(id){if(activeTour&&activeTour.stops.indexOf(id)>=0)localStorage.setItem('strand.active',JSON.stringify({name:activeTour.name,desc:activeTour.desc,stops:activeTour.stops,at:id}))}
@@ -416,23 +426,25 @@ function showPlanner(sub){if(sub==='result'&&planned.length){showPlan();return}c
    '<div class="q">What are you into?</div>'+chipsQ('themes',THEMES.map(function(t){return [t[0],t[1]]}),1)+'<div style="height:6px"></div>'+chipsQ('cats',PLANCATS.map(function(c){return [c[0],c[1]]}),1)+
    '<div class="q">Famous or hidden?</div>'+chipsQ('fame',[['famous','The famous ones'],['mix','A mix'],['hidden','Off the beaten track']])+
    '<div class="q">Walking pace</div>'+chipsQ('pace',[['gentle','Gentle'],['normal','Normal'],['brisk','Brisk']])+
+   '<div class="q">Guide films</div>'+chipsQ('vids',[['off','Leave them out'],['some','Include spots guides filmed'],['only','A video walk: only those spots']])+
    '<div class="q">Breaks</div>'+chipsQ('breaks',[['coffee','A coffee stop every couple of hours'],['pub','End at a famous pub']],1)+
    '<div class="q">Start from</div>'+chipsQ('from',[['here','Where I am'],['map','The middle of the map']])+
    (AI_URL?'<div class="q">Or say it in your own words</div><div class="aibox"><textarea id="aitext" rows="3" maxlength="300" placeholder="Two days, love Dickens and old pubs, not too much walking"></textarea><div class="actions"><button class="btn" data-act="ai-plan">✦ Plan from this</button><span class="stat" id="aistat"></span></div></div>':'')+
    '<div class="actions" style="margin-top:16px"><button class="btn acc" data-act="plan-go">✦ Plan it</button></div>';content.scrollTop=0}
-function dwell(pl){var k=iconOf(pl);return {museum:60,palace:40,church:20,pub:30,park:20,theatre:12,grave:10,hospital:10,school:10,station:6,statue:8,plaque:6,memorial:8,street:6,water:10,bridge:8,house:10,building:10}[k]||10}
-function planScore(id){var pl=D.places[id];if(!active(id)||/country|kingdom|state|empire/.test((pl.t||[]).join(' ')))return 0;var th=pl.th||{},want=Object.keys(PA.themes),cats=Object.keys(PA.cats);
+function dwell(pl){var k=iconOf(pl);if(pl.vid)return 6;return (PA.vids!=='off'&&pl.id&&hasVid[pl.id]?3:0)+({museum:60,palace:40,church:20,pub:30,park:20,theatre:12,grave:10,hospital:10,school:10,station:6,statue:8,plaque:6,memorial:8,street:6,water:10,bridge:8,house:10,building:10}[k]||10)}
+function planScore(id){var pl=D.places[id];if(pl.food)return 0;if(pl.vid){if(PA.vids==='off'||!hasVid[id])return 0}else if(PA.vids==='only'&&!hasVid[id])return 0;if((!pl.vid&&!active(id))||/country|kingdom|\bstate\b|empire/.test((pl.t||[]).join(' ')))return 0;var th=pl.th||{},want=Object.keys(PA.themes),cats=Object.keys(PA.cats);
   var interest=1;want.forEach(function(t){interest+=(th[t]||0)});if(cats.length&&cats.indexOf(pl.g)>=0)interest+=4;if((want.length||cats.length)&&interest===1)interest=0.15;
   var f=pl.f||0,fame=PA.fame==='famous'?Math.log(2+f):PA.fame==='hidden'?(f>300?0.2:2.5/Math.log(3+f)):Math.sqrt(Math.log(2+f));
   var k=iconOf(pl),dull=(k==='street'||k==='station')&&!PA.cats.outdoors?0.25:1;
-  return interest*fame*dull*(storyIdx&&storyIdx[id]?1:0.5)}
-var CHAINS=/^(costa|starbucks|pret|caff[eè] nero|greggs|eat|leon|black sheep|joe & the juice|gail'?s|paul|patisserie valerie|benugo|itsu|wasabi|mcdonald|burger king|kfc|subway|wetherspoon|j ?d wetherspoon|all bar one|slug and lettuce|be at one|nando)/i;
+  var film=hasVid[id]?(PA.vids==='some'?2.5:PA.vids==='only'?3:1):1;if(pl.vid&&interest<1)interest=1;
+  return interest*fame*dull*film*(pl.vid||(storyIdx&&storyIdx[id])?1:0.5)}
+var CHAINS=/^(costa|starbucks|pret|caff[eè] nero|greggs|eat\b|leon|black sheep|joe & the juice|gail'?s|paul\b|patisserie valerie|benugo|itsu|wasabi|mcdonald|burger king|kfc|subway|wetherspoon|j ?d wetherspoon|all bar one|slug and lettuce|be at one|nando)/i;
 function nearestFood(lat,lon,kinds,used,maxKm,famousFirst){var best=null;FOOD.forEach(function(v){if(kinds.indexOf(v.k)<0||used[v.id]||CHAINS.test(v.n))return;var d=dist(lat,lon,v.lat,v.lon);if(d>maxKm)return;var sc=d-(famousFirst?(v.f||0)*0.6:0);if(!best||sc<best.sc)best={id:v.id,d:d,sc:sc}});return best}
 function planDay(start,minutes,used,pace){var pos=start,left=minutes-(PA.breaks.pub?40:0),stops=[],km=0,sinceBreak=0;
   var cands=Object.keys(D.places).filter(function(i){return !used[i]&&dist(start[0],start[1],D.places[i].lat,D.places[i].lon)<3}).map(function(i){return {id:i,s:planScore(i)}}).filter(function(c){return c.s>0});
   var labels={},cap=Math.min(14,Math.max(4,Math.round(minutes/22)));
-  while(stops.length<cap){var best=null;cands.forEach(function(c){if(used[c.id])return;var pl=D.places[c.id];if(labels[pl.l])return;var d=dist(pos[0],pos[1],pl.lat,pl.lon);if(d>(stops.length?1.2:1.5))return;
-      var walk=d/pace[0]*60,cost=walk+dwell(pl)*pace[1];if(cost>left)return;var v=c.s/(4+cost);if(!best||v>best.v)best={id:c.id,v:v,cost:cost,d:d}});
+  while(stops.length<cap){var best=null;cands.forEach(function(c){if(used[c.id])return;var pl=D.places[c.id];if(labels[pl.l])return;var d=dist(pos[0],pos[1],pl.lat,pl.lon);if(d>(stops.length?(PA.vids==='only'?1.6:1.2):1.5))return;
+      pl.id=c.id;var walk=d/pace[0]*60,cost=walk+dwell(pl)*pace[1];if(cost>left)return;var v=c.s/(4+cost);if(!best||v>best.v)best={id:c.id,v:v,cost:cost,d:d}});
     if(!best)break;used[best.id]=1;labels[D.places[best.id].l]=1;stops.push(best.id);sinceBreak+=best.cost;
     if(PA.breaks.coffee&&sinceBreak>=110&&left>40){var cf=nearestFood(D.places[best.id].lat,D.places[best.id].lon,['c'],used,0.3,false);if(cf){used[cf.id]=1;stops.push(cf.id);var cc=cf.d/pace[0]*60+20;left-=cc;km+=cf.d;sinceBreak=0;pos=[D.places[cf.id].lat,D.places[cf.id].lon]}}left-=best.cost;km+=best.d;pos=[D.places[best.id].lat,D.places[best.id].lon]}
   if(PA.breaks.pub&&stops.length){var pb=nearestFood(pos[0],pos[1],['p'],used,1,true)||nearestFood(pos[0],pos[1],['p','b'],used,2,false);if(pb){used[pb.id]=1;stops.push(pb.id);left-=pb.d/pace[0]*60+30;km+=pb.d}}
@@ -440,7 +452,9 @@ function planDay(start,minutes,used,pace){var pos=start,left=minutes-(PA.breaks.
 function makePlan(){var L=LENS[PA.len],pace=PACE[PA.pace],used={},start;if(PA.from==='here'&&myPos)start=myPos.slice();else{var c=map.getCenter();start=[c.lat,c.lng]}
   planned=[];var starts=[start];for(var day=0;day<L[1];day++){var r=planDay(start,L[0]*60,used,pace);if(r.stops.length){var first=D.places[r.stops.filter(function(i){return !D.places[i].food})[0]||r.stops[0]];
       var names=[];r.stops.forEach(function(i){topNames(i,1).forEach(function(n){if(names.indexOf(n)<0&&names.length<4)names.push(n)})});
-      planned.push({name:(L[1]>1?'Day '+(day+1)+': ':'')+'From '+first.l,desc:r.stops.length+' stops, about '+fmt(r.km)+' on foot and '+(Math.round(r.mins/30)/2)+' hours with time at each. With '+names.join(', ')+'.',stops:r.stops,km:r.km,mins:r.mins})}
+      var films=[];r.stops.forEach(function(i){var q=D.places[i];(hasVid[i]||[]).forEach(function(v){var c=v.c.replace(/\s*\(.*\)$/,'').replace(/^.*-\s+/,'');if(films.indexOf(c)<0)films.push(c)})});
+      if(films.length&&PA.vids!=='off')names.push('films by '+films.slice(0,3).join(', '));
+      planned.push({name:(L[1]>1?'Day '+(day+1)+': ':'')+(PA.vids==='only'?'Video walk from ':'From ')+first.l,desc:r.stops.length+' stops, about '+fmt(r.km)+' on foot and '+(Math.round(r.mins/30)/2)+' hours with time at each. With '+names.join(', ')+'.',stops:r.stops,km:r.km,mins:r.mins})}
     /* next day: the best unused place well away from earlier starts */
     var nb=null;Object.keys(D.places).forEach(function(i){if(used[i])return;var pl=D.places[i];if(starts.some(function(s){return dist(s[0],s[1],pl.lat,pl.lon)<2}))return;var sc=planScore(i);if(!nb||sc>nb.s)nb={i:i,s:sc}});
     if(!nb)break;start=[D.places[nb.i].lat,D.places[nb.i].lon];starts.push(start)}}
