@@ -77,6 +77,12 @@ a,.lnk{color:var(--acc2);text-decoration:none;cursor:pointer}.lnk:hover{text-dec
 .mini{display:flex;gap:4px}.mini .btn{padding:3px 8px;font-size:13px}
 .form input,.form textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;margin:4px 0}.form .cnt{font-size:12px;color:var(--muted);text-align:right}
 .leg{font-size:12px;color:var(--muted);padding:0 0 4px 38px}
+.zpin{min-width:30px;height:30px;padding:0 6px;border-radius:15px;background:#1d1a16;color:#f3c96b;border:2px solid #f3c96b;display:flex;align-items:center;justify-content:center;gap:3px;font:bold 12px Georgia,serif;box-shadow:0 2px 6px rgba(0,0,0,.45);white-space:nowrap}
+#subbar{position:fixed;top:52px;left:0;right:0;z-index:7;display:none;align-items:center;gap:8px;padding:8px 12px;background:#1d1a16;color:#f3c96b;font-size:14px;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+#subbar.show{display:flex}#subbar b{color:#fff;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#subbar .btn{margin:0;padding:4px 10px;box-shadow:none;background:#2a251c;color:#f3c96b;border-color:#5a4a2a}
+body.inside #journey{display:none}
+.inside-box{border:2px solid #f3c96b;border-radius:12px;padding:10px 12px;margin:10px 0;background:var(--chip)}.inside-box b{display:block}
+.obj{width:100%;max-height:260px;object-fit:contain;border-radius:10px;background:var(--chip);margin:6px 0}
 .chip.on{border-color:var(--acc);background:var(--bg);font-weight:bold}
 .q{margin:14px 0 4px;font-weight:bold}
 .mrow{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line);cursor:pointer}.mrow .ml{flex:1}.mrow small{display:block;color:var(--muted)}.mrow .go{color:var(--muted);font-size:18px}
@@ -103,6 +109,7 @@ a,.lnk{color:var(--acc2);text-decoration:none;cursor:pointer}.lnk:hover{text-dec
 <div id="map"></div>
 <div id="top"><button class="btn" id="menubtn" title="Menu">☰</button><input id="search" placeholder="Search a person or place…" autocomplete="off"><button class="btn" id="near" title="Near me">◎</button><button class="btn acc" id="lead" title="Lead me">➜ Lead me</button></div>
 <div id="journey"></div>
+<div id="subbar"></div>
 <div id="menu"></div>
 <div id="toast"></div>
 <div id="pip"><div class="bar"><span id="piptitle"></span><button id="pipsize" title="Bigger">⤢</button><button id="pipopen" title="Open in YouTube">↗</button><button id="pipclose" title="Close">✕</button></div></div>
@@ -111,7 +118,7 @@ a,.lnk{color:var(--acc2);text-decoration:none;cursor:pointer}.lnk:hover{text-dec
 <script src="vendor/leaflet/leaflet.min.js"></script>
 <script src="vendor/markercluster/leaflet.markercluster.js"></script>
 <script>
-var D=null, byPlace={}, byPerson={}, markers={}, journey=[], visited={}, cur=null, cluster, hereMarker=null, lifeLine=null, lifeEvents=[], myPos=null, leadRadius=1.2, excluded={}, walkOn=false, walkWatch=null, alerted={}, lastAlert=0, wakeLock=null, selMarker=null, tourLayer=null, curated=[], activeTour=null, draft={name:'',desc:'',stops:[]}, myTours=[], alertEx={}, offlineState='', deferredInstall=null, FOOD=[], hasVid={}, foodLayer=null, menuPage='', VIDS=[], vidsAt={}, vidLayer=null, pipCur=null, planned=[], PA={len:'day',pace:'normal',fame:'mix',themes:{},cats:{},from:'here',breaks:{},vids:'some'};
+var D=null, byPlace={}, byPerson={}, markers={}, journey=[], visited={}, cur=null, cluster, hereMarker=null, lifeLine=null, lifeEvents=[], myPos=null, leadRadius=1.2, excluded={}, walkOn=false, walkWatch=null, alerted={}, lastAlert=0, wakeLock=null, selMarker=null, tourLayer=null, curated=[], activeTour=null, draft={name:'',desc:'',stops:[]}, myTours=[], alertEx={}, offlineState='', deferredInstall=null, FOOD=[], hasVid={}, ZONES={}, zoneKid={}, SUB=null, subMask=null, zoneMins=60, foodLayer=null, menuPage='', VIDS=[], vidsAt={}, vidLayer=null, pipCur=null, planned=[], PA={len:'day',pace:'normal',fame:'mix',themes:{},cats:{},from:'here',breaks:{},vids:'some'};
 try{var _pa=JSON.parse(localStorage.getItem('strand.plan')||'null');if(_pa)PA=_pa;if(!PA.breaks)PA.breaks={};if(!PA.vids)PA.vids='some'}catch(e){}
 var AI_URL='https://strand-ai-planner.rackdigaback.workers.dev';
 var DEF={startSheet:true,foodC:true,foodP:true,foodB:true,foodR:true,videos:true,vibrate:true,rate:0.95,alertRadius:80,alertGap:40,alertFame:'known',alertStory:true,offline:false};var S={};
@@ -185,10 +192,10 @@ fetch('data/index.json').then(function(r){return r.json()}).then(function(d){
   map.addLayer(cluster);refreshPins();renderMenu();
   if(localStorage.getItem('strand.loc')==='1')locate(false);
   if(S.offline&&!localStorage.getItem('strand.offlineDone'))offline(true);
-  fetch('data/tours.json').then(function(r){return r.ok?r.json():[]}).then(function(t){curated=t.filter(function(x){return x.stops.every(function(i){return D.places[i]})});renderMenu()}).catch(function(){}).then(function(){return foodReady}).then(function(){if(!resumeOrStart())route()});
+  fetch('data/tours.json').then(function(r){return r.ok?r.json():[]}).then(function(t){curated=t.filter(function(x){return x.stops.every(function(i){return D.places[i]})});renderMenu()}).catch(function(){}).then(function(){return foodReady}).then(function(){return fetch('data/zones.json').then(function(r){return r.ok?r.json():{}}).then(buildZones).catch(function(){})}).then(function(){if(!resumeOrStart())route()});
 });
 window.addEventListener('hashchange',route);
-function refreshPins(){cluster.clearLayers();cluster.addLayers(Object.keys(D.places).filter(active).map(function(id){return markers[id]}))}
+function refreshPins(){cluster.clearLayers();cluster.addLayers(Object.keys(D.places).filter(function(id){return active(id)&&!zoneKid[id]&&markers[id]}).map(function(id){return markers[id]}))}
 function standalone(){return window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}
 function installRow(){if(standalone())return '';if(deferredInstall)return '<div class="actions" style="margin-bottom:10px"><button class="btn acc" data-act="install">⬇ Install Strand</button></div>';
   if(/iPhone|iPad|iPod/.test(navigator.userAgent))return '<div class="stat" style="margin:0 0 10px">To install: Share ⎙ → Add to Home Screen. It then opens full-screen and keeps its data.</div>';return ''}
@@ -239,7 +246,7 @@ function offline(on){if(!on){offStat('');localStorage.removeItem('strand.offline
 if(S.offline&&localStorage.getItem('strand.offlineDone'))offlineState='Ready. Works without a signal; pictures and Wikipedia text need one.';
 document.addEventListener('click',function(e){if(!e.target.isConnected)return;if(!e.target.closest('#menu,#menubtn')){$('#menu').classList.remove('open');if(menuPage){menuPage='';renderMenu()}}});
 function route(){if(!D)return;var h=location.hash.slice(1).split('/');
-  if(h[0]==='p'&&D.people[h[1]])showPerson(h[1],h[2]);else if(h[0]==='l'&&D.places[h[1]])showPlace(h[1]);else if(h[0]==='t')showTour(h.slice(1).join('/'));else if(h[0]==='plan')showPlanner(h[1]);else showHome()}
+  if(h[0]==='p'&&D.people[h[1]])showPerson(h[1],h[2]);else if(h[0]==='l'&&D.places[h[1]])showPlace(h[1]);else if(h[0]==='t')showTour(h.slice(1).join('/'));else if(h[0]==='plan')showPlanner(h[1]);else if(h[0]==='in'&&SUB)showInside(+h[1]);else showHome();subBar()}
 function hop(kind,id,label){var k=kind+'/'+id;if(kind==='l')visited[id]=1;if(journey.length&&journey[journey.length-1].k===k)return;
   journey.push({k:k,kind:kind,id:id,label:label});if(journey.length>40)journey.shift();
   $('#journey').innerHTML=journey.map(function(j,i){return '<span class="hop'+(i===journey.length-1?' cur':'')+'" data-go="'+j.kind+'/'+j.id+'">'+(j.kind==='p'?'👤 ':'📍 ')+esc(j.label)+'</span>'}).join('');
@@ -273,7 +280,7 @@ function toggleWalk(){walkOn=!walkOn;renderMenu();
     if(navigator.wakeLock)navigator.wakeLock.request('screen').then(function(l){wakeLock=l}).catch(function(){});speak('Walk with me is on. I will speak up when you pass somewhere worth a stop.')}
   else{if(walkWatch!=null)navigator.geolocation.clearWatch(walkWatch);walkWatch=null;if(wakeLock){wakeLock.release();wakeLock=null}}}
 function worthAStop(id){var p=D.places[id];if(alertEx[p.g])return false;if(S.alertStory&&!(storyIdx&&storyIdx[id]))return false;return (p.f||0)>=FAMEMIN[S.alertFame]||(S.alertFame==='anyone')}
-function walkCheck(){if(!myPos||Date.now()-lastAlert<S.alertGap*1000)return;var la=myPos[0],lo=myPos[1],best=null;
+function walkCheck(){if(SUB||!myPos||Date.now()-lastAlert<S.alertGap*1000)return;var la=myPos[0],lo=myPos[1],best=null;
   Object.keys(D.places).forEach(function(id){if(visited[id]||alerted[id]||!active(id))return;var p=D.places[id];var d=dist(la,lo,p.lat,p.lon);if(d>S.alertRadius/1000||!worthAStop(id))return;
     var sc=(Math.log(1+(p.f||0))*3+Math.log(1+(p.n||0)))/(0.05+d);if(!best||sc>best.sc)best={id:id,p:p,d:d,sc:sc}});
   if(!best)return;lastAlert=Date.now();alerted[best.id]=1;var b=bearing(la,lo,best.p.lat,best.p.lon);var names=topNames(best.id,2).filter(function(n){return best.p.l.indexOf(n)<0});
@@ -288,7 +295,7 @@ function showPlace(id){var pl=D.places[id];cur={kind:'l',id:id};hop('l',id,pl.l)
   map.flyTo([pl.lat,pl.lon],Math.max(map.getZoom(),16),{duration:.6});
   var ppl=placePeople(id);
   content.innerHTML='<h1>'+icon(pl,1)+esc(pl.l)+'</h1><p class="sub">'+esc(pl.d||pl.t.join(', '))+' · <a target="_blank" href="https://www.wikidata.org/wiki/'+id+'">wikidata</a></p>'+
-   '<div id="story"></div>'+vidStrip(vidsNear(pl.lat,pl.lon,id))+tourStrip(id)+'<div class="actions"><button class="btn acc" data-act="lead">➜ Lead me on from here</button><button class="btn" data-act="listen">▶ Listen</button>'+(draft.stops.indexOf(id)<0?'<button class="btn" data-act="tour-add">+ Tour</button>':'<button class="btn on" data-act="tour-open">✓ In tour ('+draft.stops.length+')</button>')+'</div>'+
+   '<div id="story"></div>'+zoneBox(id)+vidStrip(vidsNear(pl.lat,pl.lon,id))+tourStrip(id)+'<div class="actions"><button class="btn acc" data-act="lead">➜ Lead me on from here</button><button class="btn" data-act="listen">▶ Listen</button>'+(draft.stops.indexOf(id)<0?'<button class="btn" data-act="tour-add">+ Tour</button>':'<button class="btn on" data-act="tour-open">✓ In tour ('+draft.stops.length+')</button>')+'</div>'+
    '<h2>'+ppl.length+' people</h2>'+ppl.map(function(o){return personRow(o.id,id,o.rels)}).join('')+
    '<h2>Nearby</h2>'+nearby(pl.lat,pl.lon,8,id)+foodNear(pl.lat,pl.lon,4,id);
   content.scrollTop=0;loadStory(id)}
@@ -336,7 +343,7 @@ function drawTour(t){if(tourLayer){map.removeLayer(tourLayer);tourLayer=null}if(
   tourLayer=L.layerGroup([L.polyline(pts,{color:'#8a2f1d',weight:3,dashArray:'6 6',opacity:.8})].concat(t.stops.map(function(id,i){return L.marker(pts[i],{icon:L.divIcon({className:'',html:'<div class="stop">'+(i+1)+'</div>',iconSize:[28,28],iconAnchor:[14,14]}),zIndexOffset:900}).on('click',function(){location.hash='#l/'+id})}))).addTo(map);
   if(pts.length>1)map.fitBounds(pts,{padding:[40,40],maxZoom:16});else map.flyTo(pts[0],16)}
 function tourStrip(id){if(!activeTour)return '';var i=activeTour.stops.indexOf(id);if(i<0)return '';var n=activeTour.stops.length;var pv=D.places[id],fv=hasVid[id]||(pv?vidsNear(pv.lat,pv.lon,id):[]);
-  return '<div class="actions"><span class="chip">'+esc(activeTour.name)+' · stop '+(i+1)+' of '+n+'</span>'+(fv.length?'<button class="btn acc" data-act="vid:'+fv[0].i+'">▶ Watch the guide here</button>':'')+(i>0?'<button class="btn" data-go="l/'+activeTour.stops[i-1]+'">◀</button>':'')+(i<n-1?'<button class="btn acc" data-go="l/'+activeTour.stops[i+1]+'">Next stop ➜</button>':'<button class="btn" data-act="tour-stop">End tour</button>')+'</div>'}
+  return '<div class="actions"><span class="chip">'+esc(activeTour.name)+' · stop '+(i+1)+' of '+n+'</span>'+(fv.length?'<button class="btn acc" data-act="vid:'+fv[0].i+'">▶ Watch the guide here</button>':'')+(ZONES[id]?'<button class="btn acc" data-act="zone-go:'+id+'">⤵ Explore inside</button>':'')+(i>0?'<button class="btn" data-go="l/'+activeTour.stops[i-1]+'">◀</button>':'')+(i<n-1?'<button class="btn acc" data-go="l/'+activeTour.stops[i+1]+'">Next stop ➜</button>':'<button class="btn" data-act="tour-stop">End tour</button>')+'</div>'}
 function showTour(key){var t=tourOf(key);if(!t){location.hash='';return}cur=null;select(null);panel.classList.remove('collapsed');activeTour=t.stops.length?t:null;drawTour(t);
   var total=0;for(var i=1;i<t.stops.length;i++){var a=D.places[t.stops[i-1]],b=D.places[t.stops[i]];total+=dist(a.lat,a.lon,b.lat,b.lon)}
   var rows=t.stops.map(function(id,i){var pl=D.places[id];var leg=i?'<div class="leg">↓ '+fmt(dist(D.places[t.stops[i-1]].lat,D.places[t.stops[i-1]].lon,pl.lat,pl.lon))+'</div>':'';
@@ -390,6 +397,7 @@ function showFood(id){var pl=D.places[id];map.flyTo([pl.lat,pl.lon],Math.max(map
 /* Start sheet: on opening the app, unless a tour is under way, offer the main ways in; Skip just starts. */
 function saveActive(id){if(activeTour&&activeTour.stops.indexOf(id)>=0)localStorage.setItem('strand.active',JSON.stringify({name:activeTour.name,desc:activeTour.desc,stops:activeTour.stops,at:id}))}
 function resumeOrStart(){var a=null;try{a=JSON.parse(localStorage.getItem('strand.active')||'null')}catch(e){}
+  var sb=null;try{sb=JSON.parse(localStorage.getItem('strand.sub')||'null')}catch(e){}if(sb&&ZONES[sb.z]){if(a&&a.stops&&a.stops.every(function(i){return D.places[i]})){activeTour={key:'resume',name:a.name,desc:a.desc,stops:a.stops};drawTour(activeTour)}SUB=sb;maskZone(sb.z);location.hash='#in/'+sb.i;return true}
   if(a&&a.stops&&a.stops.every(function(i){return D.places[i]})){activeTour={key:'resume',name:a.name,desc:a.desc,stops:a.stops};drawTour(activeTour);location.hash='#l/'+a.at;return true}
   if(!S.startSheet||location.hash.length>1)return false;try{if(sessionStorage.getItem('strand.started'))return false;sessionStorage.setItem('strand.started','1')}catch(e){}
   panel.classList.remove('collapsed');var meet=localStorage.getItem('strand.meetup');
@@ -411,6 +419,59 @@ function aiPlan(){var t=($('#aitext').value||'').trim();if(t.length<4)return;var
   fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:t,device:dev,themes:THEMES.map(function(x){return x[0]}),cats:PLANCATS.map(function(x){return x[0]})})}).then(function(r){return r.json().then(function(j){return [r.status,j]})}).then(function(x){var j=x[1];
     if(x[0]!==200){st.textContent=j.error||'Not available just now';return}var a=j.answers||{};['len','pace','fame'].forEach(function(k){if(a[k])PA[k]=a[k]});PA.themes={};(a.themes||[]).forEach(function(k){PA.themes[k]=1});PA.cats={};(a.cats||[]).forEach(function(k){PA.cats[k]=1});PA.breaks={};(a.breaks||[]).forEach(function(k){PA.breaks[k]=1});
     localStorage.setItem('strand.plan',JSON.stringify(PA));makePlan();if(j.intro&&planned[0])planned[0].desc=j.intro+' '+planned[0].desc;location.hash='#plan/result'}).catch(function(){st.textContent='Not available just now'})}
+/* Zones: a place that holds many stops (tools/pull_zones.py): its own parts, the pins packed around a square, objects
+   in its collection, people buried there. Explore inside starts a sub-tour: a banner says you are in it, the map dims
+   everything else, Next/Back step through by tap (GPS is no use indoors), Exit returns to the main tour's next stop. */
+function buildZones(Z){var CEM=/cemetery|abbey|cathedral|church|chapel|churchyard|burial/;
+  Object.keys(Z).forEach(function(zid){var z=Z[zid];
+    if(z.l&&!D.places[zid]){D.places[zid]={l:z.l,d:'A square crowded with statues and memorials',lat:z.lat,lon:z.lon,t:['square'],f:0,n:0,g:'outdoors'};var m=L.marker([z.lat,z.lon],{title:z.l});m.on('click',function(){location.hash='#l/'+zid});markers[zid]=m}
+    var items=[],peopleIn={};
+    (z.places||[]).forEach(function(q){if(!D.places[q])return;items.push({k:'pl',id:q,sc:Math.log(2+(D.places[q].f||0))+1});zoneKid[q]=zid;(byPlace[q]||[]).forEach(function(l){peopleIn[l.pe]=1})});
+    (z.objects||[]).forEach(function(o){items.push({k:'ob',o:o,sc:Math.log(1+o.sl)*1.6})});
+    if(D.places[zid]&&CEM.test((D.places[zid].t||[]).join(' ').toLowerCase()))(byPlace[zid]||[]).forEach(function(l){if(l.r==='buried'&&!peopleIn[l.pe]&&D.people[l.pe]){peopleIn[l.pe]=1;items.push({k:'pe',id:l.pe,sc:Math.log(2+(D.people[l.pe].f||0))})}});
+    items.sort(function(a,b){return b.sc-a.sc});if(items.length>=3)ZONES[zid]={items:items.slice(0,80)}});
+  /* big cemeteries and churches with many burials but no zone yet */
+  Object.keys(D.places).forEach(function(q){if(ZONES[q]||!CEM.test((D.places[q].t||[]).join(' ').toLowerCase()))return;var ps=(byPlace[q]||[]).filter(function(l){return l.r==='buried'&&D.people[l.pe]});
+    if(ps.length>=8){var seen={},items=[];ps.forEach(function(l){if(seen[l.pe])return;seen[l.pe]=1;items.push({k:'pe',id:l.pe,sc:Math.log(2+(D.people[l.pe].f||0))})});items.sort(function(a,b){return b.sc-a.sc});ZONES[q]={items:items.slice(0,80)}}});
+  Object.keys(ZONES).forEach(function(zid){var m=markers[zid];if(!m)return;var n=ZONES[zid].items.length;m.setIcon(L.divIcon({className:'',html:'<div class="zpin">⤵ '+n+'</div>',iconSize:[46,30],iconAnchor:[23,15]}))});
+  refreshPins()}
+function itemMins(it){return it.k==='ob'?4:it.k==='pe'?3:6}
+function itemName(it){return it.k==='ob'?it.o.l:it.k==='pe'?D.people[it.id].l:D.places[it.id].l}
+function pickItems(zid,mins){var out=[],t=0;ZONES[zid].items.forEach(function(it){if(t+itemMins(it)<=mins){out.push(it);t+=itemMins(it)}});return out}
+function zoneBox(id){var z=ZONES[id];if(!z)return '';var pick=pickItems(id,zoneMins),total=z.items.reduce(function(a,it){return a+itemMins(it)},0);
+  return '<div class="inside-box"><b>⤵ Explore inside: '+z.items.length+' stops, about '+fmtMins(total)+' for all</b><span class="dim">'+esc(z.items.slice(0,5).map(itemName).join(', '))+(z.items.length>5?'…':'')+'</span>'+
+   '<div class="chips" style="margin-top:8px">'+[30,60,120].map(function(m){return '<span class="chip'+(zoneMins===m?' on':'')+'" data-act="zmins:'+m+'">'+fmtMins(m)+'</span>'}).join('')+'<span class="chip'+(zoneMins>=999?' on':'')+'" data-act="zmins:999">Everything</span></div>'+
+   '<div class="actions"><button class="btn acc" data-act="zone-go:'+id+'">Go inside: '+pick.length+' stops</button></div></div>'}
+function fmtMins(m){return m<60?m+' min':(Math.round(m/30)/2)+' h'}
+function enterZone(zid){var items=pickItems(zid,zoneMins);if(!items.length)items=ZONES[zid].items.slice(0,5);
+  var from=activeTour&&activeTour.stops.indexOf(zid)>=0?zid:null;
+  SUB={z:zid,items:items.map(function(it){return it.k==='ob'?{k:'ob',o:it.o}:{k:it.k,id:it.id}}),i:0,from:from};saveSub();maskZone(zid);location.hash='#in/0'}
+function saveSub(){if(SUB)localStorage.setItem('strand.sub',JSON.stringify(SUB));else localStorage.removeItem('strand.sub')}
+function maskZone(zid){if(subMask){map.removeLayer(subMask);subMask=null}var c=D.places[zid];if(!c)return;var r=0.08;
+  SUB&&SUB.items.forEach(function(it){if(it.k==='pl'&&D.places[it.id])r=Math.max(r,dist(c.lat,c.lon,D.places[it.id].lat,D.places[it.id].lon)+0.03)});r=Math.min(r,0.6);
+  var ring=[];for(var a=0;a<=360;a+=10){var rad=a*Math.PI/180;ring.push([c.lat+r/111.2*Math.cos(rad),c.lon+r/(111.2*Math.cos(c.lat*Math.PI/180))*Math.sin(rad)])}
+  var B=0.25;subMask=L.polygon([[[c.lat+B,c.lon-B*1.6],[c.lat+B,c.lon+B*1.6],[c.lat-B,c.lon+B*1.6],[c.lat-B,c.lon-B*1.6]],ring],{stroke:true,color:'#f3c96b',weight:2,fillColor:'#000',fillOpacity:.45,interactive:false}).addTo(map);
+  map.fitBounds(L.latLngBounds(ring),{paddingTopLeft:[20,110],paddingBottomRight:[20,(innerWidth<900?panel.offsetHeight:0)+20],maxZoom:18});document.body.classList.add('inside')}
+function subBar(){var b=$('#subbar');if(!SUB||!ZONES[SUB.z]){b.classList.remove('show');document.body.classList.remove('inside');return}var z=D.places[SUB.z];
+  var here=location.hash.indexOf('#in/')===0;
+  b.innerHTML='<b>⤵ Inside '+esc(z.l)+' · '+(here?'stop '+(SUB.i+1)+' of '+SUB.items.length:'paused')+'</b>'+(here?'':'<button class="btn" data-go="in/'+SUB.i+'">Back inside</button>')+'<button class="btn" data-act="sub-exit">Exit</button>';b.classList.add('show');document.body.classList.add('inside')}
+function exitZone(){var z=SUB&&SUB.z,from=SUB&&SUB.from;SUB=null;saveSub();if(subMask){map.removeLayer(subMask);subMask=null}subBar();
+  if(from&&activeTour){var k=activeTour.stops.indexOf(from);location.hash='#l/'+(activeTour.stops[k+1]||from)}else location.hash=z?'#l/'+z:''}
+function showInside(i){if(!SUB)return;i=Math.max(0,Math.min(SUB.items.length-1,i||0));SUB.i=i;saveSub();if(!subMask)maskZone(SUB.z);cur={kind:'in',id:SUB.z};panel.classList.remove('collapsed');
+  var it=SUB.items[i],zl=D.places[SUB.z].l,last=i===SUB.items.length-1,h='',pic='',sub='',wtitle='';
+  if(it.k==='ob'){var o=it.o;sub=(o.d?o.d+' · ':'')+'in the collection of '+zl;if(o.i)pic='<img class="obj" src="'+img(o,500)+'" alt="">';wtitle=o.w||''}
+  else if(it.k==='pe'){var pp=D.people[it.id];sub=(pp.d||'')+' · buried here';if(pp.i)pic='<img class="obj" src="'+img(pp,500)+'" alt="">';wtitle=pp.w||''}
+  else{var q=D.places[it.id];sub=q.d||'';select([q.lat,q.lon]);map.panTo([q.lat,q.lon])}
+  h='<h1>'+esc(itemName(it))+'</h1><p class="sub">'+esc(sub)+'</p>'+pic+'<div id="insidetext" class="extract dim">…</div>'+
+   (it.k==='pl'?vidStrip(vidsNear(D.places[it.id].lat,D.places[it.id].lon,it.id)):'')+
+   '<div class="actions">'+(i>0?'<button class="btn" data-go="in/'+(i-1)+'">◀ Back</button>':'')+(last?'<button class="btn acc" data-act="sub-exit">Finish and leave</button>':'<button class="btn acc" data-go="in/'+(i+1)+'">Next ➜</button>')+
+   '<button class="btn" data-act="sub-listen">▶ Listen</button>'+(it.k==='pl'?'<button class="btn" data-go="l/'+it.id+'">Full page</button>':it.k==='pe'?'<button class="btn" data-go="p/'+it.id+'">Their life</button>':'')+'</div>'+
+   '<h2>Coming up</h2>'+SUB.items.slice(i+1,i+4).map(function(n,j){return '<div class="row"><span class="num">'+(i+j+2)+'</span><span class="who">'+link('in',i+j+1,itemName(n))+'</span></div>'}).join('');
+  content.innerHTML=h;content.scrollTop=0;subBar();
+  var put=function(t){var el=$('#insidetext');if(el&&SUB&&SUB.i===i){el.className='extract';el.textContent=t||''}};
+  if(it.k==='pl'){fetch('data/story/'+it.id+'.json').then(function(r){return r.ok?r.json():{}}).then(function(x){put(x.t||D.places[it.id].d||'')}).catch(function(){put('')})}
+  else if(wtitle){fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(wtitle.replace(/ /g,'_'))).then(function(r){return r.json()}).then(function(w){put(w.extract||'')}).catch(function(){put('')})}else put('')}
+function subSpeech(){var it=SUB&&SUB.items[SUB.i];if(!it)return '';var el=$('#insidetext');return itemName(it)+'. '+(el?el.textContent:'')}
 /* Plan my visit: a few taps, then tours built on the phone from the people behind each place. No AI, no server. */
 var THEMES=[['writers','Writers & poets',/writer|poet|novelist|playwright|author|essayist|dramatist|journalist|diarist/],['science','Science & invention',/scientist|physicist|chemist|mathematician|engineer|inventor|biologist|astronomer|naturalist|physician|surgeon|nurse/],
  ['art','Art & architecture',/painter|sculptor|artist|architect|designer|illustrator|photographer/],['stage','Music & stage',/composer|musician|singer|actor|actress|comedian|dancer|conductor|songwriter|guitarist/],
@@ -431,8 +492,8 @@ function showPlanner(sub){if(sub==='result'&&planned.length){showPlan();return}c
    '<div class="q">Start from</div>'+chipsQ('from',[['here','Where I am'],['map','The middle of the map']])+
    (AI_URL?'<div class="q">Or say it in your own words</div><div class="aibox"><textarea id="aitext" rows="3" maxlength="300" placeholder="Two days, love Dickens and old pubs, not too much walking"></textarea><div class="actions"><button class="btn" data-act="ai-plan">✦ Plan from this</button><span class="stat" id="aistat"></span></div></div>':'')+
    '<div class="actions" style="margin-top:16px"><button class="btn acc" data-act="plan-go">✦ Plan it</button></div>';content.scrollTop=0}
-function dwell(pl){var k=iconOf(pl);if(pl.vid)return 6;return (PA.vids!=='off'&&pl.id&&hasVid[pl.id]?3:0)+({museum:60,palace:40,church:20,pub:30,park:20,theatre:12,grave:10,hospital:10,school:10,station:6,statue:8,plaque:6,memorial:8,street:6,water:10,bridge:8,house:10,building:10}[k]||10)}
-function planScore(id){var pl=D.places[id];if(pl.food)return 0;if(pl.vid){if(PA.vids==='off'||!hasVid[id])return 0}else if(PA.vids==='only'&&!hasVid[id])return 0;if((!pl.vid&&!active(id))||/country|kingdom|\bstate\b|empire/.test((pl.t||[]).join(' ')))return 0;var th=pl.th||{},want=Object.keys(PA.themes),cats=Object.keys(PA.cats);
+function dwell(pl){var k=iconOf(pl);if(pl.vid)return 6;if(pl.id&&ZONES[pl.id])return Math.min(60,20+ZONES[pl.id].items.length*2);return (PA.vids!=='off'&&pl.id&&hasVid[pl.id]?3:0)+({museum:60,palace:40,church:20,pub:30,park:20,theatre:12,grave:10,hospital:10,school:10,station:6,statue:8,plaque:6,memorial:8,street:6,water:10,bridge:8,house:10,building:10}[k]||10)}
+function planScore(id){var pl=D.places[id];if(pl.food||zoneKid[id])return 0;if(pl.vid){if(PA.vids==='off'||!hasVid[id])return 0}else if(PA.vids==='only'&&!hasVid[id])return 0;if((!pl.vid&&!active(id))||/country|kingdom|\bstate\b|empire/.test((pl.t||[]).join(' ')))return 0;var th=pl.th||{},want=Object.keys(PA.themes),cats=Object.keys(PA.cats);
   var interest=1;want.forEach(function(t){interest+=(th[t]||0)});if(cats.length&&cats.indexOf(pl.g)>=0)interest+=4;if((want.length||cats.length)&&interest===1)interest=0.15;
   var f=pl.f||0,fame=PA.fame==='famous'?Math.log(2+f):PA.fame==='hidden'?(f>300?0.2:2.5/Math.log(3+f)):Math.sqrt(Math.log(2+f));
   var k=iconOf(pl),dull=(k==='street'||k==='station')&&!PA.cats.outdoors?0.25:1;
@@ -474,7 +535,9 @@ function lead(){var o=origin();panel.classList.remove('collapsed');
    (picks.length?picks.map(function(c){return '<div class="card" data-go="l/'+c.id+'"><div class="arrow" style="transform:rotate('+Math.round(c.b)+'deg)">↑</div><div><div class="d">'+fmt(c.d)+' '+compass(c.b)+'</div><b>'+icon(c.p,1)+esc(c.p.l)+'</b><div class="ppl">'+esc(topNames(c.id,3).join(', '))+(c.p.n>3?' <span class="dim">+'+(c.p.n-3)+' more</span>':'')+'</div></div></div>'}).join(''):'<p class="dim">Nothing new within range.</p>')+
    '<div class="actions"><button class="btn" data-act="listen-lead">▶ Listen</button><button class="btn" data-act="further">Further afield</button><button class="btn" data-act="closer">Closer</button><button class="btn" data-act="forget">Forget where I have been</button></div>';
   content.scrollTop=0}
-function act(a,btn){if(a.slice(0,4)==='cat:'){var g=a.slice(4);if(excluded[g])delete excluded[g];else excluded[g]=1;localStorage.setItem('strand.excluded',JSON.stringify(excluded));refreshPins();renderMenu();if(!location.hash||location.hash==='#')showHome();return}
+function act(a,btn){if(a.slice(0,8)==='zone-go:'){enterZone(a.slice(8));return}if(a.slice(0,6)==='zmins:'){zoneMins=+a.slice(6);showPlace(cur.id);return}
+  if(a==='sub-exit'){exitZone();return}if(a==='sub-listen'){speak(subSpeech(),btn);return}
+  if(a.slice(0,4)==='cat:'){var g=a.slice(4);if(excluded[g])delete excluded[g];else excluded[g]=1;localStorage.setItem('strand.excluded',JSON.stringify(excluded));refreshPins();renderMenu();if(!location.hash||location.hash==='#')showHome();return}
   if(a.slice(0,5)==='menu:'){menuPage=a.slice(5);renderMenu();$('#menu').scrollTop=0;return}
   if(a.slice(0,6)==='start:'){startAct(a.slice(6));return}
   if(a==='ai-plan'){aiPlan();return}
@@ -501,11 +564,11 @@ function act(a,btn){if(a.slice(0,4)==='cat:'){var g=a.slice(4);if(excluded[g])de
 $('#lead').onclick=lead;
 function showPerson(id,ctxPlace){var p=D.people[id];cur={kind:'p',id:id};hop('p',id,p.l);panel.classList.remove('collapsed');select(ctxPlace&&D.places[ctxPlace]?[D.places[ctxPlace].lat,D.places[ctxPlace].lon]:null);
   var here=(byPerson[id]||[]).map(function(l){var pl=D.places[l.pl];return '<div class="row">'+icon(pl)+'<span class="who">'+link('l',l.pl,pl.l)+' <span class="rel">'+RELTEXT[l.r]+span(l.s,l.e)+'</span></span></div>'}).join('');
-  content.innerHTML='<h1>'+esc(p.l)+'</h1><p class="sub">'+yrs(p)+(p.d?' · '+esc(p.d):'')+'</p><div id="wiki" class="extract">'+(p.i?'<img class="thumb" src="'+img(p,240)+'" alt="">':'')+'<span class="dim">Loading Wikipedia…</span></div>'+
+  content.innerHTML='<h1>'+esc(p.l)+'</h1><p class="sub">'+yrs(p)+(p.d?' · '+esc(p.d):'')+'</p><div id="wiki" class="extract">'+(p.i?'<img class="thumb" src="'+img(p,250)+'" alt="">':'')+'<span class="dim">Loading Wikipedia…</span></div>'+
    '<h2>In London</h2>'+here+'<h2>Life</h2><div id="life" class="dim">Loading…</div><h2>People</h2><div id="assoc" class="dim">Loading…</div>';
   content.scrollTop=0;
   if(p.w)fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+p.w).then(function(r){return r.json()}).then(function(w){if(cur.id!==id)return;
-      var pic=w.thumbnail?w.thumbnail.source:(p.i?img(p,240):null);
+      var pic=w.thumbnail?w.thumbnail.source:(p.i?img(p,250):null);
       $('#wiki').innerHTML=(pic?'<img class="thumb" src="'+pic+'" alt="">':'')+esc(w.extract||'')+' <a target="_blank" href="'+w.content_urls.desktop.page+'">Wikipedia ↗</a>'}).catch(function(){$('#wiki').querySelector('.dim').textContent=''});
   else $('#wiki').querySelector('.dim').innerHTML='No English Wikipedia article. <a target="_blank" href="https://www.wikidata.org/wiki/'+id+'">Wikidata ↗</a>';
   fetch('data/people/'+id+'.json').then(function(r){return r.json()}).then(function(x){if(cur.id!==id)return;

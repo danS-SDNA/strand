@@ -94,6 +94,17 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   are general topics, several places at once, book news, or outside London. Instagram reels
   can be listed by hand and embed the same way; they are never fetched.
 
+- **Zones and sub-tours** (`tools/pull_zones.py` -> `site/data/zones.json`): a place that holds many
+  stops. Members come from Wikidata part-of/location links, places within 300 m whose description
+  names the venue, squares and named clusters of statues (Trafalgar Square was not a pin, so it is
+  named from its statues' descriptions), objects in a venue's collection with 3+ sitelinks (the
+  British Museum's Rosetta Stone, the National Gallery's Arnolfini Portrait...), and in the page,
+  people buried at a cemetery, abbey or church. A zone shows as a gold "⤵ n" pin; its members leave
+  the clusters. "Explore inside" picks stops to fit 30 min / 1 h / 2 h / everything, ranked by fame
+  (Wikidata rarely records rooms, so indoor order is not a route). Inside: a banner (stop n of m,
+  Exit), the map dimmed outside a gold ring, Next/Back by tap, Wikipedia text and pictures, Listen.
+  Leaving to another page pauses it ("Back inside"); Exit returns to the main tour's next stop; the
+  app reopens inside. Walk alerts pause; the planner treats a zone as one longer stop.
 - **Video walks**: Plan my visit asks about guide films: leave them out, include the spots guides
   filmed (boosted), or a video walk that only stops where there is a film. Each film belongs to one
   place, its own or the nearest within 100 m, so every stop has a film of its own; a film with no
