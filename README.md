@@ -86,7 +86,12 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
 - **Guide videos**: shorts by London guides, pinned where they were filmed (`tools/pull_videos.py`,
   sources in `tools/video_sources.json`). They appear on place pages, as ▶ pins (switchable in ☰),
   and on walk alerts, and play in a draggable in-app floating player using YouTube's own embed.
-  Feeds give each channel's latest 15 shorts; more needs a YouTube Data API key. Instagram reels
+  Feeds give each channel's latest 15 shorts; a whole catalogue can be listed in a text file of ids
+  (`tools/llh_shorts.txt`: all 276 Living London History shorts, read off the channel page 16/11),
+  with titles from oEmbed (cached). Hand entries can fix their own place, carry a note, and expire
+  (`until`). Placement uses the claude CLI and falls back to Kimi K3 when it cannot answer; a video
+  shows under "Guides filmed here" within 100 m of a place. 124 of 305 pinned on 16/11: the rest
+  are general topics, several places at once, book news, or outside London. Instagram reels
   can be listed by hand and embed the same way; they are never fetched.
 
 - **Food and drink**: 12,987 cafés, pubs, bars and restaurants from OpenStreetMap

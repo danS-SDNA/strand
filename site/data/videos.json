@@ -1,6 +1,17 @@
 [
  {
   "p": "yt",
+  "v": "bM_5l_5rUys",
+  "t": "This West London mansion is full of surprises and is free to visit",
+  "c": "Living London History (Jack Chesher)",
+  "w": "Osterley Park and House",
+  "pl": [],
+  "lat": 51.49064,
+  "lon": -0.340839,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
   "v": "s4XeYwKgihk",
   "t": "I got special access to film Whitehall before the National Remembrance Ceremony",
   "c": "Living London History (Jack Chesher)",
@@ -20,8 +31,8 @@
   "c": "Living London History (Jack Chesher)",
   "w": "Lower Robert Street",
   "pl": [],
-  "lat": 51.508798,
-  "lon": -0.123136,
+  "lat": 51.508716,
+  "lon": -0.122677,
   "how": "geocoded"
  },
  {
@@ -192,19 +203,6 @@
  },
  {
   "p": "yt",
-  "v": "X7XbNFAYagk",
-  "t": "The Dog and Pot in Southwark!",
-  "c": "Look Up London (Katie Wignall)",
-  "w": "The Dog and Pot",
-  "pl": [
-   "Q121423167"
-  ],
-  "lat": 51.50354,
-  "lon": -0.10422,
-  "how": "place"
- },
- {
-  "p": "yt",
   "v": "9jcdOkQZuQM",
   "t": "The LONDON MONSTER and MASS HYSTERIA in Fleet Street, London #london #history #crime #jacktheripper",
   "c": "Hidden History",
@@ -214,6 +212,1299 @@
   ],
   "lat": 51.51378,
   "lon": -0.11153,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "gQXaIDUbZAI",
+  "t": "What are these odd metal cones outside Georgian houses in London?",
+  "c": "Jack Chesher- Living London History",
+  "note": "Link extinguishers like these survive on Berkeley Square and elsewhere in Mayfair; the film is about them in general.",
+  "w": "Berkeley Square",
+  "pl": [],
+  "lat": 51.5098,
+  "lon": -0.1459,
+  "how": "hand"
+ },
+ {
+  "p": "yt",
+  "v": "rP3f9tpcLT8",
+  "t": "What is this odd little building in the City of London? 🧐",
+  "c": "Jack Chesher- Living London History",
+  "note": "The Walbrook Club, squeezed between St Stephen Walbrook and an office block near Bank.",
+  "w": "The Walbrook Club, Walbrook",
+  "pl": [],
+  "lat": 51.513046,
+  "lon": -0.089822,
+  "how": "hand"
+ },
+ {
+  "p": "yt",
+  "v": "eBaLW4rgnTk",
+  "t": "A rare look inside the ancient home of the Archbishops of Canterbury",
+  "c": "Jack Chesher- Living London History",
+  "w": "Lambeth Palace",
+  "pl": [
+   "Q1130266"
+  ],
+  "lat": 51.49556,
+  "lon": -0.11972,
+  "how": "place"
+ },
+ {
+  "p": "ig",
+  "v": "DfsM4glRKFl",
+  "t": "Step aboard El Galeón Andalucía, a replica Spanish galleon",
+  "c": "Secret London (video by @byphoebeanderson)",
+  "note": "Moored at St Katharine Docks from 13 November 2026 until the new year.",
+  "until": "2027-01-10",
+  "w": "St Katharine Docks",
+  "pl": [],
+  "lat": 51.5076,
+  "lon": -0.0715,
+  "how": "hand"
+ },
+ {
+  "p": "yt",
+  "v": "YmigJ5-RM7c",
+  "t": "What secret lies beneath Fortnum & Mason? 🧐 (Made originally as a paid partnership on Insta)",
+  "c": "Jack Chesher- Living London History",
+  "w": "Fortnum & Mason",
+  "pl": [
+   "Q498563"
+  ],
+  "lat": 51.5083,
+  "lon": -0.1384,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "2Hbdd_AKmwA",
+  "t": "Did you know you can visit the old palace of the Bishop of London for free?",
+  "c": "Jack Chesher- Living London History",
+  "w": "Fulham Palace",
+  "pl": [
+   "Q5507927"
+  ],
+  "lat": 51.47044,
+  "lon": -0.21605,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "XTfbC_BYumI",
+  "t": "Admiralty Citadel: London’s not so secret bunker right in the heart of the city",
+  "c": "Jack Chesher- Living London History",
+  "w": "Admiralty Citadel",
+  "pl": [],
+  "lat": 51.505741,
+  "lon": -0.129497,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "jVgGs08Y12E",
+  "t": "What famous Tudor figure once prayed at this unassuming London church?",
+  "c": "Jack Chesher- Living London History",
+  "w": "St Etheldreda's Church",
+  "pl": [],
+  "lat": 51.518642,
+  "lon": -0.107523,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "ded_tR60MjI",
+  "t": "Visiting the only surviving home of Benjamin Franklin. A house full of surprises…",
+  "c": "Jack Chesher- Living London History",
+  "w": "Benjamin Franklin House",
+  "pl": [],
+  "lat": 51.507669,
+  "lon": -0.124867,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "uQw5ZC0tSVA",
+  "t": "Henry VIII’s suit of armour and the bullet that killed Admiral Nelson",
+  "c": "Jack Chesher- Living London History",
+  "w": "Tower of London",
+  "pl": [
+   "Q62378"
+  ],
+  "lat": 51.5082,
+  "lon": -0.0762,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "HINHBj28VY8",
+  "t": "Did you know London has a Museum of the Mind?",
+  "c": "Jack Chesher- Living London History",
+  "w": "Bethlem Museum of the Mind",
+  "pl": [],
+  "lat": 51.380949,
+  "lon": -0.029448,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "lU2lF88WNlM",
+  "t": "A rare surviving set of river stairs by Tower Bridge",
+  "c": "Jack Chesher- Living London History",
+  "w": "Tower Bridge River Stairs",
+  "pl": [
+   "Q83125"
+  ],
+  "lat": 51.50556,
+  "lon": -0.07528,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "aCVhzGNnYaI",
+  "t": "I visited a hidden prison cell for heretics in South London",
+  "c": "Jack Chesher- Living London History",
+  "w": "The Clink Prison Museum",
+  "pl": [],
+  "lat": 51.506962,
+  "lon": -0.091909,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "vueDVPCAlpE",
+  "t": "How a portrait can be propaganda: a look at the earliest full length portrait of Elizabeth I",
+  "c": "Jack Chesher- Living London History",
+  "w": "National Portrait Gallery",
+  "pl": [
+   "Q238587"
+  ],
+  "lat": 51.50944,
+  "lon": -0.12806,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "AVTXXUr4FyQ",
+  "t": "Where you can find the largest clock face in the UK? (It is not The Elizabeth Tower)",
+  "c": "Jack Chesher- Living London History",
+  "w": "Shell Mex House",
+  "pl": [],
+  "lat": 51.509734,
+  "lon": -0.121309,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "l8UdyUNsQTg",
+  "t": "Where can you find ‘Dead Man’s Hole’ In London?",
+  "c": "Jack Chesher- Living London History",
+  "w": "Dead Man's Hole",
+  "pl": [],
+  "lat": 51.506741,
+  "lon": -0.074462,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "p2cHSmjvkos",
+  "t": "Designs For The New Queen Elizabeth II Memorial Have Been Revealed",
+  "c": "Jack Chesher- Living London History",
+  "w": "Queen Elizabeth II Memorial",
+  "pl": [],
+  "lat": 51.510274,
+  "lon": -0.144996,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "uBM4AxaCgG4",
+  "t": "Where to see London’s smallest sculpture 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "The Smallest Sculpture in London",
+  "pl": [],
+  "lat": 51.511172,
+  "lon": -0.084047,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "1fRMK_DQBXc",
+  "t": "The myths and legends of the London Stone",
+  "c": "Jack Chesher- Living London History",
+  "w": "The London Stone",
+  "pl": [],
+  "lat": 51.511655,
+  "lon": -0.089735,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "1nkrhk47ZPk",
+  "t": "A City of London church sold to the United States!",
+  "c": "Jack Chesher- Living London History",
+  "w": "St Mary Aldermanbury",
+  "pl": [
+   "Q7594557"
+  ],
+  "lat": 51.5165,
+  "lon": -0.09307,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "TF0BNOCyQsQ",
+  "t": "Visiting a medieval monastery in the heart of London",
+  "c": "Jack Chesher- Living London History",
+  "w": "The Charterhouse",
+  "pl": [
+   "Q6670230"
+  ],
+  "lat": 51.52139,
+  "lon": -0.09972,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "PeCojFrxgQY",
+  "t": "The London building in which a King took his final steps",
+  "c": "Jack Chesher- Living London History",
+  "w": "Banqueting House",
+  "pl": [
+   "Q642039"
+  ],
+  "lat": 51.5046,
+  "lon": -0.1259,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "hz42mqrFoLE",
+  "t": "Did you know about this free London art gallery in an old army chapel?",
+  "c": "Jack Chesher- Living London History",
+  "w": "The Guards' Chapel (Royal Military Chapel)",
+  "pl": [],
+  "lat": 51.29137,
+  "lon": -0.101376,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "7s-EUJ6nbh8",
+  "t": "This historic area of London was nearly bulldozed in the 1970s",
+  "c": "Jack Chesher- Living London History",
+  "w": "Covent Garden",
+  "pl": [
+   "Q385521",
+   "Q7428236",
+   "Q38879"
+  ],
+  "lat": 51.5114,
+  "lon": -0.12417,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "FN0UOutkKCo",
+  "t": "The fascinating history of London Bridge over nearly 2000 years",
+  "c": "Jack Chesher- Living London History",
+  "w": "London Bridge",
+  "pl": [
+   "Q130206"
+  ],
+  "lat": 51.50806,
+  "lon": -0.08778,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "m2iW2fHQafY",
+  "t": "Inside the mind of a genius: a visit to Sir John Soane’s House",
+  "c": "Jack Chesher- Living London History",
+  "w": "Sir John Soane's Museum",
+  "pl": [
+   "Q2060860"
+  ],
+  "lat": 51.5171,
+  "lon": -0.11691,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "gH8df7jO2KA",
+  "t": "A look inside Britain’s most famous courthouse: The Old Bailey",
+  "c": "Jack Chesher- Living London History",
+  "w": "Old Bailey (Central Criminal Court)",
+  "pl": [],
+  "lat": 51.516009,
+  "lon": -0.102018,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "F5xLaJz0YMA",
+  "t": "Where to find a wonderful mosaic all about the history of London",
+  "c": "Jack Chesher- Living London History",
+  "w": "Queenhithe Mosaic",
+  "pl": [],
+  "lat": 51.510456,
+  "lon": -0.095073,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "4xJkXYECM78",
+  "t": "Why does this red ball drop at 1pm everyday in London? 🔴",
+  "c": "Jack Chesher- Living London History",
+  "w": "Royal Observatory Greenwich",
+  "pl": [
+   "Q192988"
+  ],
+  "lat": 51.47783,
+  "lon": -0.00139,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "kF1dTvxwDtU",
+  "t": "A WW2 secret beneath the streets of St James’s 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "Cabinet War Rooms (Churchill War Rooms)",
+  "pl": [],
+  "lat": 51.50221,
+  "lon": -0.129252,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "-VDBO0DP1gw",
+  "t": "An almost perfectly preserved pocket of old London, just minutes from Waterloo Station…",
+  "c": "Jack Chesher- Living London History",
+  "w": "Lower Marsh",
+  "pl": [],
+  "lat": 51.499982,
+  "lon": -0.114233,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "bKDB-nVmJYE",
+  "t": "Through this nondescript door in the City of London is an ancient historic treasure 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "The London Stone",
+  "pl": [],
+  "lat": 51.511655,
+  "lon": -0.089735,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "jYi5PSx8Duw",
+  "t": "This building is often the stand in for Buckingham Palace on screen! 🎥",
+  "c": "Jack Chesher- Living London History",
+  "w": "Lancaster House",
+  "pl": [
+   "Q1146311"
+  ],
+  "lat": 51.50389,
+  "lon": -0.13917,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "VqtA9V4lysk",
+  "t": "What incredibly historic meeting took place in Methodist Central Hall 80 years ago?",
+  "c": "Jack Chesher- Living London History",
+  "w": "Methodist Central Hall",
+  "pl": [],
+  "lat": 51.500017,
+  "lon": -0.130043,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "hzrowDySrsc",
+  "t": "Going on a tour of London’s oldest meat market at 6.30am! 🥩",
+  "c": "Jack Chesher- Living London History",
+  "w": "Smithfield Market",
+  "pl": [],
+  "lat": 51.519357,
+  "lon": -0.101271,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "qVyzFeSYBmQ",
+  "t": "The brilliant story behind ‘Of Alley’ Near Charing Cross Station!",
+  "c": "Jack Chesher- Living London History",
+  "w": "York Buildings (Of Alley)",
+  "pl": [],
+  "lat": 51.508707,
+  "lon": -0.123043,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "SOx4dXq6x3g",
+  "t": "Where does the word ‘stationery’ come from? 🤔",
+  "c": "Jack Chesher- Living London History",
+  "w": "Stationers' Hall",
+  "pl": [
+   "Q17526857"
+  ],
+  "lat": 51.5144,
+  "lon": -0.10154,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "UzS21wnzERY",
+  "t": "Why does this London building have a big ‘scoop’ out of it? 🧐",
+  "c": "Jack Chesher- Living London History",
+  "w": "20 Fenchurch Street (Walkie Talkie)",
+  "pl": [
+   "Q3068338",
+   "Q212834"
+  ],
+  "lat": 51.51194,
+  "lon": -0.08078,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "n9qHgko5Zzk",
+  "t": "Looking Around Windsor Castle With No-One Else There 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "Windsor Castle",
+  "pl": [],
+  "lat": 51.506293,
+  "lon": -0.198398,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "wnzvJXFcZq4",
+  "t": "This is why the Trafalgar Square Christmas tree is, in fact, the best in London! 🎄",
+  "c": "Jack Chesher- Living London History",
+  "w": "Trafalgar Square",
+  "pl": [
+   "Q125723999"
+  ],
+  "lat": 51.50727,
+  "lon": -0.12889,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "PCzEUQZJXwk",
+  "t": "There is a secret hiding underneath Australia House in central London…",
+  "c": "Jack Chesher- Living London History",
+  "w": "Australia House",
+  "pl": [
+   "Q38166787"
+  ],
+  "lat": 51.5129,
+  "lon": -0.11572,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "ogyIPaU427c",
+  "t": "Life-long learning at Morley College in South London! 📚 💪",
+  "c": "Jack Chesher- Living London History",
+  "w": "Morley College",
+  "pl": [],
+  "lat": 51.481452,
+  "lon": -0.185298,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "0DS9aRPzhH4",
+  "t": "A rare look inside the Chapel Royal of St James’s Palace",
+  "c": "Jack Chesher- Living London History",
+  "w": "Chapel Royal, St James's Palace",
+  "pl": [
+   "Q272162"
+  ],
+  "lat": 51.50472,
+  "lon": -0.13778,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "BK5KOuwLW08",
+  "t": "The new poppy display at The Tower of London",
+  "c": "Jack Chesher- Living London History",
+  "w": "Tower of London",
+  "pl": [
+   "Q62378"
+  ],
+  "lat": 51.5082,
+  "lon": -0.0762,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "j-5XeNGLrqg",
+  "t": "Covent Garden’s hidden history, my new self-guided audio tour! 🔈 https://voicemap.me/coventgarden",
+  "c": "Jack Chesher- Living London History",
+  "w": "Covent Garden",
+  "pl": [
+   "Q385521",
+   "Q7428236",
+   "Q38879"
+  ],
+  "lat": 51.5114,
+  "lon": -0.12417,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "T2Wnt51HkWE",
+  "t": "A look at the unique architecture of Freemasons’ Hall near Covent Garden!",
+  "c": "Jack Chesher- Living London History",
+  "w": "Freemasons' Hall",
+  "pl": [
+   "Q1453586"
+  ],
+  "lat": 51.5151,
+  "lon": -0.121,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "1rvr67P4_0w",
+  "t": "The dramatic history of the Royal Opera House 🎭",
+  "c": "Jack Chesher- Living London History",
+  "w": "Royal Opera House",
+  "pl": [
+   "Q55018"
+  ],
+  "lat": 51.51306,
+  "lon": -0.12278,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "Y4AwP_PgBBs",
+  "t": "The surprising history of Shoreditch Town Hall",
+  "c": "Jack Chesher- Living London History",
+  "w": "Shoreditch Town Hall",
+  "pl": [],
+  "lat": 51.526941,
+  "lon": -0.079152,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "JO50QU4k-ik",
+  "t": "This 400 year old chapel in St James’s is beautiful inside and overlooked by many",
+  "c": "Jack Chesher- Living London History",
+  "w": "St James's Church, Piccadilly",
+  "pl": [
+   "Q1124023",
+   "Q16684477",
+   "Q17531464"
+  ],
+  "lat": 51.50698,
+  "lon": -0.14235,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "bBh-DxWmzik",
+  "t": "Is this the City of London’s oldest house? And what can you see in its windows? 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "41-42 Cloth Fair",
+  "pl": [
+   "Q5135539"
+  ],
+  "lat": 51.5189,
+  "lon": -0.09966,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "IR5rflOamKY",
+  "t": "Why are these odd red pillars in the river by Blackfriars Bridge? Plus another detail many miss!",
+  "c": "Jack Chesher- Living London History",
+  "w": "Blackfriars Bridge",
+  "pl": [],
+  "lat": 51.509759,
+  "lon": -0.104391,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "JyZN88lXwnM",
+  "t": "The story behind the so called ‘Cornhill Devils’ 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "Cornhill Devils",
+  "pl": [
+   "Q28846065"
+  ],
+  "lat": 51.51336,
+  "lon": -0.08597,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "mgNFMtOFtN8",
+  "t": "The story of the oldest man-made object on the streets of London and a little detail many miss",
+  "c": "Jack Chesher- Living London History",
+  "w": "Cleopatra's Needle",
+  "pl": [],
+  "lat": 51.508515,
+  "lon": -0.120316,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "NqfoVzTglLg",
+  "t": "The fascinating story behind the York Watergate!",
+  "c": "Jack Chesher- Living London History",
+  "w": "York Watergate",
+  "pl": [],
+  "lat": 51.508568,
+  "lon": -0.12264,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "Spv4b_SMKRA",
+  "t": "A visit to Lock and Co hatters in St James’s: London’s oldest shop 🎩",
+  "c": "Jack Chesher- Living London History",
+  "w": "Lock & Co. Hatters",
+  "pl": [],
+  "lat": 51.505107,
+  "lon": -0.137981,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "SSZxc0cGo1E",
+  "t": "The history of Temple Church (the entrance mentioned at the beginning is only open Mon-Fri)",
+  "c": "Jack Chesher- Living London History",
+  "w": "Temple Church",
+  "pl": [
+   "Q1429312"
+  ],
+  "lat": 51.5132,
+  "lon": -0.1104,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "V0Sk5OejYXs",
+  "t": "The romantic story behind the monument outside Charing Cross Station",
+  "c": "Jack Chesher- Living London History",
+  "w": "Eleanor Cross",
+  "pl": [],
+  "lat": 51.685826,
+  "lon": -0.032966,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "fS0QmHFQJck",
+  "t": "An unsettling effigy in the crypt of St John’s Priory Church",
+  "c": "Jack Chesher- Living London History",
+  "w": "St John's Priory Church",
+  "pl": [],
+  "lat": 51.523066,
+  "lon": -0.103061,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "xlCEDwRm-oQ",
+  "t": "A visit to the Bow Street Police Museum 👮‍♀️ Link in my bio for full blog post",
+  "c": "Jack Chesher- Living London History",
+  "w": "Bow Street Police Museum",
+  "pl": [],
+  "lat": 51.51349,
+  "lon": -0.121726,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "Vm5MZ1mTFYc",
+  "t": "A look at the ruins of London’s Roman Temple of Mithras",
+  "c": "Jack Chesher- Living London History",
+  "w": "London Mithraeum",
+  "pl": [],
+  "lat": 51.512379,
+  "lon": -0.090676,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "ScP3Yi8haVw",
+  "t": "Little Details To Spot At The Natural History Museum",
+  "c": "Jack Chesher- Living London History",
+  "w": "Natural History Museum",
+  "pl": [
+   "Q309388"
+  ],
+  "lat": 51.49611,
+  "lon": -0.17611,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "QamRLtQC7vI",
+  "t": "St John’s Gate: A Magnificent Tudor Survivor",
+  "c": "Jack Chesher- Living London History",
+  "w": "St John's Gate",
+  "pl": [],
+  "lat": 51.522006,
+  "lon": -0.102556,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "qFokK8HPoJQ",
+  "t": "A symbol hiding in plain sight at Hampton Court Palace 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "Hampton Court Palace",
+  "pl": [],
+  "lat": 51.406013,
+  "lon": -0.340939,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "9nC66cigryM",
+  "t": "Finding the site of London’s notorious Tyburn Tree…",
+  "c": "Jack Chesher- Living London History",
+  "w": "Tyburn Tree site",
+  "pl": [
+   "Q141607809"
+  ],
+  "lat": 51.51322,
+  "lon": -0.16064,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "z0zPtmNl2Ds",
+  "t": "A door that is not quite what it seems in the Churchill War Rooms…",
+  "c": "Jack Chesher- Living London History",
+  "w": "Churchill War Rooms",
+  "pl": [],
+  "lat": 51.50221,
+  "lon": -0.129252,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "ZI8KCLYDjJg",
+  "t": "A detail hiding in plain sight on Tower Bridge 🧐",
+  "c": "Jack Chesher- Living London History",
+  "w": "Tower Bridge",
+  "pl": [
+   "Q83125"
+  ],
+  "lat": 51.50556,
+  "lon": -0.07528,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "uQWUlRIBjRo",
+  "t": "A mark left by Churchill inside the Cabinet War Rooms…",
+  "c": "Jack Chesher- Living London History",
+  "w": "Churchill War Rooms",
+  "pl": [],
+  "lat": 51.50221,
+  "lon": -0.129252,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "9O6exIeRiT8",
+  "t": "The Museum Of Homelessness has found a home! #london #londonmuseum",
+  "c": "Jack Chesher- Living London History",
+  "w": "Museum of Homelessness",
+  "pl": [],
+  "lat": 51.570586,
+  "lon": -0.09665,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "LufVR_irC2Q",
+  "t": "The Great Model of St Paul’s Cathedral!",
+  "c": "Jack Chesher- Living London History",
+  "w": "St Paul's Cathedral",
+  "pl": [
+   "Q173882",
+   "Q2576524"
+  ],
+  "lat": 51.51378,
+  "lon": -0.09831,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "rGgXo1w0TCE",
+  "t": "Going behind the scenes at the Natural History Museum… 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "Natural History Museum",
+  "pl": [
+   "Q309388"
+  ],
+  "lat": 51.49611,
+  "lon": -0.17611,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "tsbPZqJIeGQ",
+  "t": "Behind the scenes are Horse Guards Parade 👀 #london #londonhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "Horse Guards Parade",
+  "pl": [
+   "Q492350"
+  ],
+  "lat": 51.5047,
+  "lon": -0.12722,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "2JUKw5yWT8s",
+  "t": "Two hidden treasures inside St Paul’s Cathedral… 👀#london #londonhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "St Paul's Cathedral",
+  "pl": [
+   "Q173882",
+   "Q2576524"
+  ],
+  "lat": 51.51378,
+  "lon": -0.09831,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "27daSCxGJk0",
+  "t": "Why is there a giant spike at one end of London Bridge? 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "London Bridge",
+  "pl": [
+   "Q130206"
+  ],
+  "lat": 51.50806,
+  "lon": -0.08778,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "lY7Z6-c5J5w",
+  "t": "A look inside the Old War Office! #london #londonhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "Old War Office",
+  "pl": [
+   "Q58454576"
+  ],
+  "lat": 51.50556,
+  "lon": -0.12583,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "MK3-wYM3Cx8",
+  "t": "A new section of the old Roman city wall has been made accessible to the public!",
+  "c": "Jack Chesher- Living London History",
+  "w": "London Wall",
+  "pl": [],
+  "lat": 51.509908,
+  "lon": -0.076,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "4vrKSqwBBXk",
+  "t": "Some of the original designs for Tower Bridge! #london #londonhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "Tower Bridge",
+  "pl": [
+   "Q83125"
+  ],
+  "lat": 51.50556,
+  "lon": -0.07528,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "tXTTtq8LkIo",
+  "t": "The oldest room in Westminster Abbey! #london #londonhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "Westminster Abbey",
+  "pl": [
+   "Q5933"
+  ],
+  "lat": 51.4994,
+  "lon": -0.12737,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "VwftZUdYlYw",
+  "t": "A powerful sculpture on the slave trade and its abolition, in the City of London",
+  "c": "Jack Chesher- Living London History",
+  "w": "The Gilt of Cain",
+  "pl": [],
+  "lat": 51.51221,
+  "lon": -0.081557,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "LF_OaGEOGDA",
+  "t": "A bedroom with a sad story to tell! #london #londonhistory #keats",
+  "c": "Jack Chesher- Living London History",
+  "w": "Keats House",
+  "pl": [],
+  "lat": 51.555522,
+  "lon": -0.167935,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "bVc0xi-loks",
+  "t": "Three skulls over the entranceway to a London churchyard 💀",
+  "c": "Jack Chesher- Living London History",
+  "w": "St Olave Hart Street",
+  "pl": [
+   "Q2688896"
+  ],
+  "lat": 51.51084,
+  "lon": -0.07969,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "4X8TghI3zhk",
+  "t": "‘Forgotten Streams’ can be found at either end of Bloomberg Arcade #london #londonart #history",
+  "c": "Jack Chesher- Living London History",
+  "w": "Forgotten Streams",
+  "pl": [
+   "Q120010077"
+  ],
+  "lat": 51.51195,
+  "lon": -0.09097,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "4jlllRbk5O4",
+  "t": "A site with a dark history by the Tower of London #london #londonhistory #darkhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "Tower Hill",
+  "pl": [
+   "Q2911428",
+   "Q132130539"
+  ],
+  "lat": 51.50972,
+  "lon": -0.07778,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "PCOFeF-JyUs",
+  "t": "An alarming discovery in the basement of 36 Craven Street! #London #londonhistory #ushistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "Benjamin Franklin House",
+  "pl": [],
+  "lat": 51.507669,
+  "lon": -0.124867,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "3E_MURgHATY",
+  "t": "The story behind London’s first one-way street! #london #royalinstitution #science #history",
+  "c": "Jack Chesher- Living London History",
+  "w": "Albemarle Street",
+  "pl": [
+   "Q4709504"
+  ],
+  "lat": 51.5091,
+  "lon": -0.1421,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "YRfmDmr2hzc",
+  "t": "Do you love it or hate it? Here are my top 5 details to spot if you visit the Barbican!",
+  "c": "Jack Chesher- Living London History",
+  "w": "Barbican Estate",
+  "pl": [],
+  "lat": 51.519751,
+  "lon": -0.094221,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "PCpHoIv9wug",
+  "t": "History hiding in plain sight at Sloane Square station 👀 #london #secretlondon",
+  "c": "Jack Chesher- Living London History",
+  "w": "Sloane Square station",
+  "pl": [],
+  "lat": 51.492321,
+  "lon": -0.157189,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "h-Bu83S1FFQ",
+  "t": "5 Unusual gravestones at Highgate Cemetery #london #history",
+  "c": "Jack Chesher- Living London History",
+  "w": "Highgate Cemetery",
+  "pl": [
+   "Q533697"
+  ],
+  "lat": 51.567,
+  "lon": -0.147,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "j10WF1guEvM",
+  "t": "A great Victorian Necropolis, the story behind Highgate Cemetery. #london #londonhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "Highgate Cemetery",
+  "pl": [
+   "Q533697"
+  ],
+  "lat": 51.567,
+  "lon": -0.147,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "ETYiXav9dAA",
+  "t": "Why is there a bale of straw dangling off Millennium Bridge? 🤔 #london #londonhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "Millennium Bridge",
+  "pl": [
+   "Q44057"
+  ],
+  "lat": 51.51017,
+  "lon": -0.09844,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "3JtxFVqd2Hk",
+  "t": "A look inside one of the chambers underneath Tower Bridge! #london",
+  "c": "Jack Chesher- Living London History",
+  "w": "Tower Bridge",
+  "pl": [
+   "Q83125"
+  ],
+  "lat": 51.50556,
+  "lon": -0.07528,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "nPlMfKuVW7c",
+  "t": "Origins of the term ‘hallmarking’! #london #londonhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "Goldsmiths' Hall",
+  "pl": [],
+  "lat": 51.515715,
+  "lon": -0.095843,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "9gNtnaGu_6Y",
+  "t": "Unusual street names. Sign me up for a flat on Garlick Hill 🙋‍♂️ #london #londonhistory #garlic",
+  "c": "Jack Chesher- Living London History",
+  "w": "Garlick Hill",
+  "pl": [
+   "Q65767754"
+  ],
+  "lat": 51.5118,
+  "lon": -0.09386,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "RF7NQrwHGCg",
+  "t": "A second-hand sarcophagus in St Paul’s! #london #londonhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "St Paul's Cathedral",
+  "pl": [
+   "Q173882",
+   "Q2576524"
+  ],
+  "lat": 51.51378,
+  "lon": -0.09831,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "27REJeOcRYI",
+  "t": "A rare peek inside Ironmongers’ Hall 👀 #london #londonhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "Ironmongers' Hall",
+  "pl": [],
+  "lat": 51.518235,
+  "lon": -0.096034,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "31afvfStkho",
+  "t": "Hidden history in the crypt of St Bride’s 💀 #london #londonhistory #darkhistory",
+  "c": "Jack Chesher- Living London History",
+  "w": "St Bride's Church",
+  "pl": [
+   "Q1112579"
+  ],
+  "lat": 51.51378,
+  "lon": -0.10575,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "Ij74d5cEH1g",
+  "t": "Mayfair’s Spy Lamppost! 🔍 It can be found on Audley Square #london #spy #history",
+  "c": "Jack Chesher- Living London History",
+  "w": "Spy Lamppost",
+  "pl": [],
+  "lat": 51.507257,
+  "lon": -0.150679,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "O75BVCiZBKE",
+  "t": "Symbols hiding in plain sight on the Monument 👀 #london #londonhistory #history",
+  "c": "Jack Chesher- Living London History",
+  "w": "The Monument",
+  "pl": [
+   "Q26548668",
+   "Q17552226",
+   "Q26665426"
+  ],
+  "lat": 51.56291,
+  "lon": -0.07778,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "HjfTV74EWXc",
+  "t": "A London gate with a grisly past 💀",
+  "c": "Jack Chesher- Living London History",
+  "w": "Temple Bar",
+  "pl": [],
+  "lat": 51.513692,
+  "lon": -0.111916,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "k5XApDzn6m4",
+  "t": "The story behind Peerless Street! #london #history #street",
+  "c": "Jack Chesher- Living London History",
+  "w": "Peerless Street",
+  "pl": [],
+  "lat": 51.526887,
+  "lon": -0.090414,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "mz8CbXSNk7A",
+  "t": "The oldest purpose-built art gallery in the world! #london #londonhistory #artgallery #architecture",
+  "c": "Jack Chesher- Living London History",
+  "w": "Dulwich Picture Gallery",
+  "pl": [],
+  "lat": 51.44596,
+  "lon": -0.086325,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "GMgMwPcSGEA",
+  "t": "The exquisite Fitzrovia Chapel! #london #londonhistory #architecture",
+  "c": "Jack Chesher- Living London History",
+  "w": "Fitzrovia Chapel",
+  "pl": [],
+  "lat": 51.519,
+  "lon": -0.138308,
+  "how": "geocoded"
+ },
+ {
+  "p": "yt",
+  "v": "utdCQS133xc",
+  "t": "The fake houses of Leinster Gardens #london #londonhistory #sherlock",
+  "c": "Jack Chesher- Living London History",
+  "w": "Leinster Gardens",
+  "pl": [
+   "Q3229195"
+  ],
+  "lat": 51.5126,
+  "lon": -0.18361,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "XJOiy5_k8UM",
+  "t": "Why is this church called St Andrew Undershaft? 🤔",
+  "c": "Jack Chesher- Living London History",
+  "w": "St Andrew Undershaft",
+  "pl": [
+   "Q7592425"
+  ],
+  "lat": 51.51366,
+  "lon": -0.08131,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "4pfsPabQqkc",
+  "t": "A gruesome secret at Tower Bridge 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "Tower Bridge",
+  "pl": [
+   "Q83125"
+  ],
+  "lat": 51.50556,
+  "lon": -0.07528,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "j62F3ttVsf8",
+  "t": "Where did the statue in Cavendish Square go??",
+  "c": "Jack Chesher- Living London History",
+  "w": "Cavendish Square",
+  "pl": [
+   "Q5055036"
+  ],
+  "lat": 51.5165,
+  "lon": -0.145,
+  "how": "place"
+ },
+ {
+  "p": "yt",
+  "v": "eiprSvimEFY",
+  "t": "A curious detail to spot at Horse Guards Parade 👀",
+  "c": "Jack Chesher- Living London History",
+  "w": "Horse Guards Parade",
+  "pl": [
+   "Q492350"
+  ],
+  "lat": 51.5047,
+  "lon": -0.12722,
   "how": "place"
  }
 ]

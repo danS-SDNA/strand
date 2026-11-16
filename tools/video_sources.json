@@ -1,14 +1,84 @@
 {
-  "_note": "Guide channels whose shorts are pulled from YouTube's public RSS feed (the latest 15 each), plus single videos added by hand. Instagram reels go in 'videos' with platform 'ig' and the reel code; they are never fetched, only embedded.",
+  "_note": "Guide channels whose shorts are pulled from YouTube's public RSS feed (the latest 15 each), plus single videos added by hand. Instagram reels go in 'videos' with platform 'ig' and the reel code; they are never fetched, only embedded. Hand entries may fix their own place with place/lat/lon and carry a note, and 'until' hides them after that date. idLists are whole catalogues read off a channel page.",
   "channels": [
-    {"id": "UC0FY2mxHdVGnl0uGxrJ8k-w", "name": "Living London History (Jack Chesher)"},
-    {"id": "UCFWqceEDVxifaU3ljzMH5tg", "name": "Joolz Guides"},
-    {"id": "UCjuLwBL8ZQrcFaBTGozQ64A", "name": "Look Up London (Katie Wignall)"}
+    {
+      "id": "UC0FY2mxHdVGnl0uGxrJ8k-w",
+      "name": "Living London History (Jack Chesher)",
+      "longVideos": true
+    },
+    {
+      "id": "UCFWqceEDVxifaU3ljzMH5tg",
+      "name": "Joolz Guides"
+    },
+    {
+      "id": "UCjuLwBL8ZQrcFaBTGozQ64A",
+      "name": "Look Up London (Katie Wignall)"
+    }
   ],
   "videos": [
-    {"platform": "yt", "id": "c2lykmWo954"},
-    {"platform": "yt", "id": "9jcdOkQZuQM"},
-    {"platform": "yt", "id": "8ZaYWakepDk"},
-    {"platform": "yt", "id": "NxKh_LhzBss"}
+    {
+      "platform": "yt",
+      "id": "c2lykmWo954"
+    },
+    {
+      "platform": "yt",
+      "id": "9jcdOkQZuQM"
+    },
+    {
+      "platform": "yt",
+      "id": "8ZaYWakepDk"
+    },
+    {
+      "platform": "yt",
+      "id": "NxKh_LhzBss"
+    },
+    {
+      "platform": "yt",
+      "id": "gQXaIDUbZAI",
+      "from": "operator 16/11",
+      "place": "Berkeley Square",
+      "lat": 51.5098,
+      "lon": -0.1459,
+      "note": "Link extinguishers like these survive on Berkeley Square and elsewhere in Mayfair; the film is about them in general."
+    },
+    {
+      "platform": "yt",
+      "id": "rP3f9tpcLT8",
+      "from": "operator 16/11",
+      "place": "The Walbrook Club, Walbrook",
+      "lat": 51.513046,
+      "lon": -0.089822,
+      "note": "The Walbrook Club, squeezed between St Stephen Walbrook and an office block near Bank."
+    },
+    {
+      "platform": "yt",
+      "id": "PvxCwRzj3Dk",
+      "from": "operator 16/11"
+    },
+    {
+      "platform": "yt",
+      "id": "eBaLW4rgnTk",
+      "from": "operator 16/11"
+    },
+    {
+      "platform": "yt",
+      "id": "vha7WFv2UEA",
+      "from": "operator 16/11"
+    },
+    {
+      "platform": "ig",
+      "id": "DfsM4glRKFl",
+      "from": "operator 16/11",
+      "title": "Step aboard El Galeón Andalucía, a replica Spanish galleon",
+      "creator": "Secret London (video by @byphoebeanderson)",
+      "place": "St Katharine Docks",
+      "lat": 51.5076,
+      "lon": -0.0715,
+      "note": "Moored at St Katharine Docks from 13 November 2026 until the new year.",
+      "until": "2027-01-10"
+    }
+  ],
+  "idLists": [
+    "tools/llh_shorts.txt"
   ]
 }
