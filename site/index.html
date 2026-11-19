@@ -93,12 +93,13 @@ body.inside #journey{display:none}
 .opt.soon{opacity:.75}.skip{display:flex;justify-content:space-between;margin-top:10px;font-size:14px}.skip span{cursor:pointer;color:var(--acc2)}
 .aibox textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
 #pip{position:fixed;right:10px;bottom:72px;z-index:12;width:min(210px,52vw);aspect-ratio:9/16;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.45);display:none;touch-action:none}
-#pip.show{display:block}#pip.big{width:min(340px,86vw)}#pip.wide{aspect-ratio:16/9;width:min(340px,86vw)}#pip.wide.big{width:min(560px,94vw)}#pip iframe{width:100%;height:100%;border:0}
+#pip.show{display:block}#pip video{width:100%;height:100%;object-fit:cover;background:#000;display:block}#pip.big{width:min(340px,86vw)}#pip.wide{aspect-ratio:16/9;width:min(340px,86vw)}#pip.wide.big{width:min(560px,94vw)}#pip iframe{width:100%;height:100%;border:0}
 #pip .bar{position:absolute;top:0;left:0;right:0;height:30px;display:flex;justify-content:space-between;align-items:center;padding:0 6px;background:linear-gradient(rgba(0,0,0,.65),transparent);cursor:move;z-index:2}
 #pip .bar span{color:#fff;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;padding:0 4px}#pip .bar button{background:rgba(0,0,0,.4);color:#fff;border:0;border-radius:6px;width:26px;height:24px;cursor:pointer;font-size:14px}
 @media(min-width:900px){#pip{right:470px;bottom:12px}}
 .vids{display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}.vid{flex:none;width:96px;cursor:pointer}.vid .th{width:96px;height:150px;border-radius:10px;background:#222 center/cover;position:relative}
 .vid .th::after{content:"▶";position:absolute;inset:auto 6px 6px auto;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center}
+.vid .th.org{border:2px solid #f3c96b}.vid .th.org::before{content:"STRAND";position:absolute;left:6px;top:6px;color:#f3c96b;font-size:11px;font-weight:bold;letter-spacing:.06em;text-shadow:0 1px 2px #000}
 .vid .th.ig{background:linear-gradient(135deg,#f58529,#dd2a7b 50%,#8134af)}.vid .th.ig::before{content:"Instagram";position:absolute;left:6px;top:6px;color:#fff;font-size:11px;font-weight:bold}.vid .vn{font-size:11px;color:var(--acc);margin-top:2px}
 .vid .vt{font-size:12px;line-height:1.25;margin-top:4px;max-height:3.75em;overflow:hidden}.vid .vc{font-size:11px;color:var(--muted)}
 .vpin{width:26px;height:26px;border-radius:7px;background:#1a1410;color:#fff;border:2px solid #b08556;display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.4)}.day{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0;background:var(--chip)}.day b{display:block}.lab{font-size:13px;color:var(--muted);margin:8px 0 3px}
@@ -188,7 +189,7 @@ fetch('data/index.json').then(function(r){return r.json()}).then(function(d){
   var foodReady=fetch('data/food.json').then(function(r){return r.ok?r.json():[]}).then(function(f){FOOD=f;var KW={c:['café','cafe'],p:['pub','pub'],b:['bar','pub'],r:['restaurant','dining']};
     f.forEach(function(v,i){var id='f'+i;v.id=id;D.places[id]={l:v.n,d:(v.f===2?'Famous pub':v.f===1?'Historic pub':KW[v.k][0][0].toUpperCase()+KW[v.k][0].slice(1))+(v.cu?' · '+v.cu:''),lat:v.lat,lon:v.lon,t:[KW[v.k][0]],f:0,n:0,food:v.k,famous:v.f||0,wd:v.wd,ic:v.k==='c'?'cafe':v.k==='r'?'dining':'pub',g:'food'}});
     drawFood()}).catch(function(){});
-  fetch('data/videos.json').then(function(r){return r.ok?r.json():[]}).then(function(v){var today=new Date().toISOString().slice(0,10);v=v.filter(function(x){return !x.until||x.until>=today});VIDS=v;v.forEach(function(x,i){x.i=i;(x.pl||[]).forEach(function(q){(vidsAt[q]=vidsAt[q]||[]).push(x)})});drawVids();filmSpots();if(cur&&cur.kind==='l')showPlace(cur.id)}).catch(function(){});
+  Promise.all([fetch('data/originals.json').then(function(r){return r.ok?r.json():[]}).catch(function(){return []}),fetch('data/videos.json').then(function(r){return r.ok?r.json():[]})]).then(function(a){return a[0].concat(a[1])}).then(function(v){var today=new Date().toISOString().slice(0,10);v=v.filter(function(x){return !x.until||x.until>=today});VIDS=v;v.forEach(function(x,i){x.i=i;(x.pl||[]).forEach(function(q){(vidsAt[q]=vidsAt[q]||[]).push(x)})});drawVids();filmSpots();if(cur&&cur.kind==='l')showPlace(cur.id)}).catch(function(){});
   map.addLayer(cluster);refreshPins();renderMenu();
   if(localStorage.getItem('strand.loc')==='1')locate(false);
   if(S.offline&&!localStorage.getItem('strand.offlineDone'))offline(true);
@@ -357,15 +358,15 @@ function showTour(key){var t=tourOf(key);if(!t){location.hash='';return}cur=null
 /* Guide videos: shorts by London guides pinned where they were filmed (tools/pull_videos.py). Played in a floating
    in-app player so the map stays usable; YouTube's own embed, nothing re-hosted. */
 function vidsNear(lat,lon,id){var out=(vidsAt[id]||[]).slice();VIDS.forEach(function(v){if(out.indexOf(v)<0&&dist(lat,lon,v.lat,v.lon)<0.1)out.push(v)});return out}
-function thumb(v){return v.p==='yt'?'https://i.ytimg.com/vi/'+v.v+'/hqdefault.jpg':''}
-function vidStrip(vs){if(!vs.length)return '';return '<h2>Guides filmed here</h2><div class="vids">'+vs.map(function(v){return '<div class="vid" data-act="vid:'+v.i+'"><div class="th'+(v.p==='ig'?' ig':'')+'"'+(v.p==='ig'?'':' style="background-image:url('+thumb(v)+')"')+'></div><div class="vt">'+esc(v.t.replace(/#\w+/g,'').trim())+'</div><div class="vc">'+esc(v.c)+'</div>'+(v.note?'<div class="vn">'+esc(v.note)+'</div>':'')+'</div>'}).join('')+'</div>'}
+function thumb(v){return v.p==='mp4'?v.poster:v.p==='yt'?'https://i.ytimg.com/vi/'+v.v+'/hqdefault.jpg':''}
+function vidStrip(vs){if(!vs.length)return '';return '<h2>Guides filmed here</h2><div class="vids">'+vs.map(function(v){return '<div class="vid" data-act="vid:'+v.i+'"><div class="th'+(v.p==='ig'?' ig':v.p==='mp4'?' org':'')+'"'+(v.p==='ig'?'':' style="background-image:url('+thumb(v)+')"')+'></div><div class="vt">'+esc(v.t.replace(/#\w+/g,'').trim())+'</div><div class="vc">'+esc(v.c)+'</div>'+(v.note?'<div class="vn">'+esc(v.note)+'</div>':'')+'</div>'}).join('')+'</div>'}
 function drawVids(){if(vidLayer){map.removeLayer(vidLayer);vidLayer=null}if(!S.videos||!VIDS.length)return;
   vidLayer=L.layerGroup(VIDS.map(function(v){return L.marker([v.lat,v.lon],{icon:L.divIcon({className:'',html:'<div class="vpin">▶</div>',iconSize:[26,26],iconAnchor:[13,13]}),zIndexOffset:800,title:v.t}).on('click',function(){if(v.pl&&v.pl[0])location.hash='#l/'+v.pl[0];play(v)})})).addTo(map)}
-function vidSrc(v){return v.p==='ig'?'https://www.instagram.com/reel/'+v.v+'/embed':'https://www.youtube-nocookie.com/embed/'+v.v+'?autoplay=1&playsinline=1&rel=0&modestbranding=1'}
-function vidUrl(v){return v.p==='ig'?'https://www.instagram.com/reel/'+v.v+'/':'https://www.youtube.com/shorts/'+v.v}
-function play(v){if(!v)return;pipCur=v;var p=$('#pip');var f=p.querySelector('iframe');if(f)f.remove();f=document.createElement('iframe');f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.src=vidSrc(v);p.appendChild(f);
+function vidSrc(v){return v.p==='mp4'?v.v:v.p==='ig'?'https://www.instagram.com/reel/'+v.v+'/embed':'https://www.youtube-nocookie.com/embed/'+v.v+'?autoplay=1&playsinline=1&rel=0&modestbranding=1'}
+function vidUrl(v){return v.p==='mp4'?v.v:v.p==='ig'?'https://www.instagram.com/reel/'+v.v+'/':'https://www.youtube.com/shorts/'+v.v}
+function play(v){if(!v)return;pipCur=v;var p=$('#pip');var f=p.querySelector('iframe,video');if(f)f.remove();if(v.p==='mp4'){f=document.createElement('video');f.src=v.v;f.poster=v.poster||'';f.controls=true;f.autoplay=true;f.playsInline=true;f.setAttribute('playsinline','')}else{f=document.createElement('iframe');f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.src=vidSrc(v)}p.appendChild(f);
   $('#piptitle').textContent=v.c;p.classList.toggle('wide',!!v.wide);p.classList.add('show');if(speaking){speechSynthesis.cancel();speaking=false}}
-$('#pipclose').onclick=function(){var p=$('#pip');p.classList.remove('show','big');var f=p.querySelector('iframe');if(f)f.remove();pipCur=null};
+$('#pipclose').onclick=function(){var p=$('#pip');p.classList.remove('show','big');var f=p.querySelector('iframe,video');if(f)f.remove();pipCur=null};
 $('#pipsize').onclick=function(){$('#pip').classList.toggle('big')};
 $('#pipopen').onclick=function(){if(pipCur)window.open(vidUrl(pipCur),'_blank')};
 (function(){var p=$('#pip'),bar=p.querySelector('.bar'),sx,sy,ox,oy,drag=false;
@@ -465,7 +466,7 @@ function showInside(i){if(!SUB)return;i=Math.max(0,Math.min(SUB.items.length-1,i
   h='<h1>'+esc(itemName(it))+'</h1><p class="sub">'+esc(sub)+'</p>'+pic+'<div id="insidetext" class="extract dim">…</div>'+
    (it.k==='pl'?vidStrip(vidsNear(D.places[it.id].lat,D.places[it.id].lon,it.id)):'')+
    '<div class="actions">'+(i>0?'<button class="btn" data-go="in/'+(i-1)+'">◀ Back</button>':'')+(last?'<button class="btn acc" data-act="sub-exit">Finish and leave</button>':'<button class="btn acc" data-go="in/'+(i+1)+'">Next ➜</button>')+
-   '<button class="btn" data-act="sub-listen">▶ Listen</button>'+(it.k==='pl'?'<button class="btn" data-go="l/'+it.id+'">Full page</button>':it.k==='pe'?'<button class="btn" data-go="p/'+it.id+'">Their life</button>':'')+'</div>'+
+   (it.k==='ob'&&VIDS.some(function(v){return v.obj===it.o.id})?'<button class="btn acc" data-act="vid:'+VIDS.filter(function(v){return v.obj===it.o.id})[0].i+'">▶ Watch the Strand short</button>':'')+'<button class="btn" data-act="sub-listen">▶ Listen</button>'+(it.k==='pl'?'<button class="btn" data-go="l/'+it.id+'">Full page</button>':it.k==='pe'?'<button class="btn" data-go="p/'+it.id+'">Their life</button>':'')+'</div>'+
    '<h2>Coming up</h2>'+SUB.items.slice(i+1,i+4).map(function(n,j){return '<div class="row"><span class="num">'+(i+j+2)+'</span><span class="who">'+link('in',i+j+1,itemName(n))+'</span></div>'}).join('');
   content.innerHTML=h;content.scrollTop=0;subBar();
   var put=function(t){var el=$('#insidetext');if(el&&SUB&&SUB.i===i){el.className='extract';el.textContent=t||''}};

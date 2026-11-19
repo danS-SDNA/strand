@@ -1,0 +1,270 @@
+{
+ "_note": "Strand originals: vertical shorts made from public-domain or freely licensed archive pictures (Wikimedia Commons) and a neural voice. Each beat is one sentence or two, over one picture. 'search' finds candidates on Commons; 'pick' is the chosen file (set after looking at the contact sheet); 'focus' is where the slow zoom ends, as fractions of the picture (x, y).",
+ "voice": "en-GB-RyanNeural",
+ "shorts": [
+  {
+   "id": "old-london-bridge",
+   "title": "Old London Bridge",
+   "place": "Old London Bridge",
+   "lat": 51.5079,
+   "lon": -0.0877,
+   "beats": [
+    {
+     "text": "For more than six hundred years, this was London Bridge. For over five centuries, it was the only way across the river in London.",
+     "search": "Old London Bridge Visscher panorama",
+     "cat": "Old London Bridge",
+     "pick": "Print (BM 1880,1113.1528).jpg",
+     "focus": [
+      0.5,
+      0.55
+     ],
+     "credit": {
+      "artist": "Print made by: Robert Martin\n\nAfter: John Norden",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "Work began in 1176, under a priest called Peter of Colechurch, and took thirty-three years. It stood on nineteen narrow arches, set on boat-shaped piers called starlings.",
+     "search": "Old London Bridge arches starlings engraving",
+     "pick": "Archway of Old London Bridge RMG PW0767.jpg",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "credit": {
+      "artist": "William Lionel Wyllie",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "On top grew a street: shops and houses up to seven storeys high, a chapel to Thomas Becket, and Nonsuch House, made in the Netherlands and put together with wooden pegs.",
+     "search": "Nonsuch House London Bridge",
+     "pick": "Nonsuch House on London Bridge.jpg",
+     "focus": [
+      0.5,
+      0.35
+     ],
+     "credit": {
+      "artist": "Ben Sutherland",
+      "licence": "CC BY 2.0"
+     }
+    },
+    {
+     "text": "The starlings choked the river, so the tide roared through the arches like a weir. Shooting the bridge by boat was a famous way to drown.",
+     "search": "Old London Bridge tide rapids painting",
+     "pick": "Image taken from page 613 of 'Old and New London, etc' (11187967333).jpg",
+     "focus": [
+      0.45,
+      0.6
+     ],
+     "credit": {
+      "artist": "Swain, after W.H.P",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "At the southern gate, the heads of traitors were dipped in tar and set on spikes. William Wallace's was the first, in 1305.",
+     "search": "London Bridge heads on spikes gate",
+     "pick": "Image taken from page 614 of 'Old and New London, etc' (11190274454).jpg",
+     "focus": [
+      0.3,
+      0.45
+     ],
+     "credit": {
+      "artist": "",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "It was replaced in 1831 by a new bridge just upstream. Its stone alcoves survive today, in Victoria Park and at Guy's Hospital.",
+     "search": "London Bridge alcove Victoria Park",
+     "pick": "London Bridge Stone Alcove - Victoria Park.jpg",
+     "focus": [
+      0.5,
+      0.55
+     ],
+     "credit": {
+      "artist": "Sumit Surai",
+      "licence": "CC BY-SA 4.0"
+     }
+    }
+   ]
+  },
+  {
+   "id": "highgate-graves",
+   "title": "Highgate's famous graves",
+   "place": "Highgate Cemetery",
+   "lat": 51.5667,
+   "lon": -0.147,
+   "beats": [
+    {
+     "text": "Highgate Cemetery opened in 1839, one of seven grand cemeteries ringing Victorian London.",
+     "search": "Highgate Cemetery",
+     "cat": "Highgate Cemetery",
+     "pick": "Highgate Cemetery (20848993548).jpg",
+     "focus": [
+      0.5,
+      0.6
+     ],
+     "credit": {
+      "artist": "Laika ac from UK",
+      "licence": "CC BY-SA 2.0"
+     }
+    },
+    {
+     "text": "Its most visited grave belongs to Karl Marx. He died in London in 1883. The great bronze head came in 1956, paid for by the Communist Party of Great Britain.",
+     "search": "Tomb of Karl Marx Highgate",
+     "pick": "Karl Marx grave at the Highgate Cemetery.jpg",
+     "focus": [
+      0.5,
+      0.3
+     ],
+     "credit": {
+      "artist": "Satdeep Gill",
+      "licence": "CC BY-SA 4.0"
+     }
+    },
+    {
+     "text": "A few steps away lies George Eliot, author of Middlemarch, buried under her married name, Mary Ann Cross.",
+     "search": "George Eliot grave Highgate",
+     "pick": "George Eliot grave -Highgate Cemetery, London, England-25May2009.jpg",
+     "focus": [
+      0.5,
+      0.7
+     ],
+     "credit": {
+      "artist": "Simon Lee",
+      "licence": "CC BY-SA 2.0"
+     }
+    },
+    {
+     "text": "Across Swain's Lane, in the West Cemetery, Michael Faraday, pioneer of electricity, lies in a modest grave, true to his quiet faith.",
+     "search": "Michael Faraday grave Highgate",
+     "pick": "Faraday Michael grave.jpg",
+     "focus": [
+      0.5,
+      0.35
+     ],
+     "credit": {
+      "artist": "Astrochemist",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "And Douglas Adams, author of The Hitchhiker's Guide to the Galaxy, where visitors still leave pens beside his headstone.",
+     "search": "Douglas Adams grave Highgate",
+     "pick": "Grave of Douglas Adams, Highgate Cemetery 2016-06-09.jpg",
+     "focus": [
+      0.5,
+      0.65
+     ],
+     "credit": {
+      "artist": "August Schwerdfeger",
+      "licence": "CC BY 4.0"
+     }
+    },
+    {
+     "text": "Walk the Egyptian Avenue and the Circle of Lebanon, and you'll see why Victorians came here simply to stroll.",
+     "search": "Highgate Cemetery Egyptian Avenue",
+     "pick": "Egyptian Avenue Highgate Cemetery.jpg",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "credit": {
+      "artist": "JohnArmagh",
+      "licence": "Public domain"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rosetta-stone",
+   "title": "The Rosetta Stone",
+   "place": "British Museum",
+   "lat": 51.5194,
+   "lon": -0.127,
+   "beats": [
+    {
+     "text": "This broken slab of dark stone is one of the most visited objects in the British Museum: the Rosetta Stone.",
+     "search": "Rosetta Stone British Museum",
+     "cat": "Rosetta Stone",
+     "pick": "20180506 103138-rosetta-stone.jpg",
+     "focus": [
+      0.5,
+      0.45
+     ],
+     "credit": {
+      "artist": "Shadsluiter",
+      "licence": "CC BY-SA 4.0"
+     }
+    },
+    {
+     "text": "French soldiers found it in 1799, rebuilding a fort near the town of Rosetta, in Egypt's Nile Delta.",
+     "search": "Fort Julien Rosetta Rashid",
+     "pick": "The Holman new self-pronouncing Sunday-school teachers Bible (1895) (14793321773).jpg",
+     "focus": [
+      0.5,
+      0.4
+     ],
+     "credit": {
+      "artist": "Internet Archive Book Images",
+      "licence": "No restrictions"
+     }
+    },
+    {
+     "text": "When Britain defeated the French in Egypt, it came to London as a prize of war. It has been on show here since 1802.",
+     "search": "Rosetta Stone 1802 engraving British Museum",
+     "pick": "Steen van Rosetta, GDE000987.jpg",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "credit": {
+      "artist": "Unknown",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "Its secret: it says the same thing three times. In hieroglyphs, in Demotic, and in ancient Greek. It is a royal decree, from 196 BC.",
+     "search": "Rosetta Stone hieroglyphs detail",
+     "pick": "British Museum 2024-10-03m.jpg",
+     "focus": [
+      0.4,
+      0.4
+     ],
+     "credit": {
+      "artist": "Djehouty",
+      "licence": "CC BY-SA 4.0"
+     }
+    },
+    {
+     "text": "Scholars could read the Greek, and used it to crack the rest. In 1822, Jean-François Champollion announced that he could read hieroglyphs.",
+     "search": "Champollion portrait Cogniet",
+     "pick": "Jean-François Champollion, by Léon Cogniet.jpg",
+     "focus": [
+      0.5,
+      0.35
+     ],
+     "credit": {
+      "artist": "Léon Cogniet",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "Look at its sides, and you can still read the words painted on in London: captured in Egypt by the British Army, in 1801.",
+     "search": "Rosetta Stone side inscription captured British Army",
+     "pick": "RosettaStone-LeftAndRightSides-BritishMuseum-August21-08.jpg",
+     "focus": [
+      0.3,
+      0.4
+     ],
+     "credit": {
+      "artist": "",
+      "licence": "CC BY-SA 3.0"
+     }
+    }
+   ]
+  }
+ ]
+}

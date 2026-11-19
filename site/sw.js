@@ -3,12 +3,12 @@
    People, stories, vendor libraries: cache first (immutable by id).
    Map tiles and Wikimedia images/summaries: cache as seen, capped. Nothing is prefetched here;
    the page drives the optional "keep on this phone" download through ordinary fetches. */
-var VERSION = 'strand-v6';
+var VERSION = 'strand-v7';
 var SHELL = ['./', 'index.html', 'vendor/leaflet/leaflet.min.css', 'vendor/leaflet/leaflet.min.js',
   'vendor/leaflet/images/marker-icon.png', 'vendor/leaflet/images/marker-icon-2x.png', 'vendor/leaflet/images/marker-shadow.png',
   'vendor/markercluster/leaflet.markercluster.js', 'vendor/markercluster/MarkerCluster.css', 'vendor/markercluster/MarkerCluster.Default.css',
   'data/index.json', 'data/tours.json', 'data/videos.json', 'data/food.json', 'data/zones.json', 'data/story/_index.json', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
-var NETWORK_FIRST = /(\/|index\.html|data\/index\.json|data\/tours\.json|data\/videos\.json|data\/food\.json|data\/zones\.json|data\/story\/_index\.json)$/;
+var NETWORK_FIRST = /(\/|index\.html|data\/index\.json|data\/tours\.json|data\/videos\.json|data\/food\.json|data\/zones\.json|data\/originals\.json|data\/story\/_index\.json)$/;
 var TILE_CAP = 4000, MEDIA_CAP = 1500;
 
 self.addEventListener('install', function (e) {
@@ -31,6 +31,7 @@ self.addEventListener('fetch', function (e) {
   var req = e.request;
   if (req.method !== 'GET') return;
   var url = new URL(req.url);
+  if (url.origin === location.origin && /\.mp4$/.test(url.pathname)) return;  // video: range requests, leave to the browser
   if (url.origin === location.origin) {
     if (NETWORK_FIRST.test(url.pathname)) {
       e.respondWith(fetch(req).then(function (r) { if (r.ok) { var copy = r.clone(); caches.open(VERSION).then(function (c) { c.put(req, copy); }); } return r; })

@@ -1,0 +1,47 @@
+[
+ {
+  "p": "mp4",
+  "v": "media/shorts/old-london-bridge.mp4",
+  "poster": "media/shorts/old-london-bridge.jpg",
+  "t": "Old London Bridge",
+  "c": "Strand",
+  "w": "Old London Bridge",
+  "pl": [
+   "Q130206"
+  ],
+  "obj": null,
+  "lat": 51.5079,
+  "lon": -0.0877,
+  "how": "original"
+ },
+ {
+  "p": "mp4",
+  "v": "media/shorts/highgate-graves.mp4",
+  "poster": "media/shorts/highgate-graves.jpg",
+  "t": "Highgate's famous graves",
+  "c": "Strand",
+  "w": "Highgate Cemetery",
+  "pl": [
+   "Q533697"
+  ],
+  "obj": null,
+  "lat": 51.5667,
+  "lon": -0.147,
+  "how": "original"
+ },
+ {
+  "p": "mp4",
+  "v": "media/shorts/rosetta-stone.mp4",
+  "poster": "media/shorts/rosetta-stone.jpg",
+  "t": "The Rosetta Stone",
+  "c": "Strand",
+  "w": "British Museum",
+  "pl": [
+   "Q6373"
+  ],
+  "obj": "Q48584",
+  "lat": 51.5194,
+  "lon": -0.127,
+  "how": "original"
+ }
+]

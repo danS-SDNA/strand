@@ -94,6 +94,16 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   are general topics, several places at once, book news, or outside London. Instagram reels
   can be listed by hand and embed the same way; they are never fetched.
 
+- **Strand originals** (`tools/shorts/`): vertical one-minute shorts made from archive pictures and a
+  neural voice. `shorts.json` holds the scripts (written from Strand's stories, Wikipedia and Wikidata),
+  one picture per beat with its focus point and credit; `candidates.py` draws numbered contact sheets of
+  Commons candidates to choose from; `render.py` voices each beat (edge-tts, en-GB Ryan), pans and zooms
+  each picture, lights captions word by word, puts each picture's credit on screen and adds an end card,
+  then encodes a 1080p master (`data/shorts/`, git-ignored, with a credits file for posting) and a 720p
+  copy for the app (`site/media/shorts/`, about 6 MB each); `publish.py` lists them in
+  `site/data/originals.json`. In the app they carry a gold STRAND badge, play as video in the floating
+  player, and a museum object's short is offered at its stop inside the zone. Three pilots (19/11):
+  Old London Bridge, Highgate's famous graves, the Rosetta Stone. Needs `pip install edge-tts imageio-ffmpeg`.
 - **Zones and sub-tours** (`tools/pull_zones.py` -> `site/data/zones.json`): a place that holds many
   stops. Members come from Wikidata part-of/location links, places within 300 m whose description
   names the venue, squares and named clusters of statues (Trafalgar Square was not a pin, so it is
