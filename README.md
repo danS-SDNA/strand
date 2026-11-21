@@ -94,6 +94,15 @@ demand from the Wikipedia REST API; nothing of Wikipedia is stored here.
   are general topics, several places at once, book news, or outside London. Instagram reels
   can be listed by hand and embed the same way; they are never fetched.
 
+- **Ratings** (`worker/ratings`, Cloudflare Worker + D1 at https://strand-ratings.rackdigaback.workers.dev):
+  one rating per phone per place: an optional "Worth the stop?" star rating and what the place is good for
+  (History, Art & culture, Worth a look, Quirky, Good with kids, Peaceful). Only for places visited: on the
+  spot by GPS (150 m), or after tapping "Rate it" on "Been here?". Pages show strengths only: tags that 30%+
+  of raters chose ("Loved for history · 92%"), stars only when 3+ star ratings average 3.5+ after weighting
+  (5 imagined ratings at 3.8, so one 5-star cannot beat 200 at 4.7), and a COPPER (1-10) / SILVER (11-50) /
+  GOLD (51+) badge for how many have rated. Nearby lists show a small star for well-rated places; the
+  planner lifts them gently once 5+ have rated. No names, accounts or locations stored; the phone makes its
+  own random id; 60 ratings per phone per day. `node worker/ratings/test.mjs` runs against `wrangler dev`.
 - **Strand originals** (`tools/shorts/`): vertical one-minute shorts made from archive pictures and a
   neural voice. `shorts.json` holds the scripts (written from Strand's stories, Wikipedia and Wikidata),
   one picture per beat with its focus point and credit; `candidates.py` draws numbered contact sheets of

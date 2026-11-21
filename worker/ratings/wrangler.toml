@@ -1,0 +1,16 @@
+# Strand ratings: one rating per phone per place, summarised for the app.
+#   npx wrangler d1 create strand-ratings            (put the id below)
+#   npx wrangler d1 execute strand-ratings --remote --file schema.sql
+#   npx wrangler deploy
+name = "strand-ratings"
+main = "index.js"
+compatibility_date = "2026-08-18"
+
+[vars]
+ALLOWED_ORIGINS = "https://dans-sdna.github.io,http://localhost:5260"
+DEVICE_DAILY = "60"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "strand-ratings"
+database_id = "57e8ab1f-9d2b-4a1f-8259-36b18ccc6202"

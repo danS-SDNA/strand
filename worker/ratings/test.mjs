@@ -1,0 +1,22 @@
+// Test of the ratings worker against wrangler dev (npx wrangler dev --local --port 8799): validation, upsert, withdraw, daily cap, summary.
+const U = "http://127.0.0.1:8799", O = { "Content-Type": "application/json", Origin: "http://localhost:5260" };
+const rate = (b) => fetch(U + "/rate", { method: "POST", headers: O, body: JSON.stringify(b) }).then(async (r) => [r.status, await r.json()]);
+const sum = () => fetch(U + "/summary?x=" + Math.random(), { headers: O }).then((r) => r.json());
+let fails = 0; const ok = (c, m) => { console.log((c ? "ok   " : "FAIL ") + m); if (!c) fails++; };
+const dev = "test" + Date.now().toString(36); const PL = "Q9" + Math.floor(Math.random()*1e8);
+ok((await rate({ device: dev, place: PL, stars: 5, tags: ["history", "peaceful", "bogus"] }))[0] === 200, "a rating with stars and tags is stored");
+ok((await rate({ device: dev, place: PL, stars: 4, tags: ["history"] }))[0] === 200, "the same phone rating again replaces its rating");
+ok((await rate({ device: dev + "b", place: PL, tags: ["quirky"] }))[0] === 200, "tags without stars are accepted");
+ok((await rate({ device: dev, place: "f123", stars: 5 }))[0] === 400, "an unstable food id is refused");
+ok((await rate({ device: dev, place: "Q1", stars: 9 }))[0] === 400, "stars outside 1-5 are refused");
+ok((await rate({ device: "x", place: "Q1", stars: 3 }))[0] === 400, "a malformed device id is refused");
+let s = (await sum()).places[PL];
+ok(s && s.n === 2 && s.ns === 1 && s.s === 4, `summary counts one rating per phone (n=${s && s.n}, stars=${s && s.s})`);
+ok(s && s.t.history === 1 && s.t.quirky === 1 && !s.t.bogus && !s.t.peaceful, "tags are counted from the latest rating only, unknown tags dropped");
+ok((await rate({ device: dev + "b", place: PL, tags: [] }))[1].withdrawn === true, "an empty rating withdraws it");
+s = (await sum()).places[PL];
+ok(s && s.n === 1, "after withdrawal one rating remains");
+let last; const flood = dev + "c";
+for (let i = 0; i < 61; i++) last = await rate({ device: flood, place: "Q" + (1000 + i), stars: 3 });
+ok(last[0] === 429, "the 61st rating in a day from one phone is refused");
+console.log(fails ? fails + " FAILED" : "all passed"); process.exit(fails ? 1 : 0);
