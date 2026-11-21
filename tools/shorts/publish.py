@@ -9,7 +9,8 @@ import json, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 spec = json.loads((ROOT / "tools/shorts/shorts.json").read_text(encoding="utf-8"))
-PLACE = {"old-london-bridge": ["Q130206"], "highgate-graves": ["Q533697"], "rosetta-stone": ["Q6373"]}
+PLACE = {"old-london-bridge": ["Q130206"], "highgate-graves": ["Q533697"], "rosetta-stone": ["Q6373"],
+         "st-pauls": ["Q173882"], "postmans-park": ["Q6642119"], "temple-bar": []}  # Temple Bar is not a pin: placed by coordinates
 OBJECT = {"rosetta-stone": "Q48584"}
 out = []
 for s in spec["shorts"]:

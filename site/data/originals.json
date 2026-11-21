@@ -43,5 +43,48 @@
   "lat": 51.5194,
   "lon": -0.127,
   "how": "original"
+ },
+ {
+  "p": "mp4",
+  "v": "media/shorts/st-pauls.mp4",
+  "poster": "media/shorts/st-pauls.jpg",
+  "t": "St Paul's Cathedral",
+  "c": "Strand",
+  "w": "St Paul's Cathedral",
+  "pl": [
+   "Q173882"
+  ],
+  "obj": null,
+  "lat": 51.51378,
+  "lon": -0.09831,
+  "how": "original"
+ },
+ {
+  "p": "mp4",
+  "v": "media/shorts/temple-bar.mp4",
+  "poster": "media/shorts/temple-bar.jpg",
+  "t": "Temple Bar",
+  "c": "Strand",
+  "w": "Temple Bar, Paternoster Square",
+  "pl": [],
+  "obj": null,
+  "lat": 51.5142,
+  "lon": -0.0996,
+  "how": "original"
+ },
+ {
+  "p": "mp4",
+  "v": "media/shorts/postmans-park.mp4",
+  "poster": "media/shorts/postmans-park.jpg",
+  "t": "Postman's Park",
+  "c": "Strand",
+  "w": "Memorial to Heroic Self-Sacrifice",
+  "pl": [
+   "Q6642119"
+  ],
+  "obj": null,
+  "lat": 51.51688,
+  "lon": -0.09788,
+  "how": "original"
  }
 ]

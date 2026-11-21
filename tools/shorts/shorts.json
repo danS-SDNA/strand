@@ -265,6 +265,270 @@
      }
     }
    ]
+  },
+  {
+   "id": "st-pauls",
+   "title": "St Paul's Cathedral",
+   "place": "St Paul's Cathedral",
+   "lat": 51.51378,
+   "lon": -0.09831,
+   "beats": [
+    {
+     "text": "Christopher Wren's dome has crowned the City since 1710. But this is at least the fourth cathedral to stand on this hill.",
+     "search": "St Paul's Cathedral dome",
+     "cat": "St Paul's Cathedral",
+     "pick": "St. Paul's Cathedral Dome (exterior).jpg",
+     "focus": [
+      0.5,
+      0.4
+     ],
+     "credit": {
+      "artist": "Maksim Sokolov (maxergon.com)",
+      "licence": "CC BY-SA 4.0"
+     }
+    },
+    {
+     "text": "Its medieval predecessor, Old St Paul's, was one of the longest churches in Europe, with a spire taller than today's dome, until lightning set it alight in 1561.",
+     "search": "Old St Paul's Cathedral Hollar",
+     "pick": "Wenceslas Hollar Old St Paul's Cathedral with spire.jpg",
+     "focus": [
+      0.5,
+      0.45
+     ],
+     "credit": {
+      "artist": "Wenceslas_Hollar_-_St._Paul's_from_the_south_showing_the_spire_(State_1).jpg: Original upload by User:Dcoetzee, revision",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "In September 1666, the Great Fire swept through the City. The old cathedral, wrapped in wooden scaffolding, burned, and its lead roof melted into the streets.",
+     "search": "Great Fire of London 1666 painting St Paul's",
+     "pick": "Wenceslaus Hollar - Burning of old St Paul's Cathedral in the Fire of London - B1977.14.17818 - Yale Center for British Art.jpg",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "credit": {
+      "artist": "Wenceslaus Hollar",
+      "licence": "CC0"
+     }
+    },
+    {
+     "text": "Wren spent more than thirty years on its replacement. In 1708, his son laid the last stone, at the very top of the lantern.",
+     "search": "Christopher Wren portrait Kneller",
+     "pick": "Christopher Wren by Godfrey Kneller 1711.jpg",
+     "focus": [
+      0.5,
+      0.3
+     ],
+     "credit": {
+      "artist": "Godfrey Kneller",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "The dome is really three: a painted inner dome, a hidden brick cone that carries the lantern, and the lead-covered outer dome you see from the street.",
+     "search": "St Paul's Cathedral dome section drawing",
+     "pick": "Dome cross section.jpg",
+     "focus": [
+      0.5,
+      0.35
+     ],
+     "credit": {
+      "artist": "Samuel Wale and John Gwynn (1755)",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "Wren lies in the crypt. His epitaph says: reader, if you seek his monument, look around you.",
+     "search": "St Paul's Cathedral interior nave",
+     "pick": "St Paul's Cathedral Nave, London, UK - Diliff.jpg",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "credit": {
+      "artist": "Diliff",
+      "licence": "CC BY-SA 3.0"
+     }
+    }
+   ]
+  },
+  {
+   "id": "temple-bar",
+   "title": "Temple Bar",
+   "place": "Temple Bar, Paternoster Square",
+   "lat": 51.5142,
+   "lon": -0.0996,
+   "beats": [
+    {
+     "text": "Beside St Paul's stands a stone gateway that spent more than a century somewhere else entirely.",
+     "search": "Temple Bar Paternoster Square",
+     "cat": "Temple Bar, London",
+     "pick": "Temple Bar Gate in Paternoster Square.jpg",
+     "focus": [
+      0.5,
+      0.45
+     ],
+     "credit": {
+      "artist": "APK",
+      "licence": "CC BY 4.0"
+     }
+    },
+    {
+     "text": "Temple Bar marked the western edge of the City of London, on Fleet Street, where the Strand begins. This arch was built after the Great Fire, and is usually credited to Christopher Wren.",
+     "search": "Temple Bar Fleet Street engraving",
+     "pick": "ONL (1887) 1.042 - Temple Bar in Dr Johnson's Time.jpg",
+     "focus": [
+      0.5,
+      0.45
+     ],
+     "credit": {
+      "artist": "",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "The heads of executed traitors were set on spikes on top of it. The last were Jacobites, after the rising of 1745.",
+     "search": "Temple Bar heads spikes",
+     "pick": "View of the Temple Bar from Paternoster Square - geograph.org.uk - 4017994.jpg",
+     "focus": [
+      0.5,
+      0.25
+     ],
+     "credit": {
+      "artist": "Robert Lamb",
+      "licence": "CC BY-SA 2.0"
+     }
+    },
+    {
+     "text": "By the 1870s it was blocking the traffic, so it was taken down, stone by stone. The brewer Henry Meux rebuilt it as the gateway to his country estate, Theobalds Park.",
+     "search": "Temple Bar Theobalds Park",
+     "pick": "Temple Bar, Theobald's Park - geograph.org.uk - 7808719.jpg",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "credit": {
+      "artist": "Winnie Paren",
+      "licence": "CC BY-SA 2.0"
+     }
+    },
+    {
+     "text": "It stood in a Hertfordshire wood for over a century, overgrown and forgotten, until it came home to the City in 2004.",
+     "search": "Temple Bar Theobalds Park overgrown",
+     "pick": "Temple Bar (geograph 2523995).jpg",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "credit": {
+      "artist": "Rob Candlish",
+      "licence": "CC BY-SA 2.0"
+     }
+    },
+    {
+     "text": "On Fleet Street, a dragon on a pillar still marks the spot where it once stood.",
+     "search": "Temple Bar Memorial dragon Fleet Street",
+     "pick": "Temple Bar. City of London Boundary Dragon. C.B. Birch 1880. - 52253786634.jpg",
+     "focus": [
+      0.5,
+      0.3
+     ],
+     "credit": {
+      "artist": "amandabhslater",
+      "licence": "CC BY-SA 2.0"
+     }
+    }
+   ]
+  },
+  {
+   "id": "postmans-park",
+   "title": "Postman's Park",
+   "place": "Memorial to Heroic Self-Sacrifice",
+   "lat": 51.51688,
+   "lon": -0.09788,
+   "beats": [
+    {
+     "text": "A few steps north of St Paul's is a small garden made from old churchyards. Londoners call it Postman's Park, after the post office workers who ate their lunch here.",
+     "search": "Postman's Park London",
+     "cat": "Postman's Park",
+     "pick": "Memorial to Heroic Self-Sacrifice 20170904 161303 (49767916073).jpg",
+     "focus": [
+      0.4,
+      0.5
+     ],
+     "credit": {
+      "artist": "Irid Escent",
+      "licence": "CC BY-SA 2.0"
+     }
+    },
+    {
+     "text": "Under a wooden shelter is a wall of tiles, each remembering an ordinary person who died saving someone else.",
+     "search": "Memorial to Heroic Self-Sacrifice Postman's Park",
+     "pick": "Memorial to Heroic Self-Sacrifice 20170904 161314 (49768776012).jpg",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "credit": {
+      "artist": "Irid Escent",
+      "licence": "CC BY-SA 2.0"
+     }
+    },
+    {
+     "text": "It was the idea of the painter George Frederic Watts. The memorial opened in 1900, and after his death his wife Mary saw more tiles added.",
+     "search": "George Frederic Watts portrait",
+     "pick": "George Frederic Watts (1817-1904) - Self Portrait in Old Age - COMWG 6 - Watts Gallery.jpg",
+     "focus": [
+      0.5,
+      0.35
+     ],
+     "credit": {
+      "artist": "George Frederic Watts",
+      "licence": "Public domain"
+     }
+    },
+    {
+     "text": "Alice Ayres, a nursemaid, saved three children from a burning house in 1885, pushing them to safety on a mattress, before falling herself.",
+     "search": "Alice Ayres tablet Postman's Park",
+     "pick": "Postman's Park Memorial to Heroic Self Sacrifice.jpg",
+     "focus": [
+      0.5,
+      0.4
+     ],
+     "credit": {
+      "artist": "GanMed64",
+      "licence": "CC BY 2.0"
+     }
+    },
+    {
+     "text": "Each tile gives a name, a date, and a few words, in the language of the time. Read a handful, and they stay with you.",
+     "search": "Watts Memorial tiles Postman's Park Doulton",
+     "pick": "George Frederic Watts's Memorial to Heroic Self Sacrifice (29881714055).jpg",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "credit": {
+      "artist": "Tony Hisgett from Birmingham, UK",
+      "licence": "CC BY 2.0"
+     }
+    },
+    {
+     "text": "The film Closer made the park famous in 2004. But the tiles tell the story best. Read a few, then look up at St Paul's.",
+     "search": "Postman's Park garden St Paul's",
+     "pick": "Central Area of Postman's Park, Facing Southeast.jpg",
+     "focus": [
+      0.5,
+      0.5
+     ],
+     "credit": {
+      "artist": "Ethan Doyle White",
+      "licence": "CC BY-SA 4.0"
+     }
+    }
+   ]
   }
  ]
 }
